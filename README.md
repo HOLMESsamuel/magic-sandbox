@@ -22,14 +22,15 @@ With this project, I aim to create a platform to load MTG decks from websites li
 
 3. Start the Containers: Use Docker Compose to build and start the services.
 
-'''
+```
 docker-compose up --build
-'''
+```
 
 4. Serve online with ngrok
-'''
+
+```
 ngrok http 5000
-'''
+```
 
 ## Accessing the Application
 

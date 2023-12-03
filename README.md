@@ -8,6 +8,7 @@ With this project, I aim to create a platform to load MTG decks from websites li
 -   Frontend: Vite.js - A frontend build tool that significantly improves the frontend development experience.
 -   Containerization: Docker - Used to containerize both frontend and backend services, ensuring easy deployment and consistent environments.
 -   Orchestration: Docker Compose - Used for defining and running multi-container Docker applications.
+-   Webscraping: Beautiful Soup is a Python package for parsing HTML and XML documents. It creates a parse tree for parsed pages that can be used to extract data from HTML.
 
 ## Prerequisites
 

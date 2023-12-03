@@ -1,7 +1,11 @@
 from fastapi import FastAPI, WebSocket
+from packages.services.rest import router as rest_router
 from typing import Dict, List
 
 app = FastAPI()
+
+# includes endpoints from rest.py in /services
+app.include_router(rest_router)
 
 # Dictionary mapping group IDs to lists of WebSocket connections
 connected_groups: Dict[str, List[WebSocket]] = {}

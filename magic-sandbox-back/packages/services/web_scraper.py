@@ -2,11 +2,34 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 from ..models.card import Card
 from ..models.deck import Deck
 
 class WebScraper:
+
+    def __init__(self):
+        # Set up the Selenium WebDriver
+        options = Options()
+        options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+    def get_dynamic_content(self, url):
+        self.driver.get(url)
+        time.sleep(3)  # Wait for the page to load.
+
+        # Get the page source and parse it with BeautifulSoup
+        soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+        self.driver.quit()
+        return soup
 
     def get_deck(self, url: str):
         card_map_data, image_urls = self.get_data(url)
@@ -19,7 +42,7 @@ class WebScraper:
             response.raise_for_status()  # Check for HTTP request errors
 
             # Parse the HTML
-            soup = BeautifulSoup(response.text, 'html.parser')
+            soup = self.get_dynamic_content(url)
             print(soup)
 
             # Find the script tag with the JSON content
@@ -35,8 +58,8 @@ class WebScraper:
             card_map = json_data.get('props', {}).get('pageProps', {}).get('redux', {}).get('deck', {}).get('cardMap', {})
 
             # Find all img tags with id "basicCardImage"
-            #image_tags = soup.find_all('img', {'id': 'basicCardImage'})
-            image_tags = soup.find_all('img', src=re.compile(r'https://cards.scryfall.io/.*'))
+            image_tags = soup.find_all('img', {'id': 'basicCardImage'})
+            #image_tags = soup.find_all('img', src=re.compile(r'https://cards.scryfall.io/.*'))
             print(image_tags)
             image_urls = {}
             for img in image_tags:

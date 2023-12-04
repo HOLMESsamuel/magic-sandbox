@@ -28,7 +28,6 @@ class WebScraper:
 
         # Get the page source and parse it with BeautifulSoup
         soup = BeautifulSoup(self.driver.page_source, 'html.parser')
-        self.driver.quit()
         return soup
 
     def get_deck(self, url: str):
@@ -37,13 +36,10 @@ class WebScraper:
 
     def get_data(self, url: str):
         try:
-            print(url)
             response = requests.get(url)
             response.raise_for_status()  # Check for HTTP request errors
 
-            # Parse the HTML
             soup = self.get_dynamic_content(url)
-            print(soup)
 
             # Find the script tag with the JSON content
             script_tag = soup.find('script', {'id': '__NEXT_DATA__'})
@@ -95,5 +91,8 @@ class WebScraper:
             return match.group(1)  # Return the matched group (the number after '?')
         else:
             return None  # or some default value or raise an exception
+
+    def close_driver(self):
+        self.driver.quit()
 
 

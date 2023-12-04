@@ -57,8 +57,3 @@ async def broadcast_state(group_id: str, state: bool):
         except Exception:
             # Handle failed send (e.g., client disconnected)
             pass
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}

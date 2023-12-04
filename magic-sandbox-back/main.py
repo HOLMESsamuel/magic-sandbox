@@ -11,7 +11,7 @@ app.include_router(rest_router)
 connected_groups: Dict[str, List[WebSocket]] = {}
 
 # Dictionary to store the state for each group
-group_states: Dict[str, bool] = {}
+group_states: Dict[str, Dict[str, int]] = {}
 
 
 @app.websocket("/ws/{group_id}")
@@ -21,22 +21,22 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str):
     # Initialize the list and state for new group IDs
     if group_id not in connected_groups:
         connected_groups[group_id] = []
-        group_states[group_id] = False  # Default state, can be changed
+        group_states[group_id] = {"x": 100, "y": 100}  # Default state, can be changed
 
     # Add the current websocket to the list of connected clients for this group
     connected_groups[group_id].append(websocket)
 
     # Send the current state to the newly connected client
-    await websocket.send_json({"state": group_states[group_id]})
+    await websocket.send_json(group_states[group_id])
 
     try:
         while True:
             # Wait for a message from the client
             data = await websocket.receive_json()
-            if "state" in data:
-                # Update the state for the group and broadcast it
-                group_states[group_id] = data["state"]
-                await broadcast_state(group_id, group_states[group_id])
+            if "x" in data and "y" in data:
+                # Update the position for the group and broadcast it
+                group_states[group_id] = {"x": data["x"], "y": data["y"]}
+                await broadcast_position(group_id, group_states[group_id])
     except Exception as e:
         print(e)
         pass
@@ -49,11 +49,11 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str):
             del group_states[group_id]  # Also remove the state for the group
 
 
-async def broadcast_state(group_id: str, state: bool):
+async def broadcast_position(group_id: str, position: Dict[str, int]):
     # Broadcast the current state to all connected clients in the same group
     for client in connected_groups.get(group_id, []):
         try:
-            await client.send_json({"state": state})
+            await client.send_json(position)
         except Exception:
             # Handle failed send (e.g., client disconnected)
             pass

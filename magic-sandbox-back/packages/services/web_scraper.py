@@ -53,10 +53,10 @@ class WebScraper:
             # Navigate to the desired data
             card_map = json_data.get('props', {}).get('pageProps', {}).get('redux', {}).get('deck', {}).get('cardMap', {})
 
-            # Find all img tags with id "basicCardImage"
+            # Find all img tags with id "basicCardImage they are containing the srcs to card images"
             image_tags = soup.find_all('img', {'id': 'basicCardImage'})
             #image_tags = soup.find_all('img', src=re.compile(r'https://cards.scryfall.io/.*'))
-            print(image_tags)
+            
             image_urls = {}
             for img in image_tags:
                 src = img.get('src')

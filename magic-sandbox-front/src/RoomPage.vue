@@ -2,16 +2,20 @@
     <div>
       <p>Room ID: {{ roomId }}</p>
       <p>User Name: {{ userName }}</p>
-      <div 
-      id="disk" 
-      class="disk" 
-      :style="{ left: diskPosition.x + 'px', top: diskPosition.y + 'px' }"
-      @mousedown="startDrag">
-    </div>
+      <img 
+        id="card" 
+        class="card" 
+        src="./assets/card_back.webp" 
+        :style="{ left: cardPosition.x + 'px', top: cardPosition.y + 'px' }"
+        @mousedown="startDrag">
+      />
+      <deck @add-deck="handleAddDeck"></deck>
     </div>
   </template>
   
   <script>
+  import Deck from './components/Deck.vue';
+
   export default {
     props: {
       roomId: String
@@ -19,8 +23,8 @@
     data() {
       return {
         ws: null,
-        diskPosition: { x: 100, y: 100 },
-        isDragging: false,
+        cardPosition: { x: 100, y: 100 },
+        isDragging: false
       };
     },
     computed: {
@@ -32,6 +36,9 @@
       this.connectWebSocket();
       document.addEventListener('mousemove', this.drag);
       document.addEventListener('mouseup', this.endDrag);
+    },
+    components: {
+      Deck
     },
     methods: {
       connectWebSocket() {
@@ -45,7 +52,7 @@
         this.ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
           console.log("Received:", data);
-          this.diskPosition = { x: data.x, y: data.y };
+          this.cardPosition = { x: data.x, y: data.y };
         };
   
         this.ws.onerror = (error) => {
@@ -57,12 +64,13 @@
         };
       },
       startDrag(event) {
-      this.isDragging = true;
+        event.preventDefault();
+        this.isDragging = true;
     },
     drag(event) {
       if (this.isDragging) {
-        this.diskPosition.x = event.clientX - 25; // 25 is half the disk's width
-        this.diskPosition.y = event.clientY - 25; // 25 is half the disk's height
+        this.cardPosition.x = event.clientX - 100;
+        this.cardPosition.y = event.clientY - 140; 
         this.sendPosition();
       }
     },
@@ -71,7 +79,7 @@
     },
     sendPosition() {
       if (this.ws) {
-        this.ws.send(JSON.stringify({ x: this.diskPosition.x, y: this.diskPosition.y }));
+        this.ws.send(JSON.stringify({ x: this.cardPosition.x, y: this.cardPosition.y }));
       }
     }
     },
@@ -84,12 +92,10 @@
   </script>
   
   <style>
-  .disk {
-  width: 50px;
-  height: 50px;
-  background-color: blue;
+.card {
+  width: 200px;
+  height: 280px; 
   position: absolute;
-  border-radius: 50%;
   cursor: pointer;
 }
   </style>

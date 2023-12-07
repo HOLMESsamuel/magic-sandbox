@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from .web_scraper import WebScraper
+import random
 
 router = APIRouter()
 
@@ -15,3 +16,7 @@ async def scrap_deck(deck_url: str):
 @router.get("/")
 def read_root():
     return {"Hello": "World"}
+
+@router.get("/dice")
+def throw_dice():
+    return random.randint(1, 20)

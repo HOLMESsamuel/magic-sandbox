@@ -62,6 +62,9 @@
       Deck, Card
     },
     methods: {
+      handleAddDeck() {
+        
+      },
       startPan(event) {
         this.panning = true;
         this.panStartX = event.clientX - this.offsetX;

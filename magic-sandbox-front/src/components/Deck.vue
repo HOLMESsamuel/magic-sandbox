@@ -2,25 +2,49 @@
 <div class="deck-container">
     <div class="add-deck-container">
     <input type="text" v-model="deckLink" placeholder="Enter link here">
-    <button @click="addDeck">Add Deck</button>
+    <button @click="addDeck" :disabled="isLoading">Add Deck</button>
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 </div>
   
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      deckLink: ''
-    };
-  },
-  methods: {
-    addDeck() {
-      this.$emit('add-deck', this.deckLink);
+  import axios from 'axios';
+
+  export default {
+    data() {
+      return {
+        deckLink: '',
+        isLoading: false,
+        errorMessage: ''
+      };
+    },
+    methods: {
+      async addDeck() {
+        if (!this.deckLink) {
+          this.errorMessage = "The URL cannot be empty.";
+          return;
+        }
+
+        this.isLoading = true;
+        this.errorMessage = ''; // Reset the error message
+        try {
+          const response = await axios.post('http://localhost:8000/deck', { url: this.deckLink });
+          console.log(response.data);
+          // Handle the response as needed
+        } catch (error) {
+          if (error.response && error.response.data && error.response.data.detail) {
+            this.errorMessage = error.response.data.detail;
+          } else {
+            this.errorMessage = "An error occurred while processing the request.";
+          }
+        } finally {
+          this.isLoading = false;
+        }
+      }
     }
-  }
-};
+  };
 </script>
 
 <style>
@@ -55,4 +79,15 @@ export default {
   border-radius: 5px;
   cursor: pointer;
 }
+
+.add-deck-container button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
 </style>

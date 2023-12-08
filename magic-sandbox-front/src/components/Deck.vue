@@ -25,9 +25,9 @@ export default {
 
 <style>
 .deck-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+  position: relative;
+  top: 52vh;
+  left: 83vw;
   height: 280px;
   width: 200px;
   padding: 0;

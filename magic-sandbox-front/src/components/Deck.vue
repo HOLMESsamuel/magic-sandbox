@@ -1,10 +1,18 @@
 <template>
-<div class="deck-container">
-    <div class="add-deck-container">
-    <input type="text" v-model="deckLink" placeholder="Enter link here">
-    <button @click="addDeck" :disabled="isLoading">Add Deck</button>
-    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-  </div>
+  <div class="deck-container">
+    <div v-if="!isDeckLoaded" class="add-deck-container">
+      <input type="text" v-model="deckLink" placeholder="Enter link here">
+      <button  @click="addDeck" :disabled="isLoading">Add Deck</button>
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    </div>
+    <div class="deck-actions" v-if="isDeckLoaded">
+      <button @click="drawCard">Draw</button>
+      <button @click="millCard">Mill</button>
+      <button @click="scryCard">Scry</button>
+      <button @click="lookCard">Look</button>
+      <button @click="shuffleDeck">Shuffle</button>
+      <button @click="resetDeck">Reset</button>
+    </div>
 </div>
   
 </template>
@@ -17,7 +25,8 @@
       return {
         deckLink: '',
         isLoading: false,
-        errorMessage: ''
+        errorMessage: '',
+        isDeckLoaded: false,
       };
     },
     methods: {
@@ -32,7 +41,8 @@
         try {
           const response = await axios.post('http://localhost:8000/deck', { url: this.deckLink });
           console.log(response.data);
-          // Handle the response as needed
+          this.isDeckLoaded = true;
+
         } catch (error) {
           if (error.response && error.response.data && error.response.data.detail) {
             this.errorMessage = error.response.data.detail;
@@ -42,8 +52,11 @@
         } finally {
           this.isLoading = false;
         }
+      },
+      resetDeck() {
+        this.isDeckLoaded = false;
       }
-    }
+    },
   };
 </script>
 
@@ -88,6 +101,30 @@
 .error-message {
   color: red;
   margin-top: 10px;
+}
+
+.deck-actions {
+  background: url(../assets/card_back.webp);
+  background-size: contain;
+  padding: 10px;
+  border-radius: 5px;
+  height: 100%; 
+  width: 100%; 
+  box-sizing: border-box; 
+}
+
+.deck-actions button {
+  background-color: #4CAF50; /* Example color */
+  color: white;
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.deck-actions button:hover {
+  background-color: #45a049;
 }
 
 </style>

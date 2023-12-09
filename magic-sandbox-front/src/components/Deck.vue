@@ -21,6 +21,10 @@
   import axios from 'axios';
 
   export default {
+    props: {
+      playerName: String,
+      roomId: String
+    },
     data() {
       return {
         deckLink: '',
@@ -41,6 +45,7 @@
         try {
           const response = await axios.post('http://localhost:8000/deck', { url: this.deckLink });
           console.log(response.data);
+          this.$emit('add-deck', response.data);
           this.isDeckLoaded = true;
 
         } catch (error) {
@@ -53,8 +58,23 @@
           this.isLoading = false;
         }
       },
-      resetDeck() {
-        this.isDeckLoaded = false;
+      async resetDeck() {
+        try{
+          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/deck/reset', {});
+          console.log(response.data);
+          this.isDeckLoaded = false;
+        } catch (error) {
+          console.log(error);
+        }
+        
+      },
+      async millCard() {
+        try{
+          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/deck/mill', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
   };

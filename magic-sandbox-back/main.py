@@ -1,14 +1,18 @@
+import asyncio
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
+from packages.services.websocket_manager import WebSocketManager
+from packages.services.state_manager import StateManager
+from packages.models.game_state import *
 from packages.services.rest import router as rest_router
 from typing import Dict, List
+from fastapi.encoders import jsonable_encoder
 
 app = FastAPI()
-
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5000"], 
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -17,53 +21,43 @@ app.add_middleware(
 # includes endpoints from rest.py in /services
 app.include_router(rest_router)
 
-# Dictionary mapping group IDs to lists of WebSocket connections
-connected_groups: Dict[str, List[WebSocket]] = {}
-
-# Dictionary to store the state for each group
-group_states: Dict[str, Dict[str, int]] = {}
+state_manager = StateManager()
+websocket_manager = WebSocketManager()
 
 
-@app.websocket("/ws/{group_id}")
-async def websocket_endpoint(websocket: WebSocket, group_id: str):
+@app.websocket("/ws/{group_id}/{name}")
+async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str):
     await websocket.accept()
 
-    # Initialize the list and state for new group IDs
-    if group_id not in connected_groups:
-        connected_groups[group_id] = []
-        group_states[group_id] = {"x": 100, "y": 100}  # Default state, can be changed
+    websocket_manager.add_connection(group_id, websocket)
 
-    # Add the current websocket to the list of connected clients for this group
-    connected_groups[group_id].append(websocket)
+    # Initialize or update the game state
+    if not state_manager.get_group_state(group_id):
+        # Initialize new game state and add player
+        print("initialize state")
+        game_state = create_game_state()
+        add_player_to_game_state(game_state, name)
+        state_manager.update_group_state(group_id, game_state)
+    else:
+        # Update existing game state
+        state = state_manager.get_group_state(group_id)
+        print("updating")
+        print(state)
+        add_player_to_game_state(state, name)
 
-    # Send the current state to the newly connected client
-    await websocket.send_json(group_states[group_id])
+    # Broadcast the current state
+    await websocket_manager.broadcast(group_id, jsonable_encoder(state_manager.get_group_state(group_id)))
 
     try:
         while True:
             # Wait for a message from the client
             data = await websocket.receive_json()
-            if "x" in data and "y" in data:
-                # Update the position for the group and broadcast it
-                group_states[group_id] = {"x": data["x"], "y": data["y"]}
-                await broadcast_position(group_id, group_states[group_id])
+            state_manager.update_group_state(group_id, data)
+            await websocket_manager.broadcast(group_id, jsonable_encoder(state_manager.get_group_state(group_id)))
     except Exception as e:
         print(e)
         pass
     finally:
         # Remove client from the list upon disconnection
-        connected_groups[group_id].remove(websocket)
-        if not connected_groups[group_id]:
-            # Remove the group_id key if no more connected clients
-            del connected_groups[group_id]
-            del group_states[group_id]  # Also remove the state for the group
+        websocket_manager.remove_connection(group_id, websocket)
 
-
-async def broadcast_position(group_id: str, position: Dict[str, int]):
-    # Broadcast the current state to all connected clients in the same group
-    for client in connected_groups.get(group_id, []):
-        try:
-            await client.send_json(position)
-        except Exception:
-            # Handle failed send (e.g., client disconnected)
-            pass

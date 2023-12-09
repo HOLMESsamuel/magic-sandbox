@@ -1,7 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from .web_scraper import WebScraper
 import random
 from pydantic import BaseModel, validator
+
+from .game_service import GameService
 
 class DeckInput(BaseModel):
     url: str
@@ -13,6 +15,7 @@ class DeckInput(BaseModel):
         return v
 
 router = APIRouter()
+game_service = GameService()
 
 url = "https://archidekt.com/decks/6015452/commander_eldrazi"
 
@@ -36,3 +39,12 @@ def read_root():
 @router.get("/dice")
 def throw_dice():
     return random.randint(1, 20)
+
+@router.post("/room/{roomId}/player/{playerId}/deck/mill")
+async def mill_deck(playerId: str, roomId: str):
+    response = await game_service.mill_card(playerId, roomId)
+    return response
+
+@router.post("/room/{roomId}/player/{playerId}/deck/reset")
+async def mill_deck(playerId: str, roomId: str):
+    return {"message": "Deck reset for player " + playerId + " room " + roomId}

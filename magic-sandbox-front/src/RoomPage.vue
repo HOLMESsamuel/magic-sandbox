@@ -3,17 +3,25 @@
     <div :style="zoomPanStyles">
       <div>
         <p>User Name: {{ userName }}</p>
-        <Card
-          v-for="(card, index) in cards"
-          :key="index"
-          :imageSrc="card.image"
-          :initialPosition="card.position"
-          :scale="scale"
-          :offsetX="offsetX"
-          :offsetY="offsetY"
-          @update-position="updateCardPosition(index, $event)"
-        ></Card>
-        <deck @add-deck="handleAddDeck"></deck>
+        <div v-for="player in state.players" :key="player.name">
+          <div v-if="player && player.board">
+            <Card
+              v-for="(card, cIndex) in player.board"
+              :key="cIndex"
+              :imageSrc="card.image"
+              :initialPosition="card.position"
+              :player="player.name"
+              :scale="scale"
+              :offsetX="offsetX"
+              :offsetY="offsetY"
+              @update-position="updateCardPosition(player.name, cIndex, $event)"
+            ></Card>
+          </div>
+        </div>
+        <deck 
+        :playerName="userName" 
+        :roomId="roomId"
+        @add-deck="handleAddDeck($event)"></deck>
       </div>
     </div>
   </div>
@@ -29,17 +37,16 @@
     },
     data() {
       return {
+        state : {
+          players: []
+        },
         ws: null,
-        isDragging: false,
         scale: 1, // Initial zoom level
         panning: false,
         panStartX: 0,
         panStartY: 0,
         offsetX: 0,
-        offsetY: 0,
-        cards: [
-        { image: 'https://cards.scryfall.io/normal/front/d/f/dfaaa58d-89bb-4cb3-96a6-b480e6f6954e.jpg?1608911671', position: { x: 100, y: 100 } }
-      ]
+        offsetY: 0
       };
     },
     computed: {
@@ -102,7 +109,7 @@
       },
       connectWebSocket() {
         const wsBackendUrl = import.meta.env.VITE_WS_BACKEND_URL;
-        this.ws = new WebSocket(`${wsBackendUrl}${this.roomId}`);
+        this.ws = new WebSocket(`${wsBackendUrl}${this.roomId}/${this.userName}`);
   
         this.ws.onopen = () => {
           console.log("WebSocket connected");
@@ -110,8 +117,8 @@
   
         this.ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
-          this.cards[0].position.x = data.x;
-          this.cards[0].position.y = data.y;
+          console.log(data)
+          this.state = data;
         };
   
         this.ws.onerror = (error) => {
@@ -123,14 +130,25 @@
         };
       },
       
-      updateCardPosition(index, newPosition) {
-        this.cards[index].position = newPosition;
-        this.sendPosition(index);
+      updateCardPosition(playerName, index, newPosition) {
+        const player = this.state.players.find(p => p.name === playerName);
+        player.board[index].position = newPosition;
+        this.sendPosition();
       },
-      sendPosition(index) {
+      sendPosition() {
         if (this.ws) {
-          this.ws.send(JSON.stringify({ x: this.cards[index].position.x, y: this.cards[index].position.y }));
+          this.ws.send(JSON.stringify(this.state));
         }
+      },
+      handleAddDeck(deck) {
+        console.log(deck);
+        const player = this.state.players.find(p => p.name === this.userName);
+        if (player) {
+          player.deck = deck;
+        } else {
+          console.error(`Player with name ${this.userName} not found.`);
+        }
+        this.sendPosition();
       }
       },
       beforeDestroy() {

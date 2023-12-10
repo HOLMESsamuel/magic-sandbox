@@ -60,4 +60,5 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str):
     finally:
         # Remove client from the list upon disconnection
         websocket_manager.remove_connection(group_id, websocket)
+        state_manager.delete_group_state(group_id)
 

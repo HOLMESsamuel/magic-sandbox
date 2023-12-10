@@ -1,27 +1,33 @@
 <template>
   <div class="zoom-pan-container" @wheel="handleZoom" @mousedown="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
     <div :style="zoomPanStyles">
-      <div>
-        <p>User Name: {{ userName }}</p>
-        <div v-for="player in state.players" :key="player.name">
-          <div v-if="player && player.board">
-            <Card
-              v-for="(card, cIndex) in player.board"
-              :key="cIndex"
-              :imageSrc="card.image"
-              :initialPosition="card.position"
-              :player="player.name"
-              :scale="scale"
-              :offsetX="offsetX"
-              :offsetY="offsetY"
-              @update-position="updateCardPosition(player.name, cIndex, $event)"
-            ></Card>
+      <div :style="containerStyle">
+        <div class="axis-horizontal"></div>
+        <div class="axis-vertical"></div>
+        <div>
+          <div v-for="(player, pIndex) in state.players" :key="player.name">
+            <div v-if="player && player.board">
+              <Card
+                v-for="(card, cIndex) in player.board"
+                :key="`${card.position.x}-${card.position.y}`"
+                :imageSrc="card.image"
+                :initialPosition="card.position"
+                :player="player.name"
+                :scale="scale"
+                :offsetX="offsetX"
+                :offsetY="offsetY"
+                @update-position="updateCardPosition(player.name, cIndex, $event)"
+              ></Card>
+            </div>
+            <deck 
+              :playerName="player.name" 
+              :roomId="roomId"
+              :pIndex="pIndex"
+              :cards="player.deck"
+              @add-deck="handleAddDeck($event)">
+            </deck>
           </div>
         </div>
-        <deck 
-        :playerName="userName" 
-        :roomId="roomId"
-        @add-deck="handleAddDeck($event)"></deck>
       </div>
     </div>
   </div>
@@ -30,6 +36,7 @@
   <script>
   import Deck from './components/Deck.vue';
   import Card from './components/Card.vue';
+  
 
   export default {
     props: {
@@ -58,6 +65,29 @@
           transform: `translate(${this.offsetX}px, ${this.offsetY}px) scale(${this.scale})`,
           transformOrigin: '0 0'
         };
+      },
+      playerIndex() {
+        return this.state.players.findIndex(player => player.name === this.userName);
+      },
+      containerStyle() {
+        switch (this.playerIndex) {
+          case 0: // First player, normal view
+            return {};
+          case 1: // Second player, rotated 180 degrees
+            return {
+              transform: 'rotate(180deg)'
+            };
+          case 2: // Third player, rotated 180 degrees and translated
+            return {
+              transform: 'rotate(180deg) translate(100vw, 0)'
+            };
+          case 3: // Fourth player, translated
+            return {
+              transform: 'translate(100vw, 0)'
+            };
+          default: // Default case if player index is not found
+            return {};
+        }
       }
     },
     mounted() {
@@ -69,9 +99,6 @@
       Deck, Card
     },
     methods: {
-      handleAddDeck() {
-        
-      },
       startPan(event) {
         this.panning = true;
         this.panStartX = event.clientX - this.offsetX;
@@ -117,7 +144,6 @@
   
         this.ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
-          console.log(data)
           this.state = data;
         };
   
@@ -129,7 +155,6 @@
           console.log("WebSocket connection closed");
         };
       },
-      
       updateCardPosition(playerName, index, newPosition) {
         const player = this.state.players.find(p => p.name === playerName);
         player.board[index].position = newPosition;
@@ -177,5 +202,27 @@
 .zoom-pan-container:active {
   cursor: grabbing;
 }
+
+.axis-horizontal {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20000px; /* 20000px long */
+  height: 1px;
+  background-color: black;
+  top: 50%; /* Centered vertically */
+}
+
+.axis-vertical {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20000px; /* 20000px long */
+  width: 1px;
+  background-color: black;
+  left: 0px; /* Centered horizontally */
+}
+
+
   </style>
   

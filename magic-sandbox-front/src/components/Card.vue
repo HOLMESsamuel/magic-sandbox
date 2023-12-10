@@ -5,12 +5,14 @@
   </template>
   
   <script>
+ import throttle from 'lodash/throttle';
+
   export default {
     props: {
       imageSrc: String,
       initialPosition: {
         type: Object,
-        default: () => ({ x: 0, y: 0 })
+        default: () => ({ x: 100, y: 100 })
       },
       scale: Number,
       offsetX: Number,
@@ -47,14 +49,14 @@
         this.cardOffsetX = correctedX - this.position.x;
         this.cardOffsetY = correctedY - this.position.y;
       },
-      drag(event) {
+      drag: throttle(function(event) {
         if (!this.isDragging) return;
         this.position.x = (event.clientX - this.offsetX) / this.scale - this.cardOffsetY;
         this.position.y = (event.clientY - this.offsetY) / this.scale - this.cardOffsetX;
-        this.$emit('update-position', { x: this.position.x, y: this.position.y });
-      },
+      }, 10),
       endDrag() {
         this.isDragging = false;
+        this.$emit('update-position', { x: this.position.x, y: this.position.y });
       }
     }
   };

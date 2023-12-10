@@ -1,11 +1,13 @@
 <template>
-  <div class="deck-container">
+  <div :style="deckStyle" class="deck-container">
     <div v-if="!isDeckLoaded" class="add-deck-container">
+      <p>{{ playerName }}</p>
       <input type="text" v-model="deckLink" placeholder="Enter link here">
       <button  @click="addDeck" :disabled="isLoading">Add Deck</button>
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
     </div>
     <div class="deck-actions" v-if="isDeckLoaded">
+      <p>{{ playerName }}</p>
       <button @click="drawCard">Draw</button>
       <button @click="millCard">Mill</button>
       <button @click="scryCard">Scry</button>
@@ -23,15 +25,42 @@
   export default {
     props: {
       playerName: String,
-      roomId: String
+      roomId: String,
+      pIndex: Number
     },
     data() {
       return {
         deckLink: '',
         isLoading: false,
         errorMessage: '',
-        isDeckLoaded: false,
+        isDeckLoaded: false
       };
+    },
+    computed: {
+      deckStyle() {
+        switch (this.pIndex) {
+          case 0:
+            return {
+              left: "50px",
+              top: "0px"
+            };
+          case 1:
+            return {
+              left: "0px",
+              top: "-280px"
+            };
+          case 2:
+            return {
+              left: "-200px",
+              top: "-280px"
+            };
+          case 3:
+            return {
+              left: "-200px",
+              top: "0px"
+            };
+        }  
+      }
     },
     methods: {
       async addDeck() {
@@ -82,9 +111,7 @@
 
 <style>
 .deck-container {
-  position: relative;
-  top: 52vh;
-  left: 83vw;
+  position: fixed;
   height: 280px;
   width: 200px;
   padding: 0;

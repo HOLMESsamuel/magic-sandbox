@@ -5,7 +5,7 @@
         <div class="axis-horizontal"></div>
         <div class="axis-vertical"></div>
         <div>
-          <div v-for="(player, pIndex) in state.players" :key="player.name">
+          <div v-for="(player, pIndex) in state.players">
             <div v-if="player && player.board">
               <Card
                 v-for="(card, cIndex) in player.board"
@@ -13,6 +13,7 @@
                 :imageSrc="card.image"
                 :initialPosition="card.position"
                 :player="player.name"
+                :pIndex="pIndex"
                 :scale="scale"
                 :offsetX="offsetX"
                 :offsetY="offsetY"

@@ -46,13 +46,15 @@
             };
           case 1:
             return {
-              left: "0px",
-              top: "-280px"
+              left: "50px",
+              top: "-280px",
+              transform: "rotate(180deg)"
             };
           case 2:
             return {
               left: "-200px",
-              top: "-280px"
+              top: "-280px",
+              transform: "rotate(180deg)"
             };
           case 3:
             return {

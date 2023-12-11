@@ -16,6 +16,7 @@
                 :scale="scale"
                 :offsetX="offsetX"
                 :offsetY="offsetY"
+                :reverseMovement="playerIndex === 1 || playerIndex === 2"
                 @update-position="updateCardPosition(player.name, cIndex, $event)"
               ></Card>
             </div>
@@ -79,12 +80,10 @@
             };
           case 2: // Third player, rotated 180 degrees and translated
             return {
-              transform: 'rotate(180deg) translate(100vw, 0)'
+              transform: 'rotate(180deg)'
             };
-          case 3: // Fourth player, translated
-            return {
-              transform: 'translate(100vw, 0)'
-            };
+          case 3: // Fourth player, normal view
+            return {};
           default: // Default case if player index is not found
             return {};
         }

@@ -16,7 +16,11 @@
       },
       scale: Number,
       offsetX: Number,
-      offsetY: Number
+      offsetY: Number,
+      reverseMovement: {
+      type: Boolean,
+      default: false
+    }
     },
     data() {
       return {
@@ -48,11 +52,27 @@
         const correctedY = (event.clientY - this.offsetY) / this.scale;
         this.cardOffsetX = correctedX - this.position.x;
         this.cardOffsetY = correctedY - this.position.y;
+        console.log("correctedX");
+        console.log(correctedX);
+        console.log("cardOffset");
+        console.log(this.cardOffsetX);
       },
       drag: throttle(function(event) {
         if (!this.isDragging) return;
-        this.position.x = (event.clientX - this.offsetX) / this.scale - this.cardOffsetY;
-        this.position.y = (event.clientY - this.offsetY) / this.scale - this.cardOffsetX;
+        const mouseX = (event.clientX - this.offsetX) / this.scale;
+        const mouseY = (event.clientY - this.offsetY) / this.scale;
+        console.log("mouse");
+        console.log(mouseX);
+
+        if (this.reverseMovement) {
+          this.position.x = this.initialPosition.x - (mouseX - this.cardOffsetX);
+          this.position.y = this.initialPosition.y - (mouseY - this.cardOffsetY);
+        } else {
+          this.position.x = mouseX - this.cardOffsetX;
+          this.position.y = mouseY - this.cardOffsetY;
+        }
+        console.log("position");
+        console.log(this.position.x);
       }, 10),
       endDrag() {
         this.isDragging = false;

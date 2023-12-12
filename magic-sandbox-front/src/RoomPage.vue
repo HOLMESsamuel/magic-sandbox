@@ -17,7 +17,7 @@
                 :scale="scale"
                 :offsetX="offsetX"
                 :offsetY="offsetY"
-                :reverseMovement="playerIndex === 1 || playerIndex === 2"
+                :reverseMovement="userIndex === 1 || userIndex === 2"
                 @update-position="updateCardPosition(player.name, cIndex, $event)"
               ></Card>
             </div>
@@ -25,7 +25,8 @@
               :playerName="player.name" 
               :roomId="roomId"
               :pIndex="pIndex"
-              :cards="player.deck"
+              :userIndex="userIndex"
+              :cards="player.deck.cards"
               @add-deck="handleAddDeck($event)">
             </deck>
           </div>
@@ -68,11 +69,11 @@
           transformOrigin: '0 0'
         };
       },
-      playerIndex() {
+      userIndex() {
         return this.state.players.findIndex(player => player.name === this.userName);
       },
       containerStyle() {
-        switch (this.playerIndex) {
+        switch (this.userIndex) {
           case 0: // First player, normal view
             return {};
           case 1: // Second player, rotated 180 degrees
@@ -145,6 +146,7 @@
         this.ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
           this.state = data;
+          console.log(this.state);
         };
   
         this.ws.onerror = (error) => {

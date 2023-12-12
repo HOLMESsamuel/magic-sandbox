@@ -1,19 +1,22 @@
 <template>
   <div :style="deckStyle" class="deck-container">
+    <p>{{ playerName }}</p>
     <div v-if="!isDeckLoaded" class="add-deck-container">
-      <p>{{ playerName }}</p>
-      <input type="text" v-model="deckLink" placeholder="Enter link here">
-      <button  @click="addDeck" :disabled="isLoading">Add Deck</button>
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <div v-if="pIndex==userIndex">
+        <input type="text" v-model="deckLink" placeholder="Enter link here">
+        <button  @click="addDeck" :disabled="isLoading">Add Deck</button>
+        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      </div>
     </div>
-    <div class="deck-actions" v-if="isDeckLoaded">
-      <p>{{ playerName }}</p>
-      <button @click="drawCard">Draw</button>
-      <button @click="millCard">Mill</button>
-      <button @click="scryCard">Scry</button>
-      <button @click="lookCard">Look</button>
-      <button @click="shuffleDeck">Shuffle</button>
-      <button @click="resetDeck">Reset</button>
+    <div class="deck-loaded" v-if="isDeckLoaded">
+      <div v-if="pIndex == userIndex"> <!-- if the player is the player using this frontend -->
+        <button @click="drawCard">Draw</button>
+        <button @click="millCard">Mill</button>
+        <button @click="scryCard">Scry</button>
+        <button @click="lookCard">Look</button>
+        <button @click="shuffleDeck">Shuffle</button>
+        <button @click="resetDeck">Reset</button>
+      </div>
     </div>
 </div>
   
@@ -26,17 +29,21 @@
     props: {
       playerName: String,
       roomId: String,
-      pIndex: Number
+      pIndex: Number, //index of the player
+      userIndex: Number, //index of this frontend user
+      cards: Array
     },
     data() {
       return {
         deckLink: '',
         isLoading: false,
-        errorMessage: '',
-        isDeckLoaded: false
+        errorMessage: ''
       };
     },
     computed: {
+      isDeckLoaded() {
+        return this.cards && this.cards.length > 0;
+      },
       deckStyle() {
         switch (this.pIndex) {
           case 0:
@@ -77,7 +84,6 @@
           const response = await axios.post('http://localhost:8000/deck', { url: this.deckLink });
           console.log(response.data);
           this.$emit('add-deck', response.data);
-          this.isDeckLoaded = true;
 
         } catch (error) {
           if (error.response && error.response.data && error.response.data.detail) {
@@ -93,7 +99,6 @@
         try{
           const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/deck/reset', {});
           console.log(response.data);
-          this.isDeckLoaded = false;
         } catch (error) {
           console.log(error);
         }
@@ -152,7 +157,7 @@
   margin-top: 10px;
 }
 
-.deck-actions {
+.deck-loaded {
   background: url(../assets/card_back.webp);
   background-size: contain;
   padding: 10px;
@@ -162,7 +167,7 @@
   box-sizing: border-box; 
 }
 
-.deck-actions button {
+.deck-loaded button {
   background-color: #4CAF50; /* Example color */
   color: white;
   padding: 10px 15px;
@@ -172,7 +177,7 @@
   cursor: pointer;
 }
 
-.deck-actions button:hover {
+.deck-loaded button:hover {
   background-color: #45a049;
 }
 

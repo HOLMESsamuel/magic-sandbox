@@ -5,7 +5,6 @@
   </template>
   
   <script>
- import throttle from 'lodash/throttle';
 
   export default {
     props: {
@@ -67,19 +66,6 @@
         this.cardOffsetX = correctedX - this.position.x;
         this.cardOffsetY = correctedY - this.position.y;
       },
-      /*drag: throttle(function(event) {
-        if (!this.isDragging) return;
-        const mouseX = (event.clientX - this.offsetX) / this.scale;
-        const mouseY = (event.clientY - this.offsetY) / this.scale;
-
-        if (this.reverseMovement) {
-          this.position.x = this.correctedX - (mouseX - this.cardOffsetX);
-          this.position.y = this.correctedY - (mouseY - this.cardOffsetY);
-        } else {
-          this.position.x = mouseX - this.cardOffsetX;
-          this.position.y = mouseY - this.cardOffsetY;
-        }
-      }, 10),*/
       drag(event) {
         if (!this.isDragging) return;
         const mouseX = (event.clientX - this.offsetX) / this.scale;

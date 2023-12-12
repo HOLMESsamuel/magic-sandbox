@@ -3,7 +3,10 @@ def create_game_state():
         "players": []
     }
 
-def add_player_to_game_state(game_state, player_name):
+def add_player_to_game_state_if_not_exist(game_state, player_name):
+    for player in game_state["players"]:
+        if player["name"] == player_name:
+            return
     game_state["players"].append(create_player(player_name))
 
 def get_player_from_game_state(game_state, player_name):

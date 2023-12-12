@@ -36,14 +36,14 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str):
         # Initialize new game state and add player
         print("initialize state")
         game_state = create_game_state()
-        add_player_to_game_state(game_state, name)
+        add_player_to_game_state_if_not_exist(game_state, name)
         state_manager.update_group_state(group_id, game_state)
     else:
         # Update existing game state
         state = state_manager.get_group_state(group_id)
         print("updating")
         print(state)
-        add_player_to_game_state(state, name)
+        add_player_to_game_state_if_not_exist(state, name)
 
     # Broadcast the current state
     await websocket_manager.broadcast(group_id, jsonable_encoder(state_manager.get_group_state(group_id)))
@@ -57,8 +57,8 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str):
     except Exception as e:
         print(e)
         pass
-    finally:
+    #finally:
         # Remove client from the list upon disconnection
-        websocket_manager.remove_connection(group_id, websocket)
-        state_manager.delete_group_state(group_id)
+        #websocket_manager.remove_connection(group_id, websocket)
+        #state_manager.delete_group_state(group_id)
 

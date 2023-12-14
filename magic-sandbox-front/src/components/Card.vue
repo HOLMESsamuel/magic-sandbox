@@ -1,12 +1,23 @@
 <template>
-    <div class="card" :style="cardStyle" @mousedown.stop="startDrag">
+    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false">
       <img :src="imageSrc" alt="Card Image">
+      <!-- Hover Buttons -->
+      <div v-if="hover" class="hover-buttons">
+        <button class="button-left">⟲</button>
+        <button class="button-center" @click.stop="showCardDetail">👁️</button>
+        <button class="button-right">⟳</button>
+      </div>
     </div>
+    <CardModal :imageSrc="imageSrc" ref="cardModal"></CardModal>
   </template>
   
   <script>
-
+  import CardModal from './CardModal.vue';
   export default {
+    emits: ['update-position', 'show-card'],
+    components: {
+      CardModal
+    },
     props: {
       imageSrc: String,
       initialPosition: {
@@ -18,9 +29,10 @@
       offsetY: Number,
       pIndex: Number,
       reverseMovement: {
-      type: Boolean,
-      default: false
-    }
+        type: Boolean,
+        default: false
+      },
+      player: String
     },
     data() {
       return {
@@ -30,7 +42,8 @@
         cardOffsetY: 0,
         correctedX: null,
         correctedY: null,
-        startDragPosition: null
+        startDragPosition: null,
+        hover: false
       };
     },
     mounted() {
@@ -88,16 +101,58 @@
       endDrag() {
         this.isDragging = false;
         this.$emit('update-position', { x: this.position.x, y: this.position.y });
+      },
+      showCardDetail() {
+        this.$emit('show-card', this.imageSrc);
       }
     }
   };
   </script>
   
   <style>
-  .card img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  </style>
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.card {
+  position: relative; /* Needed to position child elements absolutely */
+}
+
+.hover-buttons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.button-left, .button-center, .button-right {
+  background: #FFF;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.button-left:hover, .button-center:hover, .button-right:hover{
+  background: #a99d9d;
+}
+
+.button-center {
+  margin: 0 auto;
+}
+
+/* make cards not selectionable */
+.card {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+</style>
+
   

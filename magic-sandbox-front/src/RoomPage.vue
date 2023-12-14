@@ -1,5 +1,5 @@
 <template>
-  <div class="zoom-pan-container" @wheel="handleZoom" @mousedown="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
+  <div class="zoom-pan-container" ref="zoomPanContainer" @wheel="handleZoom" @mousedown="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
     <div :style="zoomPanStyles">
       <div :style="containerStyle">
         <div class="axis-horizontal"></div>
@@ -19,6 +19,7 @@
                 :offsetY="offsetY"
                 :reverseMovement="userIndex === 1 || userIndex === 2"
                 @update-position="updateCardPosition(player.name, cIndex, $event)"
+                @show-card="showCard($event)"
               ></Card>
             </div>
             <deck 
@@ -34,12 +35,17 @@
       </div>
     </div>
   </div>
+  <card-modal
+    :modalImageSrc="modalImageSrc"
+    :isModalVisible="isModalVisible"
+    @close-modal="closeModal"
+  ></card-modal>
 </template>
   
   <script>
   import Deck from './components/Deck.vue';
   import Card from './components/Card.vue';
-  
+  import CardModal from './components/CardModal.vue';
 
   export default {
     props: {
@@ -56,7 +62,9 @@
         panStartX: 0,
         panStartY: 0,
         offsetX: 0,
-        offsetY: 0
+        offsetY: 0,
+        modalImageSrc: '',
+        isModalVisible: false
       };
     },
     computed: {
@@ -97,7 +105,7 @@
       document.addEventListener('mouseup', this.endDrag);
     },
     components: {
-      Deck, Card
+      Deck, Card, CardModal
     },
     methods: {
       startPan(event) {
@@ -114,7 +122,7 @@
         this.offsetY = event.clientY - this.panStartY;
       },
       handleZoom(event) {
-        const rect = this.$el.getBoundingClientRect();
+        const rect = this.$refs.zoomPanContainer.getBoundingClientRect();
         const x = event.clientX - rect.left; // Mouse x coordinate relative to the container
         const y = event.clientY - rect.top; // Mouse y coordinate relative to the container
 
@@ -176,6 +184,15 @@
           console.error(`Player with name ${this.userName} not found.`);
         }
         this.sendPosition();
+      },
+      showCard(imageSrc) {
+        this.modalImageSrc = imageSrc;
+        this.isModalVisible = true;
+        console.log("show card" + imageSrc + " " + this.isModalVisible);
+      },
+      closeModal() {
+        console.log("close");
+        this.isModalVisible = false;
       }
       },
       beforeDestroy() {

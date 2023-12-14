@@ -111,6 +111,14 @@
         } catch (error) {
           console.log(error);
         }
+      },
+      async drawCard() {
+        try{
+          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/deck/draw', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
   };

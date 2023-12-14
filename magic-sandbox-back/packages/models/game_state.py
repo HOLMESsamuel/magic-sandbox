@@ -29,3 +29,10 @@ def move_card_from_deck_to_board(player):
         player["board"].append(card)  # Add the card to the board
     else:
         print("The deck is empty, no card to move.")
+
+def move_card_from_deck_to_hand(player):
+    if player["deck"]:
+        card = player["deck"]["cards"].pop(0)  # Remove the first card from the deck
+        player["hand"].append(card)  # Add the card to the hand
+    else:
+        print("The deck is empty, no card to move.")

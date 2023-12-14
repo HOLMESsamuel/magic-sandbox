@@ -45,6 +45,7 @@ async def mill_deck(playerId: str, roomId: str):
     response = await game_service.mill_card(playerId, roomId)
     return response
 
-@router.post("/room/{roomId}/player/{playerId}/deck/reset")
-async def mill_deck(playerId: str, roomId: str):
-    return {"message": "Deck reset for player " + playerId + " room " + roomId}
+@router.post("/room/{roomId}/player/{playerId}/deck/draw")
+async def draw_card(playerId: str, roomId: str):
+    response = await game_service.draw_card(playerId, roomId)
+    return response

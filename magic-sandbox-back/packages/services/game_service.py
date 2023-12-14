@@ -12,3 +12,8 @@ class GameService:
         move_card_from_deck_to_board(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": "Deck milled for player " + playerId + " room " + roomId}
+    
+    async def draw_card(self, playerId: str, roomId: str): 
+        move_card_from_deck_to_hand(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " draw a card"}

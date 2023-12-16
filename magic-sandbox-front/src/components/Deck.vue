@@ -1,6 +1,5 @@
 <template>
   <div :style="deckStyle" class="deck-container">
-    <p>{{ playerName }}</p>
     <div v-if="!isDeckLoaded" class="add-deck-container">
       <div v-if="pIndex==userIndex">
         <input type="text" v-model="deckLink" placeholder="Enter link here">
@@ -48,25 +47,25 @@
         switch (this.pIndex) {
           case 0:
             return {
-              left: "50px",
-              top: "0px"
+              left: "2400px",
+              top: "900px"
             };
           case 1:
             return {
               left: "50px",
-              top: "-280px",
+              top: "-1180px",
               transform: "rotate(180deg)"
             };
           case 2:
             return {
-              left: "-200px",
-              top: "-280px",
+              left: "-2400px",
+              top: "-1180px",
               transform: "rotate(180deg)"
             };
           case 3:
             return {
-              left: "-200px",
-              top: "0px"
+              left: "-250px",
+              top: "900px"
             };
         }  
       }

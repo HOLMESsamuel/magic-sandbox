@@ -4,6 +4,6 @@ class Card:
         self.name = name
         self.type = type
         self.image = image
-        self.position = position if position else {'x': 0, 'y': 0}
+        self.position = position if position else {'x': 2000, 'y': 200}
 
     

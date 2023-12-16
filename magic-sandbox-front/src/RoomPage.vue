@@ -30,6 +30,14 @@
               :cards="player.deck.cards"
               @add-deck="handleAddDeck($event)">
             </deck>
+            <counter
+              :key="`${player.name}-${player.score}`"
+              :playerName="player.name"
+              :roomId="roomId"
+              :pIndex="pIndex"
+              :initialScore="player.score"
+              :userIndex="userIndex">
+            </counter>
           </div>
         </div>
       </div>
@@ -45,6 +53,7 @@
   <script>
   import Deck from './components/Deck.vue';
   import Card from './components/Card.vue';
+  import Counter from './components/Counter.vue'
   import CardModal from './components/CardModal.vue';
 
   export default {
@@ -57,7 +66,7 @@
           players: []
         },
         ws: null,
-        scale: 1, // Initial zoom level
+        scale: 0.25, // Initial zoom level
         panning: false,
         panStartX: 0,
         panStartY: 0,
@@ -105,7 +114,7 @@
       document.addEventListener('mouseup', this.endDrag);
     },
     components: {
-      Deck, Card, CardModal
+      Deck, Card, CardModal, Counter
     },
     methods: {
       startPan(event) {
@@ -242,6 +251,13 @@
   left: 0px; /* Centered horizontally */
 }
 
+/* make everything not selectionable */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
   </style>
   

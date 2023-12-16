@@ -145,14 +145,6 @@
 .button-center {
   margin: 0 auto;
 }
-
-/* make cards not selectionable */
-.card {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 </style>
 
   

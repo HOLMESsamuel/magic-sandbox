@@ -5,7 +5,6 @@ from packages.services.websocket_manager import WebSocketManager
 from packages.services.state_manager import StateManager
 from packages.models.game_state import *
 from packages.services.rest import router as rest_router
-from typing import Dict, List
 from fastapi.encoders import jsonable_encoder
 
 app = FastAPI()
@@ -34,15 +33,12 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str):
     # Initialize or update the game state
     if not state_manager.get_group_state(group_id):
         # Initialize new game state and add player
-        print("initialize state")
         game_state = create_game_state()
         add_player_to_game_state_if_not_exist(game_state, name)
         state_manager.update_group_state(group_id, game_state)
     else:
         # Update existing game state
         state = state_manager.get_group_state(group_id)
-        print("updating")
-        print(state)
         add_player_to_game_state_if_not_exist(state, name)
 
     # Broadcast the current state

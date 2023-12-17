@@ -46,10 +46,6 @@
         hover: false
       };
     },
-    mounted() {
-      document.addEventListener('mousemove', this.drag);
-      document.addEventListener('mouseup', this.endDrag);
-    },
     computed: {
       cardStyle() {
         let style = {
@@ -78,6 +74,8 @@
         const correctedY = (event.clientY - this.offsetY) / this.scale;
         this.cardOffsetX = correctedX - this.position.x;
         this.cardOffsetY = correctedY - this.position.y;
+        document.addEventListener('mousemove', this.drag);
+        document.addEventListener('mouseup', this.endDrag);
       },
       drag(event) {
         if (!this.isDragging) return;
@@ -101,6 +99,8 @@
       endDrag() {
         this.isDragging = false;
         this.$emit('update-position', { x: this.position.x, y: this.position.y });
+        document.removeEventListener('mousemove', this.drag);
+        document.removeEventListener('mouseup', this.endDrag);
       },
       showCardDetail() {
         this.$emit('show-card', this.imageSrc);

@@ -49,6 +49,18 @@ def move_card_from_deck_to_hand(player):
 def update_player_score(player, score):
     player['score'] = score
 
+def tap_card(player, cardId):
+    for index, card in enumerate(player["board"]):
+        if card["id"] == cardId:
+            player["board"][index]["tapped"] = True
+            break
+
+def untap_card(player, cardId):
+    for index, card in enumerate(player["board"]):
+        if card["id"] == cardId:
+            player["board"][index]["tapped"] = False
+            break
+
 def get_player_index(game_state, player_id):
     for index, player in enumerate(game_state["players"]):
         if player["name"] == player_id:

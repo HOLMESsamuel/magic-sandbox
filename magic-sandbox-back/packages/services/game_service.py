@@ -24,3 +24,13 @@ class GameService:
         update_player_score(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), score)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " has " + str(score)}
+    
+    async def tap_card(self, playerId: str, roomId: str, cardId: str):
+        tap_card(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), cardId)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " tap " + cardId}
+    
+    async def untap_card(self, playerId: str, roomId: str, cardId: str):
+        untap_card(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), cardId)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " untap " + cardId}

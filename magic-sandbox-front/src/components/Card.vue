@@ -3,9 +3,9 @@
       <img :src="imageSrc" alt="Card Image">
       <!-- Hover Buttons -->
       <div v-if="hover" class="hover-buttons">
-        <button class="button-left">⟲</button>
+        <button v-if="tapped" @click="untap" class="button-left">⟲</button>
         <button class="button-center" @click.stop="showCardDetail">👁️</button>
-        <button class="button-right">⟳</button>
+        <button v-if="!tapped" @click="tap" class="button-right">⟳</button>
       </div>
     </div>
     <CardModal :imageSrc="imageSrc" ref="cardModal"></CardModal>
@@ -13,6 +13,8 @@
   
   <script>
   import CardModal from './CardModal.vue';
+  import axios from 'axios';
+
   export default {
     emits: ['update-position', 'show-card'],
     components: {
@@ -32,7 +34,10 @@
         type: Boolean,
         default: false
       },
-      player: String
+      player: String,
+      tapped: Boolean,
+      id: String,
+      roomId: String
     },
     data() {
       return {
@@ -46,22 +51,31 @@
         hover: false
       };
     },
+    mounted() {
+      document.addEventListener('mousemove', this.drag);
+      document.addEventListener('mouseup', this.endDrag);
+    },
     computed: {
       cardStyle() {
-        let style = {
+        let transformStyles = '';
+
+        // Add 90 degrees rotation if the card is tapped
+        if (this.tapped) {
+          transformStyles += 'rotate(90deg) ';
+        }
+
+        // Add 180 degrees rotation based on player index
+        if (this.pIndex === 1 || this.pIndex === 2) {
+          transformStyles += 'rotate(180deg) ';
+        }
+
+        return {
           left: this.position.x + 'px',
           top: this.position.y + 'px',
           position: 'fixed',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          transform: transformStyles
         };
-
-        switch (this.pIndex) {
-          case 1:
-          case 2:
-            style.transform = 'rotate(180deg)';
-        }
-
-        return style;
       }
     },
     methods: {
@@ -74,8 +88,6 @@
         const correctedY = (event.clientY - this.offsetY) / this.scale;
         this.cardOffsetX = correctedX - this.position.x;
         this.cardOffsetY = correctedY - this.position.y;
-        document.addEventListener('mousemove', this.drag);
-        document.addEventListener('mouseup', this.endDrag);
       },
       drag(event) {
         if (!this.isDragging) return;
@@ -99,11 +111,25 @@
       endDrag() {
         this.isDragging = false;
         this.$emit('update-position', { x: this.position.x, y: this.position.y });
-        document.removeEventListener('mousemove', this.drag);
-        document.removeEventListener('mouseup', this.endDrag);
       },
       showCardDetail() {
         this.$emit('show-card', this.imageSrc);
+      },
+      async tap() {
+        try{
+          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/tap', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async untap() {
+        try{
+          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/untap', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };

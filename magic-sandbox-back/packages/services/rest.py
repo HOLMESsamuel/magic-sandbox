@@ -54,3 +54,13 @@ async def draw_card(playerId: str, roomId: str):
 async def update_score(playerId: str, roomId: str, score: int):
     response = await game_service.update_score(playerId, roomId, score)
     return response
+
+@router.post("/room/{roomId}/player/{playerId}/card/{cardId}/tap")
+async def tap_card(playerId: str, roomId: str, cardId: str):
+    response = await game_service.tap_card(playerId, roomId, cardId)
+    return response
+
+@router.post("/room/{roomId}/player/{playerId}/card/{cardId}/untap")
+async def tap_card(playerId: str, roomId: str, cardId: str):
+    response = await game_service.untap_card(playerId, roomId, cardId)
+    return response

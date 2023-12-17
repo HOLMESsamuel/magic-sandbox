@@ -9,7 +9,9 @@ websocket_manager = WebSocketManager()
 class GameService:
 
     async def mill_card(self, playerId: str, roomId: str): 
-        move_card_from_deck_to_board(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))
+        game_state = state_manager.get_group_state(roomId)
+        player_index = get_player_index(game_state, playerId)
+        move_card_from_deck_to_board(get_player_from_game_state(game_state, playerId), player_index)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": "Deck milled for player " + playerId + " room " + roomId}
     

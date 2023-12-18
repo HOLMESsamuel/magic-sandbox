@@ -1,5 +1,5 @@
 <template>
-    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false">
+    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup.stop="endDrag">
       <img :src="imageSrc" alt="Card Image">
       <!-- Hover Buttons -->
       <div v-if="hover" class="hover-buttons">
@@ -53,7 +53,6 @@
     },
     mounted() {
       document.addEventListener('mousemove', this.drag);
-      document.addEventListener('mouseup', this.endDrag);
     },
     computed: {
       cardStyle() {

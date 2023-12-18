@@ -1,5 +1,5 @@
 <template>
-  <div class="zoom-pan-container" ref="zoomPanContainer" @wheel="handleZoom" @mousedown="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
+  <div class="zoom-pan-container" ref="zoomPanContainer" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
     <div :style="zoomPanStyles">
       <div :style="containerStyle">
         <div class="axis-horizontal"></div>
@@ -9,7 +9,7 @@
             <div v-if="player && player.board">
               <Card
                 v-for="(card, cIndex) in player.board"
-                :key="`${card.position.x}-${card.position.y}-${card.tapped}`"
+                :key="`${card.id}-${card.position.x}-${card.position.y}-${card.tapped}`"
                 :imageSrc="card.image"
                 :tapped="card.tapped"
                 :roomId="roomId"

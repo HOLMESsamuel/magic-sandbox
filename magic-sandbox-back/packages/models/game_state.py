@@ -66,3 +66,11 @@ def get_player_index(game_state, player_id):
         if player["name"] == player_id:
             return index
     return None
+
+def play_card(player, cardId, position):
+    for index, card in enumerate(player["hand"]):
+        if card["id"] == cardId:
+            removed_card = player["hand"].pop(index)
+            removed_card["position"] = position
+            player["board"].append(removed_card)
+            break

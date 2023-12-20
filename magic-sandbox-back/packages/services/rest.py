@@ -64,3 +64,8 @@ async def tap_card(playerId: str, roomId: str, cardId: str):
 async def tap_card(playerId: str, roomId: str, cardId: str):
     response = await game_service.untap_card(playerId, roomId, cardId)
     return response
+
+@router.post("/room/{roomId}/player/{playerId}/card/{cardId}/play")
+async def tap_card(playerId: str, roomId: str, cardId: str, position: dict):
+    response = await game_service.play_card(playerId, roomId, cardId, position)
+    return response

@@ -20,6 +20,7 @@
                 :scale="scale"
                 :offsetX="offsetX"
                 :offsetY="offsetY"
+                :inHand="false"
                 :reverseMovement="userIndex === 1 || userIndex === 2"
                 @update-position="updateCardPosition(player.name, cIndex, $event)"
                 @show-card="showCard($event)"
@@ -41,6 +42,17 @@
               :initialScore="player.score"
               :userIndex="userIndex">
             </counter>
+            <hand
+              :pIndex="pIndex"
+              :cards="player.hand"
+              :roomId="roomId"
+              :userIndex="userIndex"
+              :player="player.name"
+              :scale="scale"
+              :offsetX="offsetX"
+              :offsetY="offsetY"
+              :reverseMovement="userIndex === 1 || userIndex === 2"
+            ></hand>
           </div>
         </div>
       </div>
@@ -57,6 +69,7 @@
   import Deck from './components/Deck.vue';
   import Card from './components/Card.vue';
   import Counter from './components/Counter.vue'
+  import Hand from './components/Hand.vue'
   import CardModal from './components/CardModal.vue';
 
   export default {
@@ -117,7 +130,7 @@
       document.addEventListener('mouseup', this.endDrag);
     },
     components: {
-      Deck, Card, CardModal, Counter
+      Deck, Card, CardModal, Counter, Hand
     },
     methods: {
       startPan(event) {
@@ -200,10 +213,8 @@
       showCard(imageSrc) {
         this.modalImageSrc = imageSrc;
         this.isModalVisible = true;
-        console.log("show card" + imageSrc + " " + this.isModalVisible);
       },
       closeModal() {
-        console.log("close");
         this.isModalVisible = false;
       }
       },

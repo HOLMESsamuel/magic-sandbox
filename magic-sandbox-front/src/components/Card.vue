@@ -1,11 +1,11 @@
 <template>
-    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup.stop="endDrag">
+    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
       <img :src="imageSrc" alt="Card Image">
       <!-- Hover Buttons -->
       <div v-if="hover" class="hover-buttons">
-        <button v-if="tapped" @click="untap" class="button-left">⟲</button>
+        <button v-if="tapped && !inHand" @click="untap" class="button-left">⟲</button>
         <button class="button-center" @click.stop="showCardDetail">👁️</button>
-        <button v-if="!tapped" @click="tap" class="button-right">⟳</button>
+        <button v-if="!tapped && !inHand" @click="tap" class="button-right">⟳</button>
       </div>
     </div>
     <CardModal :imageSrc="imageSrc" ref="cardModal"></CardModal>
@@ -16,7 +16,7 @@
   import axios from 'axios';
 
   export default {
-    emits: ['update-position', 'show-card'],
+    emits: ['update-position', 'show-card', 'play-card'],
     components: {
       CardModal
     },
@@ -37,7 +37,8 @@
       player: String,
       tapped: Boolean,
       id: String,
-      roomId: String
+      roomId: String,
+      inHand: Boolean
     },
     data() {
       return {
@@ -68,6 +69,11 @@
           transformStyles += 'rotate(180deg) ';
         }
 
+        if(this.inHand && !this.isDragging) {
+          return {
+          }
+        }
+
         return {
           left: this.position.x + 'px',
           top: this.position.y + 'px',
@@ -81,12 +87,22 @@
       startDrag(event) {
         event.preventDefault();
         this.isDragging = true;
-        this.startDragPosition = { x: this.position.x, y: this.position.y };
-        console.log(this.startDragPosition);
         const correctedX = (event.clientX - this.offsetX) / this.scale;
         const correctedY = (event.clientY - this.offsetY) / this.scale;
-        this.cardOffsetX = correctedX - this.position.x;
-        this.cardOffsetY = correctedY - this.position.y;
+        if (this.inHand) {
+          this.position.x = correctedX;
+          this.position.y = correctedY;
+          this.cardOffsetX = 100;
+          this.cardOffsetY = 140;
+          this.startDragPosition = { x: this.position.x, y: this.position.y };
+        } else {
+          this.startDragPosition = { x: this.position.x, y: this.position.y };
+          this.cardOffsetX = correctedX - this.position.x;
+          this.cardOffsetY = correctedY - this.position.y;
+        }
+        console.log(this.startDragPosition);
+        
+        
       },
       drag(event) {
         if (!this.isDragging) return;
@@ -109,7 +125,13 @@
       },
       endDrag() {
         this.isDragging = false;
-        this.$emit('update-position', { x: this.position.x, y: this.position.y });
+        if(this.inHand) {
+          console.log("play card");
+          this.$emit('play-card', { x: this.position.x, y: this.position.y });
+        } else {
+          this.$emit('update-position', { x: this.position.x, y: this.position.y });
+        }
+        
       },
       showCardDetail() {
         this.$emit('show-card', this.imageSrc);

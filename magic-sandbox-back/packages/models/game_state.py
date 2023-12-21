@@ -1,3 +1,5 @@
+import random
+
 def create_game_state():
     return {
         "players": []
@@ -74,3 +76,6 @@ def play_card(player, cardId, position):
             removed_card["position"] = position
             player["board"].append(removed_card)
             break
+
+def shuffle_deck(player):
+    random.shuffle(player["deck"]["cards"])

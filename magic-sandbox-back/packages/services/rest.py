@@ -50,6 +50,11 @@ async def draw_card(playerId: str, roomId: str):
     response = await game_service.draw_card(playerId, roomId)
     return response
 
+@router.post("/room/{roomId}/player/{playerId}/deck/shuffle")
+async def shuffle_deck(playerId: str, roomId: str):
+    response = await game_service.shuffle_deck(playerId, roomId)
+    return response
+
 @router.post("/room/{roomId}/player/{playerId}/score/{score}")
 async def update_score(playerId: str, roomId: str, score: int):
     response = await game_service.update_score(playerId, roomId, score)

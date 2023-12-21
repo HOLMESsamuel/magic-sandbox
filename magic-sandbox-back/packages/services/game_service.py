@@ -20,6 +20,11 @@ class GameService:
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " draw a card"}
     
+    async def shuffle_deck(self, playerId: str, roomId: str):
+        shuffle_deck(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " deck shuffled " }
+    
     async def update_score(self, playerId: str, roomId: str, score: int):
         update_player_score(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), score)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))

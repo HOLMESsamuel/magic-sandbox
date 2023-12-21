@@ -118,7 +118,16 @@
         } catch (error) {
           console.log(error);
         }
-      }
+      },
+      async shuffleDeck() {
+        try{
+          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/deck/shuffle', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+        
+      },
     },
   };
 </script>

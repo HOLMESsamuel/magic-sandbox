@@ -71,6 +71,7 @@
 
         if(this.inHand && !this.isDragging) {
           return {
+            transform: transformStyles
           }
         }
 
@@ -87,22 +88,35 @@
       startDrag(event) {
         event.preventDefault();
         this.isDragging = true;
-        const correctedX = (event.clientX - this.offsetX) / this.scale;
-        const correctedY = (event.clientY - this.offsetY) / this.scale;
+
+        // Calculate the initial position based on the cursor position
+        const mouseX = (event.clientX - this.offsetX) / this.scale;
+        const mouseY = (event.clientY - this.offsetY) / this.scale;
+
         if (this.inHand) {
-          this.position.x = correctedX;
-          this.position.y = correctedY;
-          this.cardOffsetX = 100;
-          this.cardOffsetY = 140;
-          this.startDragPosition = { x: this.position.x, y: this.position.y };
+          // If in hand, set the initial position under the cursor
+          this.position.x = mouseX;
+          this.position.y = mouseY;
+          this.cardOffsetX = mouseX - this.position.x + 100;
+          this.cardOffsetY = mouseY - this.position.y + 140;
+          
+          if(this.reverseMovement) {
+            this.position.x = -mouseX + 1300;
+            this.position.y = -mouseY - 200;
+            this.cardOffsetX = mouseX - this.position.x + 100;
+            this.cardOffsetY = mouseY - this.position.y + 140;
+          }
+          
         } else {
-          this.startDragPosition = { x: this.position.x, y: this.position.y };
-          this.cardOffsetX = correctedX - this.position.x;
-          this.cardOffsetY = correctedY - this.position.y;
+          this.cardOffsetX = mouseX - this.position.x;
+          this.cardOffsetY = mouseY - this.position.y;
         }
+
+        this.startDragPosition = { x: this.position.x, y: this.position.y };
         console.log(this.startDragPosition);
-        
-        
+        console.log(this.offsetX, this.offsetY);
+        console.log(this.scale);
+        console.log(mouseX, mouseY);
       },
       drag(event) {
         if (!this.isDragging) return;

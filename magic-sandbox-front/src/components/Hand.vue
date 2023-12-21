@@ -12,6 +12,7 @@
           :roomId="roomId" 
           :tapped="card.tapped"
           :inHand="true"
+          :reverseMovement="reverseMovement"
           @play-card="handleCardDrop($event, card.id)"
         ></Card>
       </div>
@@ -54,14 +55,12 @@
           case 1:
             return {
               left: "350px",
-              top: "-1500px",
-              transform: "rotate(180deg)"
+              top: "-1500px"
             };
           case 2:
             return {
               left: "-2100px",
-              top: "-1500px",
-              transform: "rotate(180deg)"
+              top: "-1500px"
             };
           case 3:
             return {

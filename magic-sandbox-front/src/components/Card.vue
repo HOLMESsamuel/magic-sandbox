@@ -151,16 +151,18 @@
         this.$emit('show-card', this.imageSrc);
       },
       async tap() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/tap', {});
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/tap', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
         }
       },
       async untap() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/untap', {});
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/untap', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

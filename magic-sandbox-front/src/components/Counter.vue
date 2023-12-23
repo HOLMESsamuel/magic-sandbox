@@ -72,11 +72,12 @@
             this.updateScore();
         },
         async updateScore() {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
             try{
-            const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/score/' + this.score, {});
-            console.log(response.data);
+              const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/score/' + this.score, {});
+              console.log(response.data);
             } catch (error) {
-            console.log(error);
+              console.log(error);
             }
         
       },

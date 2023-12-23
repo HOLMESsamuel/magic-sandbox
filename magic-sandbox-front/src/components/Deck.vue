@@ -72,6 +72,7 @@
     },
     methods: {
       async addDeck() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
         if (!this.deckLink) {
           this.errorMessage = "The URL cannot be empty.";
           return;
@@ -80,7 +81,7 @@
         this.isLoading = true;
         this.errorMessage = ''; // Reset the error message
         try {
-          const response = await axios.post('http://localhost:8000/deck', { url: this.deckLink });
+          const response = await axios.post(`${backendUrl}` + 'deck', { url: this.deckLink });
           console.log(response.data);
           this.$emit('add-deck', response.data);
 
@@ -95,8 +96,9 @@
         }
       },
       async resetDeck() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/deck/reset', {});
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/reset', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -104,24 +106,27 @@
         
       },
       async millCard() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/deck/mill', {});
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/mill', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
         }
       },
       async drawCard() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/deck/draw', {});
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/draw', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
         }
       },
       async shuffleDeck() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post('http://localhost:8000/room/' + this.roomId +'/player/'+ this.playerName + '/deck/shuffle', {});
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/shuffle', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

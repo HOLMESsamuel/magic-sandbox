@@ -28,15 +28,14 @@ def create_player(name):
 def move_card_from_deck_to_board(player, playerIndex):
     if player["deck"]:
         card = player["deck"]["cards"].pop(0)  
-        match playerIndex:
-            case 0:
-                card["position"] = {'x': 2400, 'y': 610}
-            case 1:
-                card["position"] = {'x': 50, 'y': -890}
-            case 2:
-                card["position"] = {'x': -2400, 'y': -890}
-            case 3:
-                card["position"] = {'x': -250, 'y': 610}
+        if playerIndex == 0:
+            card["position"] = {'x': 2400, 'y': 610}
+        elif playerIndex == 1:
+            card["position"] = {'x': 50, 'y': -890}
+        elif playerIndex == 2:
+            card["position"] = {'x': -2400, 'y': -890}
+        elif playerIndex == 3:
+            card["position"] = {'x': -250, 'y': 610}
         player["board"].append(card)  # Add the card to the board
     else:
         print("The deck is empty, no card to move.")

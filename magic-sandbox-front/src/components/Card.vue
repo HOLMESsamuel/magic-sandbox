@@ -1,11 +1,9 @@
 <template>
-    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
+    <div class="card" :style="cardStyle" @click="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
       <img :src="imageSrc" alt="Card Image">
       <!-- Hover Buttons -->
       <div v-if="hover" class="hover-buttons">
-        <button v-if="tapped && !inHand" @click="untap" class="button-left">⟲</button>
         <button class="button-center" @click.stop="showCardDetail">👁️</button>
-        <button v-if="!tapped && !inHand" @click="tap" class="button-right">⟳</button>
       </div>
     </div>
     <CardModal :imageSrc="imageSrc" ref="cardModal"></CardModal>
@@ -150,6 +148,15 @@
       showCardDetail() {
         this.$emit('show-card', this.imageSrc);
       },
+      async toogleTap() {
+        if(!this.inHand) {
+          if(this.tapped) {
+            this.untap();
+          } else {
+            this.tap();
+          }
+        } 
+      },
       async tap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
@@ -193,7 +200,7 @@
   align-items: start;
 }
 
-.button-left, .button-center, .button-right {
+.button-center {
   background: #FFF;
   border: none;
   cursor: pointer;
@@ -201,7 +208,7 @@
   border-radius: 50%;
 }
 
-.button-left:hover, .button-center:hover, .button-right:hover{
+.button-center:hover {
   background: #a99d9d;
 }
 

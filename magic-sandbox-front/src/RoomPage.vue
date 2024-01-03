@@ -37,6 +37,7 @@
             <counter
               :key="`${player.name}-${player.score}`"
               :playerName="player.name"
+              :isDeckLoaded="player.deck.cards && player.deck.cards.length > 0"
               :roomId="roomId"
               :pIndex="pIndex"
               :initialScore="player.score"

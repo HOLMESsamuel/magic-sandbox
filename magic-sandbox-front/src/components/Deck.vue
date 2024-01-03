@@ -7,15 +7,7 @@
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
     </div>
-    <div class="deck-loaded" v-if="isDeckLoaded">
-      <div v-if="pIndex == userIndex"> <!-- if the player is the player using this frontend -->
-        <button @click="drawCard">Draw</button>
-        <button @click="millCard">Mill</button>
-        <button @click="scryCard">Scry</button>
-        <button @click="lookCard">Look</button>
-        <button @click="shuffleDeck">Shuffle</button>
-        <button @click="resetDeck">Reset</button>
-      </div>
+    <div class="deck-loaded" v-if="isDeckLoaded" @click="drawCard">
     </div>
 </div>
   
@@ -95,44 +87,17 @@
           this.isLoading = false;
         }
       },
-      async resetDeck() {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL;
-        try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/reset', {});
-          console.log(response.data);
-        } catch (error) {
-          console.log(error);
-        }
-        
-      },
-      async millCard() {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL;
-        try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/mill', {});
-          console.log(response.data);
-        } catch (error) {
-          console.log(error);
-        }
-      },
       async drawCard() {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL;
-        try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/draw', {});
-          console.log(response.data);
-        } catch (error) {
-          console.log(error);
+        if(this.pIndex == this.userIndex) {
+          const backendUrl = import.meta.env.VITE_BACKEND_URL;
+          try{
+            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/draw', {});
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
         }
-      },
-      async shuffleDeck() {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL;
-        try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/shuffle', {});
-          console.log(response.data);
-        } catch (error) {
-          console.log(error);
-        }
-        
-      },
+      }
     },
   };
 </script>

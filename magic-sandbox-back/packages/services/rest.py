@@ -17,8 +17,6 @@ class DeckInput(BaseModel):
 router = APIRouter()
 game_service = GameService()
 
-url = "https://archidekt.com/decks/6015452/commander_eldrazi"
-
 @router.post("/deck")
 async def scrap_deck(deck_input: DeckInput):
     try:
@@ -43,6 +41,11 @@ def throw_dice():
 @router.post("/room/{roomId}/player/{playerId}/deck/mill")
 async def mill_deck(playerId: str, roomId: str):
     response = await game_service.mill_card(playerId, roomId)
+    return response
+
+@router.post("/room/{roomId}/player/{playerId}/deck/reset")
+async def mill_deck(playerId: str, roomId: str):
+    response = await game_service.reset(playerId, roomId)
     return response
 
 @router.post("/room/{roomId}/player/{playerId}/deck/draw")

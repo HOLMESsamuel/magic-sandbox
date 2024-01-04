@@ -15,6 +15,12 @@ class GameService:
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": "Deck milled for player " + playerId + " room " + roomId}
     
+    async def reset(self, playerId: str, roomId: str): 
+        game_state = state_manager.get_group_state(roomId)
+        reset_player(get_player_from_game_state(game_state, playerId))
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": "Deck and board reset for " + playerId + " room " + roomId}
+    
     async def draw_card(self, playerId: str, roomId: str): 
         move_card_from_deck_to_hand(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))

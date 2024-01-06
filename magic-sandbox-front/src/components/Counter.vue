@@ -14,6 +14,7 @@
           <button @click="lookDeck" class="deck-button">Look</button>
           <button @click="shuffleDeck" class="deck-button">Shuffle</button>
           <button @click="resetDeck" class="deck-button">Reset</button>
+          <button @click="detapAll" class="deck-button">Detap</button>
         </div>
       </div>
 </template>
@@ -139,7 +140,15 @@
           } catch (error) {
             console.log(error);
           }
-          
+        },
+        async detapAll() {
+          const backendUrl = import.meta.env.VITE_BACKEND_URL;
+          try{
+            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/board/detap', {});
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
         }
       },
     };

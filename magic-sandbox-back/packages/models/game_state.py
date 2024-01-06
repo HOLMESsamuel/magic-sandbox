@@ -77,6 +77,10 @@ def untap_card(player, cardId):
             player["board"][index]["tapped"] = False
             break
 
+def detap_all(player):
+    for index, card in enumerate(player["board"]):
+        player["board"][index]["tapped"] = False
+
 def get_player_index(game_state, player_id):
     for index, player in enumerate(game_state["players"]):
         if player["name"] == player_id:

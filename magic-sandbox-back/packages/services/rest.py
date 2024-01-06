@@ -82,3 +82,8 @@ async def tap_card(playerId: str, roomId: str, cardId: str, position: dict):
 async def tap_card(playerId: str, roomId: str, cardId: str):
     response = await game_service.add_card_to_hand(playerId, roomId, cardId)
     return response
+
+@router.post("/room/{roomId}/player/{playerId}/board/detap")
+async def tap_card(playerId: str, roomId: str):
+    response = await game_service.detap_all(playerId, roomId)
+    return response

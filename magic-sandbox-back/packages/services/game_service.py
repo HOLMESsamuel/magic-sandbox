@@ -55,3 +55,8 @@ class GameService:
         play_card(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), cardId, position)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " play " + cardId}
+    
+    async def detap_all(self, playerId: str, roomId: str):
+        detap_all(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " detap all"}

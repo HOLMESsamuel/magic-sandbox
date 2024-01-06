@@ -11,7 +11,7 @@
         <div v-if="isDeckLoaded" :style="deckButtonStyle" class="deck-buttons"> <!-- if the player is the player using this frontend -->
           <button @click="millCard" class="deck-button">Mill</button>
           <button @click="scryCard" class="deck-button">Scry</button>
-          <button @click="lookCard" class="deck-button">Look</button>
+          <button @click="lookDeck" class="deck-button">Look</button>
           <button @click="shuffleDeck" class="deck-button">Shuffle</button>
           <button @click="resetDeck" class="deck-button">Reset</button>
         </div>
@@ -22,6 +22,7 @@
     import axios from 'axios';
   
     export default {
+      emits: ["show-deck"],
       props: {
         playerName: String,
         roomId: String,
@@ -98,6 +99,9 @@
         decrementScore() {
             this.score -= 1;
             this.updateScore();
+        },
+        lookDeck() {
+          this.$emit('show-deck');
         },
         async updateScore() {
             const backendUrl = import.meta.env.VITE_BACKEND_URL;

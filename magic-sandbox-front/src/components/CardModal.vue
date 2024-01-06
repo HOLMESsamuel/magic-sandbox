@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isModalVisible" class="modal" @click="closeModal">
+    <div v-if="isCardModalVisible" class="modal" @click="closeModal">
       <div class="modal-content" @click.stop> <!--allow to click anywhere to close the modal except on the card-->
         <img :src="modalImageSrc" alt="Enlarged Card" />
         <button class="close-button" @click.stop="closeModal"></button>
@@ -9,14 +9,14 @@
   
   <script>
   export default {
-    emits: ["close-modal"],
+    emits: ["close-card-modal"],
     props: {
       modalImageSrc: String,
-      isModalVisible: Boolean
+      isCardModalVisible: Boolean
     },
     methods: {
       closeModal() {
-        this.$emit('close-modal');
+        this.$emit('close-card-modal');
       }
     }
   };

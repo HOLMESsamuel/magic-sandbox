@@ -41,7 +41,8 @@
               :roomId="roomId"
               :pIndex="pIndex"
               :initialScore="player.score"
-              :userIndex="userIndex">
+              :userIndex="userIndex"
+              @show-deck="showDeck($event)">
             </counter>
             <hand
               :pIndex="pIndex"
@@ -61,9 +62,15 @@
   </div>
   <card-modal
     :modalImageSrc="modalImageSrc"
-    :isModalVisible="isModalVisible"
-    @close-modal="closeModal"
+    :isCardModalVisible="isCardModalVisible"
+    @close-card-modal="closeCardModal"
   ></card-modal>
+  <deck-modal
+    :isDeckModalVisible="isDeckModalVisible"
+    :cards="userCards"
+    @close-deck-modal="closeDeckModal"
+    @add-card-to-hand="addToHand($event)"
+  ></deck-modal>
 </template>
   
   <script>
@@ -72,6 +79,9 @@
   import Counter from './components/Counter.vue'
   import Hand from './components/Hand.vue'
   import CardModal from './components/CardModal.vue';
+  import DeckModal from './components/DeckModal.vue';
+
+  import axios from 'axios';
 
   export default {
     props: {
@@ -90,7 +100,8 @@
         offsetX: 0,
         offsetY: 0,
         modalImageSrc: '',
-        isModalVisible: false
+        isCardModalVisible: false,
+        isDeckModalVisible: false
       };
     },
     computed: {
@@ -105,6 +116,12 @@
       },
       userIndex() {
         return this.state.players.findIndex(player => player.name === this.userName);
+      },
+      userCards() {
+        if (this.state.players.length > this.userIndex && this.state.players[this.userIndex]) {
+          return this.state.players[this.userIndex].deck.cards;
+        }
+        return []; // Return an empty array if the user or cards are not available
       },
       containerStyle() {
         switch (this.userIndex) {
@@ -131,7 +148,7 @@
       document.addEventListener('mouseup', this.endDrag);
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand
+      Deck, Card, CardModal, Counter, Hand, DeckModal
     },
     methods: {
       startPan(event) {
@@ -213,11 +230,26 @@
       },
       showCard(imageSrc) {
         this.modalImageSrc = imageSrc;
-        this.isModalVisible = true;
+        this.isCardModalVisible = true;
       },
-      closeModal() {
-        this.isModalVisible = false;
-      }
+      showDeck() {
+        this.isDeckModalVisible = true;
+      },
+      closeCardModal() {
+        this.isCardModalVisible = false;
+      },
+      closeDeckModal() {
+        this.isDeckModalVisible = false;
+      },
+      async addToHand(cardId) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + cardId + '/hand', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
       },
       beforeDestroy() {
         if (this.ws) {

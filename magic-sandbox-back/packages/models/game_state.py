@@ -30,7 +30,7 @@ def reset_player(player):
     player["hand"] = []
     player["board"] = []
 
-def move_card_from_deck_to_board(player, playerIndex):
+def mill_card(player, playerIndex):
     if player["deck"]:
         card = player["deck"]["cards"].pop(0)  
         if playerIndex == 0:
@@ -45,10 +45,20 @@ def move_card_from_deck_to_board(player, playerIndex):
     else:
         print("The deck is empty, no card to move.")
 
-def move_card_from_deck_to_hand(player):
+def draw_card(player):
     if player["deck"]:
         card = player["deck"]["cards"].pop(0)  # Remove the first card from the deck
         player["hand"].append(card)  # Add the card to the hand
+    else:
+        print("The deck is empty, no card to move.")
+
+def move_card_from_deck_to_hand(player, cardId):
+    if player["deck"]:
+        for index, card in enumerate(player["deck"]["cards"]):
+            if card["id"] == cardId:
+                card = player["deck"]["cards"].pop(index)
+                player["hand"].append(card)
+                break
     else:
         print("The deck is empty, no card to move.")
 

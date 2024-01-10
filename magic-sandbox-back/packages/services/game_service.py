@@ -60,3 +60,8 @@ class GameService:
         detap_all(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " detap all"}
+    
+    async def mulligan(self, playerId: str, roomId: str):
+        mulligan(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " mulligan"}

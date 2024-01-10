@@ -87,3 +87,8 @@ async def tap_card(playerId: str, roomId: str, cardId: str):
 async def tap_card(playerId: str, roomId: str):
     response = await game_service.detap_all(playerId, roomId)
     return response
+
+@router.post("/room/{roomId}/player/{playerId}/mulligan")
+async def tap_card(playerId: str, roomId: str):
+    response = await game_service.mulligan(playerId, roomId)
+    return response

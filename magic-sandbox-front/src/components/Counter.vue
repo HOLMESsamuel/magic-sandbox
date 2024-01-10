@@ -15,6 +15,7 @@
           <button @click="shuffleDeck" class="deck-button">Shuffle</button>
           <button @click="resetDeck" class="deck-button">Reset</button>
           <button @click="detapAll" class="deck-button">Detap</button>
+          <button @click="mulligan" class="deck-button">Mulligan</button>
         </div>
       </div>
 </template>
@@ -145,6 +146,15 @@
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
           try{
             const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/board/detap', {});
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        async mulligan() {
+          const backendUrl = import.meta.env.VITE_BACKEND_URL;
+          try{
+            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/mulligan', {});
             console.log(response.data);
           } catch (error) {
             console.log(error);

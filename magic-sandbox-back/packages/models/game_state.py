@@ -81,6 +81,12 @@ def detap_all(player):
     for index, card in enumerate(player["board"]):
         player["board"][index]["tapped"] = False
 
+def mulligan(player):
+    if player["deck"]:
+        player["deck"]["cards"].extend(player["hand"])
+        player["hand"] = []
+        shuffle_deck(player)
+
 def get_player_index(game_state, player_id):
     for index, player in enumerate(game_state["players"]):
         if player["name"] == player_id:

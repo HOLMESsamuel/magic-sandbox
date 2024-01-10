@@ -9,7 +9,7 @@
             <div v-if="player && player.board">
               <Card
                 v-for="(card, cIndex) in player.board"
-                :key="`${card.id}-${card.position.x}-${card.position.y}-${card.tapped}`"
+                :key="`${card.id}-${card.position.x}-${card.position.y}`"
                 :imageSrc="card.image"
                 :tapped="card.tapped"
                 :roomId="roomId"

@@ -96,6 +96,7 @@
     padding: 10px;
     width: 1500px;
     height: 300px;
+    z-index: 0;
   }
   
   .hand-card {

@@ -188,6 +188,7 @@
 
 .card {
   position: relative; /* Needed to position child elements absolutely */
+  z-index: 2;
 }
 
 .hover-buttons {

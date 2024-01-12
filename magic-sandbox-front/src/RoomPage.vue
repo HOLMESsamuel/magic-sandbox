@@ -10,6 +10,7 @@
               <Card
                 v-for="(card, cIndex) in player.board"
                 :key="`${card.id}-${card.position.x}-${card.position.y}`"
+                :name="card.name"
                 :imageSrc="card.image"
                 :tapped="card.tapped"
                 :roomId="roomId"

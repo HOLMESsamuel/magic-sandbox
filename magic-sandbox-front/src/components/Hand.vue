@@ -3,6 +3,7 @@
       <div v-if="pIndex == userIndex" v-for="(card, index) in cards" :key="index" class="hand-card">
         <Card :key="index"
           :imageSrc="card.image"
+          :name="card.name"
           :scale="scale"
           :offsetX="offsetX" 
           :offsetY="offsetY"

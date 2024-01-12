@@ -1,6 +1,6 @@
 <template>
     <div class="card" :style="cardStyle" @click="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
-      <img :src="imageSrc" alt="Card Image">
+      <img :src="imageSrc" :alt="name">
       <!-- Hover Buttons -->
       <div v-if="hover" class="hover-buttons">
         <button class="button-center" @click.stop="showCardDetail">👁️</button>
@@ -36,7 +36,8 @@
       tapped: Boolean,
       id: String,
       roomId: String,
-      inHand: Boolean
+      inHand: Boolean,
+      name: String
     },
     data() {
       return {

@@ -151,7 +151,6 @@
         } else {
           this.$emit('update-position', { x: this.position.x, y: this.position.y });
         }
-        
       },
       showCardDetail() {
         this.$emit('show-card', this.imageSrc);

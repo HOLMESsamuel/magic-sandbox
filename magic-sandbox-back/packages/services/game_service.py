@@ -26,7 +26,7 @@ class GameService:
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " draw a card"}
     
-    async def add_card_to_hand(self, playerId: str, roomId: str, cardId: str):
+    async def move_card_from_deck_to_hand(self, playerId: str, roomId: str, cardId: str):
         move_card_from_deck_to_hand(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), cardId)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " card moved to hand"}

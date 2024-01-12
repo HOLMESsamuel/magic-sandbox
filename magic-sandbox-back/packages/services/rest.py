@@ -44,7 +44,7 @@ async def mill_deck(playerId: str, roomId: str):
     return response
 
 @router.post("/room/{roomId}/player/{playerId}/deck/reset")
-async def mill_deck(playerId: str, roomId: str):
+async def reset(playerId: str, roomId: str):
     response = await game_service.reset(playerId, roomId)
     return response
 
@@ -69,26 +69,26 @@ async def tap_card(playerId: str, roomId: str, cardId: str):
     return response
 
 @router.post("/room/{roomId}/player/{playerId}/card/{cardId}/untap")
-async def tap_card(playerId: str, roomId: str, cardId: str):
+async def untap_card(playerId: str, roomId: str, cardId: str):
     response = await game_service.untap_card(playerId, roomId, cardId)
     return response
 
 @router.post("/room/{roomId}/player/{playerId}/card/{cardId}/play")
-async def tap_card(playerId: str, roomId: str, cardId: str, position: dict):
+async def play_card(playerId: str, roomId: str, cardId: str, position: dict):
     response = await game_service.play_card(playerId, roomId, cardId, position)
     return response
 
 @router.post("/room/{roomId}/player/{playerId}/card/{cardId}/hand")
-async def tap_card(playerId: str, roomId: str, cardId: str):
-    response = await game_service.add_card_to_hand(playerId, roomId, cardId)
+async def move_card_from_deck_to_hand(playerId: str, roomId: str, cardId: str):
+    response = await game_service.move_card_from_deck_to_hand(playerId, roomId, cardId)
     return response
 
 @router.post("/room/{roomId}/player/{playerId}/board/detap")
-async def tap_card(playerId: str, roomId: str):
+async def detap_all(playerId: str, roomId: str):
     response = await game_service.detap_all(playerId, roomId)
     return response
 
 @router.post("/room/{roomId}/player/{playerId}/mulligan")
-async def tap_card(playerId: str, roomId: str):
+async def mulligan(playerId: str, roomId: str):
     response = await game_service.mulligan(playerId, roomId)
     return response

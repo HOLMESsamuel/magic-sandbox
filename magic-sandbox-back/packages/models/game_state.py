@@ -63,6 +63,27 @@ def move_card_from_deck_to_hand(player, cardId):
     else:
         print("The deck is empty, no card to move.")
 
+def move_card_from_board_to_hand(player, cardId, target_player):
+    if player["board"]:
+        for index, card in enumerate(player["board"]):
+            if card["id"] == cardId:
+                card = player["board"].pop(index)
+                card["tapped"] = False
+                target_player["hand"].append(card)
+                break
+    else:
+        print("The board is empty, no card to move.")
+
+def move_card_from_hand_to_hand(player, cardId, target_player):
+    if player["hand"]:
+        for index, card in enumerate(player["hand"]):
+            if card["id"] == cardId:
+                card = player["hand"].pop(index)
+                target_player["hand"].append(card)
+                break
+    else:
+        print("The board is empty, no card to move.")
+
 def update_player_score(player, score):
     player['score'] = score
 

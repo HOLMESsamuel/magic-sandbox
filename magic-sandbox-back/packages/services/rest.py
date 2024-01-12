@@ -78,9 +78,19 @@ async def play_card(playerId: str, roomId: str, cardId: str, position: dict):
     response = await game_service.play_card(playerId, roomId, cardId, position)
     return response
 
-@router.post("/room/{roomId}/player/{playerId}/card/{cardId}/hand")
+@router.post("/room/{roomId}/player/{playerId}/deck/card/{cardId}/hand")
 async def move_card_from_deck_to_hand(playerId: str, roomId: str, cardId: str):
     response = await game_service.move_card_from_deck_to_hand(playerId, roomId, cardId)
+    return response
+
+@router.post("/room/{roomId}/player/{playerId}/board/card/{cardId}/hand/{targetPlayerId}")
+async def move_card_from_board_to_hand(playerId: str, roomId: str, cardId: str, targetPlayerId: str):
+    response = await game_service.move_card_from_board_to_hand(playerId, roomId, cardId, targetPlayerId)
+    return response
+
+@router.post("/room/{roomId}/player/{playerId}/hand/card/{cardId}/hand/{targetPlayerId}")
+async def move_card_from_hand_to_hand(playerId: str, roomId: str, cardId: str, targetPlayerId: str):
+    response = await game_service.move_card_from_hand_to_hand(playerId, roomId, cardId, targetPlayerId)
     return response
 
 @router.post("/room/{roomId}/player/{playerId}/board/detap")

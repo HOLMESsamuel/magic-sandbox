@@ -29,7 +29,21 @@ class GameService:
     async def move_card_from_deck_to_hand(self, playerId: str, roomId: str, cardId: str):
         move_card_from_deck_to_hand(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), cardId)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
-        return {"message": playerId + " room " + roomId + " card moved to hand"}
+        return {"message": playerId + " room " + roomId + " card moved from deck to hand"}
+    
+    async def move_card_from_board_to_hand(self, playerId: str, roomId: str, cardId: str, targetPlayerId: str):
+        player = get_player_from_game_state(state_manager.get_group_state(roomId), playerId)
+        target_player = get_player_from_game_state(state_manager.get_group_state(roomId), targetPlayerId)
+        move_card_from_board_to_hand(player, cardId, target_player)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " card moved from board to hand"}
+    
+    async def move_card_from_hand_to_hand(self, playerId: str, roomId: str, cardId: str, targetPlayerId: str):
+        player = get_player_from_game_state(state_manager.get_group_state(roomId), playerId)
+        target_player = get_player_from_game_state(state_manager.get_group_state(roomId), targetPlayerId)
+        move_card_from_hand_to_hand(player, cardId, target_player)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " card moved from board to hand"}
     
     async def shuffle_deck(self, playerId: str, roomId: str):
         shuffle_deck(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))

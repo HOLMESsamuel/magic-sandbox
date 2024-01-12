@@ -14,7 +14,7 @@
   import axios from 'axios';
 
   export default {
-    emits: ['update-position', 'show-card', 'play-card'],
+    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand'],
     components: {
       CardModal
     },
@@ -28,6 +28,7 @@
       offsetX: Number,
       offsetY: Number,
       pIndex: Number,
+      userIndex: Number,
       reverseMovement: {
         type: Boolean,
         default: false
@@ -146,10 +147,25 @@
       },
       endDrag() {
         this.isDragging = false;
+        let playerIndex = this.checkIfCardInPlayerHand()
+        if(playerIndex != null) {
+          console.log(playerIndex);
+          //if the card comes from a and to a hand
+          //if it returns to the same hand do nothing
+          if(this.inHand && playerIndex != this.userIndex) {
+            this.$emit('move-from-hand-to-hand', { cardId: this.id, targetPlayerIndex: playerIndex });
+            return;
+          } else {
+            this.$emit('move-from-board-to-hand', { cardId: this.id, targetPlayerIndex: playerIndex });
+            return;
+          }
+        }
         if(this.inHand) {
           this.$emit('play-card', { x: this.position.x, y: this.position.y });
+          return;
         } else {
           this.$emit('update-position', { x: this.position.x, y: this.position.y });
+          return;
         }
       },
       showCardDetail() {
@@ -181,6 +197,36 @@
         } catch (error) {
           console.log(error);
         }
+      },
+      checkIfCardInPlayerHand() {
+        const playersHandAreas = this.getPlayersHandAreas();
+        const cardCenter = {
+          x: this.position.x,
+          y: this.position.y
+        };
+
+        for (let i = 0; i < playersHandAreas.length; i++) {
+          if (this.isPointInsideRect(cardCenter, playersHandAreas[i])) {
+            return i;
+          }
+        }
+        return null;
+      },
+
+      getPlayersHandAreas() {
+        // Returns an array of rectangular areas for each player's hand
+        // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }
+        return [
+          { x1: 700, y1: 1075, x2: 2205, y2: 1375 }, 
+          { x1: 263, y1: -1615, x2: 1760, y2: -1325 }
+        ];
+      },
+
+      isPointInsideRect(point, rect) {
+        return (
+          point.x >= rect.x1 && point.x <= rect.x2 &&
+          point.y >= rect.y1 && point.y <= rect.y2
+        );
       }
     }
   };

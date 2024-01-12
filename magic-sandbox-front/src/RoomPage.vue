@@ -17,6 +17,7 @@
                 :id="card.id"
                 :initialPosition="card.position"
                 :player="player.name"
+                :userIndex="userIndex"
                 :pIndex="pIndex"
                 :scale="scale"
                 :offsetX="offsetX"
@@ -27,6 +28,8 @@
                 :reverseMovement="userIndex === 1 || userIndex === 2"
                 @update-position="updateCardPosition(player.name, cIndex, $event)"
                 @show-card="showCard($event)"
+                @move-from-hand-to-hand="moveFromHandToHand($event)"
+                @move-from-board-to-hand="moveFromBoardToHand($event)"
               ></Card>
             </div>
             <deck 
@@ -251,12 +254,32 @@
       async addToHand(cardId) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + cardId + '/hand', {});
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/deck/card/' + cardId + '/hand', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
         }
       },
+      async moveFromBoardToHand(event) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
+        try{
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/board/card/' + event.cardId + '/hand/' + targetPlayerName, {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async moveFromHandToHand(event) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
+        try{
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/hand/' + targetPlayerName, {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
       },
       beforeDestroy() {
         if (this.ws) {

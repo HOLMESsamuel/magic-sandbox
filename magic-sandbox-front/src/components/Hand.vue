@@ -13,6 +13,7 @@
           :roomId="roomId" 
           :tapped="card.tapped"
           :inHand="true"
+          :maxZIndex="maxZIndex"
           :reverseMovement="reverseMovement"
           @play-card="handleCardDrop($event, card.id)"
         ></Card>
@@ -43,7 +44,8 @@
       reverseMovement: {
         type: Boolean,
         default: false
-      } 
+      }, 
+      maxZIndex: Number
     },
     computed: {
       handStyle() {
@@ -51,22 +53,26 @@
           case 0:
             return {
               left: "800px",
-              top: "1200px"
+              top: "1200px",
+              'z-index': this.maxZIndex
             };
           case 1:
             return {
               left: "350px",
-              top: "-1500px"
+              top: "-1500px",
+              'z-index': this.maxZIndex
             };
           case 2:
             return {
               left: "-2100px",
-              top: "-1500px"
+              top: "-1500px",
+              'z-index': this.maxZIndex
             };
           case 3:
             return {
               left: "-1850px",
-              top: "1200px"
+              top: "1200px",
+              'z-index': this.maxZIndex
             };
         }  
       },
@@ -97,7 +103,6 @@
     padding: 10px;
     width: 1500px;
     height: 300px;
-    z-index: 0;
   }
   
   .hand-card {

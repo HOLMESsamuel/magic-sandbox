@@ -2,7 +2,8 @@ import random
 
 def create_game_state():
     return {
-        "players": []
+        "players": [],
+        "max_z_index": 1
     }
 
 def add_player_to_game_state_if_not_exist(game_state, player_name):
@@ -93,11 +94,12 @@ def get_player_index(game_state, player_id):
             return index
     return None
 
-def play_card(player, cardId, position):
+def play_card(player, cardId, position, max_z_index):
     for index, card in enumerate(player["hand"]):
         if card["id"] == cardId:
             removed_card = player["hand"].pop(index)
             removed_card["position"] = position
+            removed_card["z_index"] = max_z_index
             player["board"].append(removed_card)
             break
 

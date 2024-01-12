@@ -37,7 +37,9 @@
       id: String,
       roomId: String,
       inHand: Boolean,
-      name: String
+      name: String,
+      zIndex: Number,
+      maxZIndex: Number
     },
     data() {
       return {
@@ -57,6 +59,15 @@
     computed: {
       cardStyle() {
         let transformStyles = '';
+        let zIndex = 2;
+
+        if(this.zIndex) {
+          zIndex = this.zIndex;
+        }
+        
+        if(this.isDragging) {
+          zIndex = this.maxZIndex + 1;
+        }
 
         // Add 90 degrees rotation if the card is tapped
         if (this.tapped) {
@@ -79,7 +90,8 @@
           top: this.position.y + 'px',
           position: 'fixed',
           cursor: 'pointer',
-          transform: transformStyles
+          transform: transformStyles,
+          'z-index': zIndex
         };
       }
     },
@@ -112,10 +124,6 @@
         }
 
         this.startDragPosition = { x: this.position.x, y: this.position.y };
-        console.log(this.startDragPosition);
-        console.log(this.offsetX, this.offsetY);
-        console.log(this.scale);
-        console.log(mouseX, mouseY);
       },
       drag(event) {
         if (!this.isDragging) return;
@@ -139,7 +147,6 @@
       endDrag() {
         this.isDragging = false;
         if(this.inHand) {
-          console.log("play card");
           this.$emit('play-card', { x: this.position.x, y: this.position.y });
         } else {
           this.$emit('update-position', { x: this.position.x, y: this.position.y });
@@ -189,7 +196,6 @@
 
 .card {
   position: relative; /* Needed to position child elements absolutely */
-  z-index: 2;
 }
 
 .hover-buttons {

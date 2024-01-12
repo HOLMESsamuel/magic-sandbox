@@ -22,6 +22,8 @@
                 :offsetX="offsetX"
                 :offsetY="offsetY"
                 :inHand="false"
+                :zIndex="card.z_index"
+                :maxZIndex="state.max_z_index"
                 :reverseMovement="userIndex === 1 || userIndex === 2"
                 @update-position="updateCardPosition(player.name, cIndex, $event)"
                 @show-card="showCard($event)"
@@ -54,6 +56,7 @@
               :scale="scale"
               :offsetX="offsetX"
               :offsetY="offsetY"
+              :maxZIndex="state.max_z_index"
               :reverseMovement="userIndex === 1 || userIndex === 2"
             ></hand>
           </div>
@@ -211,7 +214,10 @@
       },
       updateCardPosition(playerName, index, newPosition) {
         const player = this.state.players.find(p => p.name === playerName);
+        this.state.max_z_index += 1;
+        const maxZIndex = this.state.max_z_index
         player.board[index].position = newPosition;
+        player.board[index].z_index = maxZIndex;
         this.sendPosition();
       },
       sendPosition() {

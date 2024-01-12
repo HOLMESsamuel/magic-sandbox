@@ -104,6 +104,10 @@
     width: 1500px;
     height: 300px;
   }
+
+  .hand-container:hover {
+    z-index: 0;
+  }
   
   .hand-card {
     margin: 5px;

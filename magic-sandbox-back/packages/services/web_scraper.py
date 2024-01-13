@@ -15,6 +15,7 @@ from ..models.deck import Deck
 class WebScraper:
 
     def __init__(self):
+        print("initializing web scraper")
         # Set up the Selenium WebDriver
         options = Options()
         options.add_argument('--headless')

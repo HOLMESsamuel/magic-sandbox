@@ -213,12 +213,40 @@
         return null;
       },
 
+      checkIfCardInPlayerDeck() {
+        const playersDeckAreas = this.getPlayersDeckAreas();
+        const cardCenter = {
+          x: this.position.x,
+          y: this.position.y
+        };
+
+        for (let i = 0; i < playersDeckAreas.length; i++) {
+          if (this.isPointInsideRect(cardCenter, playersDeckAreas[i])) {
+            return i;
+          }
+        }
+        return null;
+      },
+
       getPlayersHandAreas() {
         // Returns an array of rectangular areas for each player's hand
         // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }
         return [
-          { x1: 700, y1: 1075, x2: 2205, y2: 1375 }, 
-          { x1: 263, y1: -1615, x2: 1760, y2: -1325 }
+          { x1: 700, y1: 1075, x2: 2205, y2: 1375 }, //player 0
+          { x1: 263, y1: -1615, x2: 1760, y2: -1325 }, //player 1
+          { x1: -680, y1: -1330, x2: -2200, y2: -1630 }, //player 2
+          { x1: -1950, y1: 1050, x2: -430, y2: 1360 }  //player 3
+        ];
+      },
+
+      getPlayersDeckAreas() {
+        // Returns an array of rectangular areas for each player's deck
+        // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }
+        return [
+          { x1: 2300, y1: 775, x2: 2500, y2: 1020 }, //player 0
+          { x1: 145, y1: -1035, x2: -45, y2: -1325 }, //player 1
+          { x1: -2300, y1: -1000, x2: -2500, y2: -1300 }, //player 2
+          { x1: -350, y1: 780, x2: -150, y2: 1080 }  //player 3
         ];
       },
 

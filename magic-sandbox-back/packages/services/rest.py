@@ -21,6 +21,7 @@ game_service = GameService()
 async def scrap_deck(deck_input: DeckInput):
     try:
         web_scraper = WebScraper()
+        print("web scraper initialized")
         deck = web_scraper.get_deck(deck_input.url)
         return deck
     except ValueError as ve:

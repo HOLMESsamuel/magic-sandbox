@@ -103,3 +103,8 @@ async def detap_all(playerId: str, roomId: str):
 async def mulligan(playerId: str, roomId: str):
     response = await game_service.mulligan(playerId, roomId)
     return response
+
+@router.post("/room/{roomId}/player/{playerId}/hand/card/{cardId}/deck/{cardPosition}")
+async def move_card_to_deck(playerId: str, roomId: str, cardId: str, cardPosition: int):
+    response = await game_service.move_card_to_deck(playerId, roomId, cardId, cardPosition)
+    return response

@@ -26,6 +26,7 @@
                 :zIndex="card.z_index"
                 :maxZIndex="state.max_z_index"
                 :reverseMovement="userIndex === 1 || userIndex === 2"
+                @open-move-to-deck-modal="openMoveToDeckModal($event)"
                 @update-position="updateCardPosition(player.name, cIndex, $event)"
                 @show-card="showCard($event)"
                 @move-from-hand-to-hand="moveFromHandToHand($event)"
@@ -61,6 +62,7 @@
               :offsetY="offsetY"
               :maxZIndex="state.max_z_index"
               :reverseMovement="userIndex === 1 || userIndex === 2"
+              @open-move-to-deck-modal="openMoveToDeckModal($event)"
             ></hand>
           </div>
         </div>
@@ -78,6 +80,13 @@
     @close-deck-modal="closeDeckModal"
     @add-card-to-hand="addToHand($event)"
   ></deck-modal>
+  <move-card-to-deck-modal
+    :isMoveToDeckModalVisible="isMoveToDeckModalVisible"
+    :deckLength="userCards.length"
+    :cardId="cardIdMovingToDeck"
+    @close-move-to-deck-modal="closeMoveToDeckModal"
+    @confirm-move="moveCardToDeck($event)"
+  ></move-card-to-deck-modal>
 </template>
   
   <script>
@@ -87,6 +96,7 @@
   import Hand from './components/Hand.vue'
   import CardModal from './components/CardModal.vue';
   import DeckModal from './components/DeckModal.vue';
+  import MoveCardToDeckModal from './components/MoveCardToDeckModal.vue';
 
   import axios from 'axios';
 
@@ -108,7 +118,9 @@
         offsetY: 0,
         modalImageSrc: '',
         isCardModalVisible: false,
-        isDeckModalVisible: false
+        isDeckModalVisible: false,
+        isMoveToDeckModalVisible: false,
+        cardIdMovingToDeck: ""
       };
     },
     computed: {
@@ -125,7 +137,7 @@
         return this.state.players.findIndex(player => player.name === this.userName);
       },
       userCards() {
-        if (this.state.players.length > this.userIndex && this.state.players[this.userIndex]) {
+        if (this.state.players.length > this.userIndex && this.state.players[this.userIndex] && this.state.players[this.userIndex].deck.cards) {
           return this.state.players[this.userIndex].deck.cards;
         }
         return []; // Return an empty array if the user or cards are not available
@@ -155,7 +167,7 @@
       document.addEventListener('mouseup', this.endDrag);
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal
     },
     methods: {
       startPan(event) {
@@ -245,11 +257,27 @@
       showDeck() {
         this.isDeckModalVisible = true;
       },
+      openMoveToDeckModal(cardId) {
+        this.cardIdMovingToDeck = cardId;
+        this.isMoveToDeckModalVisible = true;
+      },
       closeCardModal() {
         this.isCardModalVisible = false;
       },
       closeDeckModal() {
         this.isDeckModalVisible = false;
+      },
+      closeMoveToDeckModal() {
+        this.isMoveToDeckModalVisible = false;
+      },
+      async moveCardToDeck(event) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/deck/' + event.cardPosition, {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
       },
       async addToHand(cardId) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;

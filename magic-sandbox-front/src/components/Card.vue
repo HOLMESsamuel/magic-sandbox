@@ -14,7 +14,7 @@
   import axios from 'axios';
 
   export default {
-    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand'],
+    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal'],
     components: {
       CardModal
     },
@@ -147,16 +147,29 @@
       },
       endDrag() {
         this.isDragging = false;
-        let playerIndex = this.checkIfCardInPlayerHand()
-        if(playerIndex != null) {
-          console.log(playerIndex);
+        let handPlayerIndex = this.checkIfCardInPlayerHand();
+        let deckPlayerIndex = this.checkIfCardInPlayerDeck();
+        if(handPlayerIndex != null) {
+          console.log(handPlayerIndex);
           //if the card comes from a and to a hand
           //if it returns to the same hand do nothing
-          if(this.inHand && playerIndex != this.userIndex) {
-            this.$emit('move-from-hand-to-hand', { cardId: this.id, targetPlayerIndex: playerIndex });
+          if(this.inHand && handPlayerIndex != this.userIndex) {
+            this.$emit('move-from-hand-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
             return;
           } else {
-            this.$emit('move-from-board-to-hand', { cardId: this.id, targetPlayerIndex: playerIndex });
+            this.$emit('move-from-board-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
+            return;
+          }
+        }
+        if(deckPlayerIndex != null && deckPlayerIndex != this.userIndex) {
+          console.log(deckPlayerIndex);
+          //if the card comes from a hand to a hand
+          if(this.inHand) {
+            this.$emit('open-move-to-deck-modal', this.id);
+            console.log("emit event " + this.id);
+            return;
+          } else {
+            this.$emit('open-move-to-deck-modal', this.id);
             return;
           }
         }
@@ -198,6 +211,7 @@
           console.log(error);
         }
       },
+      //returns the player index if the card was dropped on his hand
       checkIfCardInPlayerHand() {
         const playersHandAreas = this.getPlayersHandAreas();
         const cardCenter = {
@@ -212,7 +226,7 @@
         }
         return null;
       },
-
+      //returns the player index if the card was dropped on his deck
       checkIfCardInPlayerDeck() {
         const playersDeckAreas = this.getPlayersDeckAreas();
         const cardCenter = {
@@ -233,8 +247,8 @@
         // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }
         return [
           { x1: 700, y1: 1075, x2: 2205, y2: 1375 }, //player 0
-          { x1: 263, y1: -1615, x2: 1760, y2: -1325 }, //player 1
-          { x1: -680, y1: -1330, x2: -2200, y2: -1630 }, //player 2
+          { x1: 263, y1: -1630, x2: 1760, y2: -1325 }, //player 1
+          { x1: -2200, y1: -1630, x2: -680, y2: -1325 }, //player 2
           { x1: -1950, y1: 1050, x2: -430, y2: 1360 }  //player 3
         ];
       },

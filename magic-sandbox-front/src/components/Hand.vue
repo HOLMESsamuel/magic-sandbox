@@ -16,6 +16,7 @@
           :maxZIndex="maxZIndex"
           :reverseMovement="reverseMovement"
           @play-card="handleCardDrop($event, card.id)"
+          @open-move-to-deck-modal="emitMoveToDeckModalEvent($event)"
         ></Card>
       </div>
       <div v-if="pIndex != userIndex" v-for="(card, index) in cards" :key="index" class="hand-card">
@@ -29,6 +30,7 @@
   import axios from 'axios';
 
   export default {
+    emits: ['open-move-to-deck-modal'],
     components: {
       Card
     },
@@ -86,6 +88,9 @@
         } catch (error) {
           console.log(error);
         }
+      },
+      emitMoveToDeckModalEvent(event) {
+        this.$emit('open-move-to-deck-modal', event);
       }
     }
   };

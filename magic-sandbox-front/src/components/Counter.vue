@@ -10,7 +10,6 @@
     <div v-if="pIndex == userIndex">
         <div v-if="isDeckLoaded" :style="deckButtonStyle" class="deck-buttons"> <!-- if the player is the player using this frontend -->
           <button @click="millCard" class="deck-button">Mill</button>
-          <button @click="scryCard" class="deck-button">Scry</button>
           <button @click="lookDeck" class="deck-button">Look</button>
           <button @click="shuffleDeck" class="deck-button">Shuffle</button>
           <button @click="resetDeck" class="deck-button">Reset</button>

@@ -81,3 +81,8 @@ class GameService:
         mulligan(get_player_from_game_state(state_manager.get_group_state(roomId), playerId))
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " mulligan"}
+    
+    async def move_card_to_deck(self, playerId: str, roomId: str, cardId: str, cardPosition: int):
+        move_card_to_deck(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), cardId, cardPosition)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " card " + cardId + " moved to deck on position " + str(cardPosition)}

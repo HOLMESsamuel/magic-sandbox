@@ -14,9 +14,15 @@
 # Stage 2: Serve the application from Nginx
 FROM nginx:stable-alpine as production-stage
 
+#remove the default conf of nginx
+RUN rm /etc/nginx/conf.d/default.conf
+
 #COPY --from=build-stage /app/dist /usr/share/nginx/html
 # Copy the local dist folder to the Nginx serve directory
 COPY ./dist /usr/share/nginx/html
+
+#copy the custom default conf of nginx
+COPY default.conf /etc/nginx/conf.d
 
 # Expose port 5000
 EXPOSE 5000

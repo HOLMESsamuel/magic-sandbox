@@ -1,5 +1,5 @@
 <template>
-    <div class="card" :style="cardStyle" @click="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
+    <div class="card" :style="cardStyle" @click.stop="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
       <img :src="imageSrc" :alt="name">
       <!-- Hover Buttons -->
       <div v-if="hover" class="hover-buttons">
@@ -149,37 +149,53 @@
         this.isDragging = false;
         let handPlayerIndex = this.checkIfCardInPlayerHand();
         let deckPlayerIndex = this.checkIfCardInPlayerDeck();
-        if(handPlayerIndex != null) {
-          console.log(handPlayerIndex);
-          //if the card comes from a and to a hand
-          //if it returns to the same hand do nothing
-          if(this.inHand && handPlayerIndex != this.userIndex) {
-            this.$emit('move-from-hand-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
-            return;
-          } else {
-            this.$emit('move-from-board-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
-            return;
-          }
+
+        if(this.isReturningToSameHand(handPlayerIndex)) {
+          return;
         }
-        if(deckPlayerIndex != null && deckPlayerIndex != this.userIndex) {
-          console.log(deckPlayerIndex);
-          //if the card comes from a hand to a hand
-          if(this.inHand) {
-            this.$emit('open-move-to-deck-modal', this.id);
-            console.log("emit event " + this.id);
-            return;
-          } else {
-            this.$emit('open-move-to-deck-modal', this.id);
-            return;
-          }
+
+        if(this.isMovingHandToHand(handPlayerIndex)) {
+          this.$emit('move-from-hand-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
+          return;
         }
-        if(this.inHand) {
+
+        if(this.isMovingBoardToHand(handPlayerIndex)) {
+          this.$emit('move-from-board-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
+          return;
+        }
+
+        if(this.isMovingFromHandToDeck(deckPlayerIndex)) {
+          this.$emit('open-move-to-deck-modal', this.id);
+          return;
+        }
+
+        if(this.isMovingHandToBoard) {
           this.$emit('play-card', { x: this.position.x, y: this.position.y });
           return;
-        } else {
+        } 
+
+        if(this.isMovingBoardToBoard) {
           this.$emit('update-position', { x: this.position.x, y: this.position.y });
           return;
         }
+      },
+      isReturningToSameHand(handPlayerIndex) {
+        return this.inHand && handPlayerIndex === this.userIndex;
+      },
+      isMovingHandToHand(handPlayerIndex) {
+        return handPlayerIndex !== null && this.inHand && handPlayerIndex !== this.userIndex;
+      },
+      isMovingBoardToHand(handPlayerIndex) {
+        return handPlayerIndex !== null && !this.inHand;
+      },
+      isMovingFromHandToDeck(deckPlayerIndex) {
+        return deckPlayerIndex !== null && deckPlayerIndex != this.userIndex && this.inHand;
+      },
+      isMovingHandToBoard() {
+        return this.inHand;
+      },
+      isMovingBoardToBoard() {
+        return !this.inHand;
       },
       showCardDetail() {
         this.$emit('show-card', this.imageSrc);

@@ -169,12 +169,12 @@
           return;
         }
 
-        if(this.isMovingHandToBoard) {
+        if(this.isMovingHandToBoard()) {
           this.$emit('play-card', { x: this.position.x, y: this.position.y });
           return;
         } 
 
-        if(this.isMovingBoardToBoard) {
+        if(this.isMovingBoardToBoard()) {
           this.$emit('update-position', { x: this.position.x, y: this.position.y });
           return;
         }
@@ -274,8 +274,8 @@
         // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }
         return [
           { x1: 2300, y1: 775, x2: 2500, y2: 1020 }, //player 0
-          { x1: 145, y1: -1035, x2: -45, y2: -1325 }, //player 1
-          { x1: -2300, y1: -1000, x2: -2500, y2: -1300 }, //player 2
+          { x1: -45, y1: -1325, x2: 150, y2: -1035 }, //player 1
+          { x1: -2500, y1: -1300, x2: -2300, y2: -1000 }, //player 2
           { x1: -350, y1: 780, x2: -150, y2: 1080 }  //player 3
         ];
       },

@@ -49,7 +49,8 @@
               :pIndex="pIndex"
               :initialScore="player.score"
               :userIndex="userIndex"
-              @show-deck="showDeck($event)">
+              @show-deck="showDeck($event)"
+              @open-token-modal="openTokenModal($event)">
             </counter>
             <hand
               :pIndex="pIndex"
@@ -87,6 +88,10 @@
     @close-move-to-deck-modal="closeMoveToDeckModal"
     @confirm-move="moveCardToDeck($event)"
   ></move-card-to-deck-modal>
+  <token-modal
+    :isTokenModalVisible="isTokenModalVisible"
+    @close-token-modal="closeTokenModal"
+  ></token-modal>
 </template>
   
   <script>
@@ -97,6 +102,7 @@
   import CardModal from './components/CardModal.vue';
   import DeckModal from './components/DeckModal.vue';
   import MoveCardToDeckModal from './components/MoveCardToDeckModal.vue';
+  import TokenModal from './components/TokenModal.vue';
 
   import axios from 'axios';
 
@@ -120,7 +126,8 @@
         isCardModalVisible: false,
         isDeckModalVisible: false,
         isMoveToDeckModalVisible: false,
-        cardIdMovingToDeck: ""
+        cardIdMovingToDeck: "",
+        isTokenModalVisible: false
       };
     },
     computed: {
@@ -167,7 +174,7 @@
       document.addEventListener('mouseup', this.endDrag);
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal
     },
     methods: {
       startPan(event) {
@@ -256,6 +263,12 @@
       },
       showDeck() {
         this.isDeckModalVisible = true;
+      },
+      openTokenModal() {
+        this.isTokenModalVisible = true;
+      },
+      closeTokenModal() {
+        this.isTokenModalVisible = false;
       },
       openMoveToDeckModal(cardId) {
         this.cardIdMovingToDeck = cardId;

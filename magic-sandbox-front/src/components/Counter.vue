@@ -15,6 +15,7 @@
           <button @click="resetDeck" class="deck-button">Reset</button>
           <button @click="detapAll" class="deck-button">Detap</button>
           <button @click="mulligan" class="deck-button">Mulligan</button>
+          <button @click="openTokenModal" class="deck-button">Token</button>
         </div>
       </div>
 </template>
@@ -23,7 +24,7 @@
     import axios from 'axios';
   
     export default {
-      emits: ["show-deck"],
+      emits: ["show-deck", "open-token-modal"],
       props: {
         playerName: String,
         roomId: String,
@@ -103,6 +104,9 @@
         },
         lookDeck() {
           this.$emit('show-deck');
+        },
+        openTokenModal() {
+          this.$emit('open-token-modal');
         },
         async updateScore() {
             const backendUrl = import.meta.env.VITE_BACKEND_URL;

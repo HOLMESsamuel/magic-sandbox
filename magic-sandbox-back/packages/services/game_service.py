@@ -65,6 +65,16 @@ class GameService:
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " untap " + cardId}
     
+    async def tap_token(self, playerId: str, roomId: str, tokenId: str):
+        tap_token(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), tokenId)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " tap " + tokenId}
+    
+    async def untap_token(self, playerId: str, roomId: str, tokenId: str):
+        untap_token(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), tokenId)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " untap " + tokenId}
+    
     async def play_card(self, playerId: str, roomId: str, cardId: str, position: dict):
         state = state_manager.get_group_state(roomId)
         play_card(get_player_from_game_state(state, playerId), cardId, position, state["max_z_index"])
@@ -88,7 +98,9 @@ class GameService:
         return {"message": playerId + " room " + roomId + " card " + cardId + " moved to deck on position " + str(cardPosition)}
     
     async def create_token(self, playerId: str, roomId: str, text: str):
-        create_token(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), text)
+        state = state_manager.get_group_state(roomId)
+        create_token(get_player_from_game_state(state, playerId), text, state["max_z_index"])
+        state["max_z_index"] += 1
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " token created"}
     

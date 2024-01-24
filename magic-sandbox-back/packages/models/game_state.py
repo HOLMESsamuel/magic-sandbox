@@ -111,6 +111,18 @@ def untap_card(player, cardId):
             player["board"]["cards"][index]["tapped"] = False
             break
 
+def tap_token(player, tokenId):
+    for index, token in enumerate(player["board"]["tokens"]):
+        if token["id"] == tokenId:
+            player["board"]["tokens"][index]["tapped"] = True
+            break
+
+def untap_token(player, tokenId):
+    for index, token in enumerate(player["board"]["tokens"]):
+        if token["id"] == tokenId:
+            player["board"]["tokens"][index]["tapped"] = False
+            break
+
 def detap_all(player):
     for index, card in enumerate(player["board"]["cards"]):
         player["board"]["cards"][index]["tapped"] = False
@@ -141,12 +153,13 @@ def play_card(player, cardId, position, max_z_index):
 def shuffle_deck(player):
     random.shuffle(player["deck"]["cards"])
 
-def create_token(player, text):
+def create_token(player, text, max_z_index):
     position = {"x": 500, "y": 500}
     token = {
         "id": str(uuid.uuid4()),
         "text": text,
-        "position": position
+        "position": position,
+        "z_index": max_z_index
     }
     player["board"]["tokens"].append(token)
 

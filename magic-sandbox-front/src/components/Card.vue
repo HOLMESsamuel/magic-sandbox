@@ -10,7 +10,7 @@
   </template>
   
   <script>
-  import CardModal from './CardModal.vue';
+  import CardModal from './modals/CardModal.vue';
   import axios from 'axios';
 
   export default {

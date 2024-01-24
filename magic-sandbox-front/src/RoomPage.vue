@@ -9,7 +9,7 @@
             <div v-if="player && player.board && player.board.cards">
               <Card
                 v-for="(card, cIndex) in player.board.cards"
-                :key="`${card.id}-${card.position.x}-${card.position.y}-${card.tapped}`"
+                :key="`${card.id}-${card.position.x}-${card.position.y}`"
                 :name="card.name"
                 :imageSrc="card.image"
                 :tapped="card.tapped"
@@ -27,11 +27,30 @@
                 :maxZIndex="state.max_z_index"
                 :reverseMovement="userIndex === 1 || userIndex === 2"
                 @open-move-to-deck-modal="openMoveToDeckModal($event)"
-                @update-position="updateCardPosition(player.name, cIndex, $event)"
+                @update-position="updateObjectPosition(player.name, cIndex, $event, 'card')"
                 @show-card="showCard($event)"
                 @move-from-hand-to-hand="moveFromHandToHand($event)"
                 @move-from-board-to-hand="moveFromBoardToHand($event)"
               ></Card>
+              <Token
+                v-for="(token, tIndex) in player.board.tokens"
+                :key="`${token.id}-${token.position.x}-${token.position.y}`"
+                :tapped="token.tapped"
+                :roomId="roomId"
+                :id="token.id"
+                :text="token.text"
+                :initialPosition="token.position"
+                :player="player.name"
+                :userIndex="userIndex"
+                :pIndex="pIndex"
+                :scale="scale"
+                :offsetX="offsetX"
+                :offsetY="offsetY"
+                :zIndex="token.z_index"
+                :maxZIndex="state.max_z_index"
+                :reverseMovement="userIndex === 1 || userIndex === 2"
+                @update-token-position="updateObjectPosition(player.name, tIndex, $event, 'token')"
+              ></Token>
             </div>
             <deck 
               :playerName="player.name" 
@@ -100,10 +119,11 @@
   import Card from './components/Card.vue';
   import Counter from './components/Counter.vue'
   import Hand from './components/Hand.vue'
-  import CardModal from './components/CardModal.vue';
-  import DeckModal from './components/DeckModal.vue';
-  import MoveCardToDeckModal from './components/MoveCardToDeckModal.vue';
-  import TokenModal from './components/TokenModal.vue';
+  import Token from './components/Token.vue'
+  import CardModal from './components/modals/CardModal.vue';
+  import DeckModal from './components/modals/DeckModal.vue';
+  import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
+  import TokenModal from './components/modals/TokenModal.vue';
 
   import axios from 'axios';
 
@@ -175,7 +195,7 @@
       document.addEventListener('mouseup', this.endDrag);
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token
     },
     methods: {
       startPan(event) {
@@ -235,12 +255,17 @@
           console.log("WebSocket connection closed");
         };
       },
-      updateCardPosition(playerName, index, newPosition) {
+      updateObjectPosition(playerName, index, newPosition, object) {
         const player = this.state.players.find(p => p.name === playerName);
         this.state.max_z_index += 1;
         const maxZIndex = this.state.max_z_index
-        player.board.cards[index].position = newPosition;
-        player.board.cards[index].z_index = maxZIndex;
+        if(object === "card") {
+          player.board.cards[index].position = newPosition;
+          player.board.cards[index].z_index = maxZIndex;
+        } else if (object === "token") {
+          player.board.tokens[index].position = newPosition;
+          player.board.tokens[index].z_index = maxZIndex;
+        }
         this.sendPosition();
       },
       sendPosition() {

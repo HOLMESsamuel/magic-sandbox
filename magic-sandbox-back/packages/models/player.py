@@ -1,3 +1,4 @@
+#TODO : either delete this class or move methods from game_state to object classes
 class Player:
     def __init__(self, name, score, hand=None, deck=None, board=None):
         self.name = name

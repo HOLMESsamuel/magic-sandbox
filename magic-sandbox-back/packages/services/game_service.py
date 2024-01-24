@@ -86,3 +86,13 @@ class GameService:
         move_card_to_deck(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), cardId, cardPosition)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " card " + cardId + " moved to deck on position " + str(cardPosition)}
+    
+    async def create_token(self, playerId: str, roomId: str, text: str):
+        create_token(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), text)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " token created"}
+    
+    async def delete_token(self, playerId: str, roomId: str, id: str):
+        delete_token(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), id)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " token deleted"}

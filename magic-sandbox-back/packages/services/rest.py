@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException
 from .web_scraper import WebScraper
 import random
 from pydantic import BaseModel, validator
@@ -107,4 +107,14 @@ async def mulligan(playerId: str, roomId: str):
 @router.post("/room/{roomId}/player/{playerId}/hand/card/{cardId}/deck/{cardPosition}")
 async def move_card_to_deck(playerId: str, roomId: str, cardId: str, cardPosition: int):
     response = await game_service.move_card_to_deck(playerId, roomId, cardId, cardPosition)
+    return response
+
+@router.post("/room/{roomId}/player/{playerId}/token")
+async def create_token(playerId: str, roomId: str, text: str = Body(...)):
+    response = await game_service.create_token(playerId, roomId, text)
+    return response
+
+@router.delete("/room/{roomId}/player/{playerId}/token/{id}")
+async def delete_token(playerId: str, roomId: str, id: str):
+    response = await game_service.delete_token(playerId, roomId, id)
     return response

@@ -6,10 +6,10 @@
         <div class="axis-vertical"></div>
         <div>
           <div v-for="(player, pIndex) in state.players">
-            <div v-if="player && player.board">
+            <div v-if="player && player.board && player.board.cards">
               <Card
-                v-for="(card, cIndex) in player.board"
-                :key="`${card.id}-${card.position.x}-${card.position.y}`"
+                v-for="(card, cIndex) in player.board.cards"
+                :key="`${card.id}-${card.position.x}-${card.position.y}-${card.tapped}`"
                 :name="card.name"
                 :imageSrc="card.image"
                 :tapped="card.tapped"
@@ -91,6 +91,7 @@
   <token-modal
     :isTokenModalVisible="isTokenModalVisible"
     @close-token-modal="closeTokenModal"
+    @create-token="createToken($event)"
   ></token-modal>
 </template>
   
@@ -238,8 +239,8 @@
         const player = this.state.players.find(p => p.name === playerName);
         this.state.max_z_index += 1;
         const maxZIndex = this.state.max_z_index
-        player.board[index].position = newPosition;
-        player.board[index].z_index = maxZIndex;
+        player.board.cards[index].position = newPosition;
+        player.board.cards[index].z_index = maxZIndex;
         this.sendPosition();
       },
       sendPosition() {
@@ -282,6 +283,15 @@
       },
       closeMoveToDeckModal() {
         this.isMoveToDeckModalVisible = false;
+      },
+      async createToken(text) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/token', text);
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
       },
       async moveCardToDeck(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;

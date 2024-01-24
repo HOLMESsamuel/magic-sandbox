@@ -1,3 +1,5 @@
+import logging;
+
 class WebSocketManager:
     _instance = None
 
@@ -11,8 +13,8 @@ class WebSocketManager:
         for client in self.connected_groups.get(group_id, []):
             try:
                 await client.send_json(state)
-            except Exception:
-                # Handle failed send (e.g., client disconnected)
+            except Exception as e:
+                logging.error(f"Error sending state to client: {e}", exc_info=True)
                 pass
 
 

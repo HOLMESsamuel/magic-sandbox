@@ -5,6 +5,7 @@
         <input 
           type="text"
           placeholder="Token text"
+          v-model="tokenText"
         >
         <label>
           <input 
@@ -26,15 +27,21 @@
   
   <script>
   export default {
-    emits: ["close-token-modal"],
+    emits: ["close-token-modal", "create-token"],
     props: {
       isTokenModalVisible: Boolean
+    },
+    data () {
+      return {
+        tokenText: ''
+      };
     },
     methods: {
       closeModal() {
         this.$emit('close-token-modal');
       },
       confirm() {
+        this.$emit('create-token', this.tokenText);
         this.closeModal();
       }
     }

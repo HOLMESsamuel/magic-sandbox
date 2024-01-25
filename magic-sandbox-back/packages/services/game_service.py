@@ -97,9 +97,9 @@ class GameService:
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " card " + cardId + " moved to deck on position " + str(cardPosition)}
     
-    async def create_token(self, playerId: str, roomId: str, text: str):
+    async def create_token(self, playerId: str, roomId: str, text: str, type: str):
         state = state_manager.get_group_state(roomId)
-        create_token(get_player_from_game_state(state, playerId), text, state["max_z_index"])
+        create_token(get_player_from_game_state(state, playerId), text, type, state["max_z_index"])
         state["max_z_index"] += 1
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " token created"}

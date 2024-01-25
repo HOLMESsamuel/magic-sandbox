@@ -153,13 +153,14 @@ def play_card(player, cardId, position, max_z_index):
 def shuffle_deck(player):
     random.shuffle(player["deck"]["cards"])
 
-def create_token(player, text, max_z_index):
+def create_token(player, text, type, max_z_index):
     position = {"x": 500, "y": 500}
     token = {
         "id": str(uuid.uuid4()),
         "text": text,
         "position": position,
-        "z_index": max_z_index
+        "z_index": max_z_index,
+        "type": type
     }
     player["board"]["tokens"].append(token)
 

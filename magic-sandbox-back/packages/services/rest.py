@@ -13,6 +13,10 @@ class DeckInput(BaseModel):
         if not v:
             raise ValueError('URL must not be empty')
         return v
+    
+class TokenData(BaseModel):
+    text: str
+    type: str
 
 router = APIRouter()
 game_service = GameService()
@@ -120,8 +124,8 @@ async def move_card_to_deck(playerId: str, roomId: str, cardId: str, cardPositio
     return response
 
 @router.post("/room/{roomId}/player/{playerId}/token")
-async def create_token(playerId: str, roomId: str, text: str = Body(...)):
-    response = await game_service.create_token(playerId, roomId, text)
+async def create_token(playerId: str, roomId: str, token_data: TokenData = Body(...)):
+    response = await game_service.create_token(playerId, roomId, token_data.text, token_data.type)
     return response
 
 @router.delete("/room/{roomId}/player/{playerId}/token/{id}")

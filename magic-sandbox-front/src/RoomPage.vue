@@ -39,6 +39,7 @@
                 :roomId="roomId"
                 :id="token.id"
                 :text="token.text"
+                :type="token.type"
                 :initialPosition="token.position"
                 :player="player.name"
                 :userIndex="userIndex"
@@ -310,10 +311,10 @@
       closeMoveToDeckModal() {
         this.isMoveToDeckModalVisible = false;
       },
-      async createToken(text) {
+      async createToken(token) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/token', text);
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/token', token);
           console.log(response.data);
         } catch (error) {
           console.log(error);

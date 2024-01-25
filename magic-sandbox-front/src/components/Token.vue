@@ -1,5 +1,5 @@
 <template>
-    <div class="token" :style="tokenStyle" @click.stop="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
+    <div class="token" :style="[tokenStyle, tokenShape, tokenColor]" @click.stop="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
       <p>{{ text }}</p>  
       <div v-if="hover" class="hover-buttons">
         <button class="button-center" @click.stop="modifyToken">👁️</button>
@@ -34,7 +34,8 @@
       name: String,
       zIndex: Number,
       maxZIndex: Number,
-      text: String
+      text: String,
+      type: String
     },
     data() {
       return {
@@ -82,6 +83,33 @@
           transform: transformStyles,
           'z-index': zIndex
         };
+      },
+      tokenShape() {
+        if(this.type === "token") {
+          return {
+            width: "200px",
+            height: "280px",
+            "border-radius": "10px"
+          };
+        } else if (this.type === "counter") {
+          return {
+            width: "100px",
+            height: "100px",
+            "border-radius": "50px"
+          };
+        }
+      },
+      tokenColor() {
+        switch (this.pIndex) {
+            case 0:
+                return {background : "rgb(196, 211, 202)"} //green
+            case 1:
+                return {background : "rgb(179, 206, 234)"} //blue
+            case 2:
+                return {background : "rgb(235, 159, 130)"} //red
+            case 3:
+                return {background : "rgb(248, 231, 185)"} //yellow
+          } 
       }
     },
     methods: {
@@ -179,13 +207,8 @@
   <style>
 
 .token {
-  position: relative; /* Needed to position child elements absolutely */
-  width: 200px;
-  height: 280px; 
   position: fixed;
   cursor: pointer;
-  background-color: rgb(196, 211, 202);
-  border-radius: 10px;
   font-size: 2em;
   text-align: center;
 }

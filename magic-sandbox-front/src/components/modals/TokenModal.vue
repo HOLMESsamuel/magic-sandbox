@@ -1,25 +1,26 @@
 <template>
     <div v-if="isTokenModalVisible" class="token-modal" @click="closeModal">
       <div class="modal-content" @click.stop> <!--allow to click anywhere to close the modal except on the card-->
-        <p>Create a token</p>
         <input 
           type="text"
           placeholder="Token text"
           v-model="tokenText"
         >
-        <label>
-          <input 
-            type="checkbox"
-          >
-          Token
-        </label>
-        <label>
-          <input 
-            type="checkbox"
-          >
-          Counter
-        </label>
-        <button class="confirm-button" @click="confirm">OK</button>
+        <div class="radio-container">
+          <label>
+            <input name="tokenTypeInput" type="radio" v-model="tokenType" value="token">
+            Token
+          </label>
+          <label>
+            <input name="tokenTypeInput" type="radio" v-model="tokenType" value="counter">
+            Counter
+          </label>
+        </div>
+        
+        
+        <div class="confirm-button-container">
+          <button class="confirm-button" @click="confirm">Create</button>
+        </div>
         <button class="close-button" @click.stop="closeModal"></button>
       </div>
     </div>
@@ -33,7 +34,8 @@
     },
     data () {
       return {
-        tokenText: ''
+        tokenText: '',
+        tokenType: "token"
       };
     },
     methods: {
@@ -41,7 +43,7 @@
         this.$emit('close-token-modal');
       },
       confirm() {
-        this.$emit('create-token', this.tokenText);
+        this.$emit('create-token', {text: this.tokenText, type: this.tokenType});
         this.closeModal();
       }
     }
@@ -114,8 +116,18 @@
 .token-modal label {
   display: flex;
   align-items: center;
-  justify-content: center;
   font-size: 16px;
+}
+
+.token-modal .radio-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.confirm-button-container {
+  display: flex;
+  justify-content: center;
 }
 
 .token-modal .confirm-button {

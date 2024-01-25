@@ -16,6 +16,7 @@
           :maxZIndex="maxZIndex"
           :reverseMovement="reverseMovement"
           @play-card="handleCardDrop($event, card.id)"
+          @show-card="showCard($event)"
           @open-move-to-deck-modal="emitMoveToDeckModalEvent($event)"
         ></Card>
       </div>
@@ -30,7 +31,7 @@
   import axios from 'axios';
 
   export default {
-    emits: ['open-move-to-deck-modal'],
+    emits: ['open-move-to-deck-modal', 'show-card'],
     components: {
       Card
     },
@@ -91,7 +92,11 @@
       },
       emitMoveToDeckModalEvent(event) {
         this.$emit('open-move-to-deck-modal', event);
-      }
+      },
+      showCard(imageSrc) {
+        console.log("show card");
+        this.$emit('show-card', imageSrc);
+      },
     }
   };
   </script>

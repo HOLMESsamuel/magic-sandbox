@@ -1,9 +1,9 @@
 <template>
-    <div class="card" :style="cardStyle" @click.stop="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
+    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
       <img :src="imageSrc" :alt="name">
       <!-- Hover Buttons -->
-      <div v-if="hover" class="hover-buttons">
-        <button class="button-center" @click.stop="showCardDetail">👁️</button>
+      <div v-if="!inHand && hover" class="hover-buttons">
+        <button class="button-center">👁️</button>
       </div>
     </div>
     <CardModal :imageSrc="imageSrc" ref="cardModal"></CardModal>
@@ -113,7 +113,7 @@
           this.cardOffsetY = mouseY - this.position.y + 140;
           
           if(this.reverseMovement) {
-            this.position.x = -mouseX + 1300;
+            this.position.x = -mouseX + 1400;
             this.position.y = -mouseY - 200;
             this.cardOffsetX = mouseX - this.position.x + 100;
             this.cardOffsetY = mouseY - this.position.y + 140;
@@ -145,10 +145,17 @@
         this.position.x = newPositionX;
         this.position.y = newPositionY;
       },
-      endDrag() {
+      endDrag(event) {
         this.isDragging = false;
         let handPlayerIndex = this.checkIfCardInPlayerHand();
         let deckPlayerIndex = this.checkIfCardInPlayerDeck();
+        const draggedDistance = Math.sqrt(Math.pow(this.position.x - this.startDragPosition.x, 2) + Math.pow(this.position.y - this.startDragPosition.y, 2));
+        
+        //can't use a click because it triggers with mousedown, if the card does not move I consider it a click
+        if(draggedDistance < 5) {
+          this.handleCardClick(event);
+          return;
+        }
 
         if(this.isReturningToSameHand(handPlayerIndex)) {
           return;
@@ -200,6 +207,23 @@
       showCardDetail() {
         this.$emit('show-card', this.imageSrc);
       },
+      handleCardClick(event) {
+        if (this.dragging) {
+          // If dragging, don't execute any click logic
+          return;
+        }
+
+        if (event.target.matches('.button-center')) {
+          // If the clicked element is the button, show card details
+          this.showCardDetail();
+          return;
+        }
+        if (this.inHand) {
+          this.showCardDetail();
+        } else {
+          this.toogleTap();
+        }
+      },
       async toogleTap() {
         if(!this.inHand) {
           if(this.tapped) {
@@ -207,7 +231,7 @@
           } else {
             this.tap();
           }
-        } 
+        }
       },
       async tap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;

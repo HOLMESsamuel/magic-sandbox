@@ -83,6 +83,7 @@
               :maxZIndex="state.max_z_index"
               :reverseMovement="userIndex === 1 || userIndex === 2"
               @open-move-to-deck-modal="openMoveToDeckModal($event)"
+              @show-card="showCard($event)"
             ></hand>
           </div>
         </div>

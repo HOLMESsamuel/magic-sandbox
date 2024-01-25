@@ -2,7 +2,7 @@
   <div :style="deckStyle" class="deck-container">
     <div v-if="!isDeckLoaded" class="add-deck-container">
       <div v-if="pIndex==userIndex">
-        <input type="text" v-model="deckLink" placeholder="Enter link here">
+        <input type="text" v-model="deckLink" placeholder="Enter link">
         <button  @click="addDeck" :disabled="isLoading">Add Deck</button>
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
@@ -123,6 +123,7 @@
 .add-deck-container input {
   width: calc(100% - 20px); /* Full width minus padding and button width */
   margin-right: 10px;
+  font-size: 2em;
 }
 
 .add-deck-container button {
@@ -131,6 +132,8 @@
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 2em;
+  margin-top: 50px;
 }
 
 .add-deck-container button[disabled] {

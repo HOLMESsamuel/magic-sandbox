@@ -81,10 +81,10 @@
               style = { left: "0px", top: "305px", background: "rgb(196, 211, 202)"};
               break;
             case 1:
-              style = { left: "0px", top: "-495px", transform: "rotate(180deg)", background: "rgb(179, 206, 234)" };
+              style = { left: "0px", top: "-548px", transform: "rotate(180deg)", background: "rgb(179, 206, 234)" };
               break;
             case 2:
-              style = { left: "-300px", top: "-495px", transform: "rotate(180deg)", background: "rgb(235, 159, 130)" };
+              style = { left: "-300px", top: "-548px", transform: "rotate(180deg)", background: "rgb(235, 159, 130)" };
               break;
             case 3:
               style = { left: "-300px", top: "305px", background: "rgb(248, 231, 185)" };

@@ -1,12 +1,19 @@
 from .websocket_manager import WebSocketManager
 from .state_manager import StateManager
 from ..models.game_state import *
+from ..models import deck
 
 
 state_manager = StateManager()
 websocket_manager = WebSocketManager()
 
 class GameService:
+
+    async def add_deck(self, playerId: str, roomId: str, deck: deck): 
+        game_state = state_manager.get_group_state(roomId)
+        add_deck(get_player_from_game_state(game_state, playerId), deck)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": "Deck added for player " + playerId + " room " + roomId}
 
     async def mill_card(self, playerId: str, roomId: str): 
         game_state = state_manager.get_group_state(roomId)

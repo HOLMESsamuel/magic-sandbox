@@ -33,6 +33,9 @@ def reset_player(player):
     player["board"]["cards"] = []
     player["board"]["tokens"] = []
 
+def add_deck(player, deck):
+    player["deck"]["cards"] = deck.cards_to_dict()
+
 def mill_card(player, playerIndex):
     if player["deck"]:
         card = player["deck"]["cards"].pop(0)  

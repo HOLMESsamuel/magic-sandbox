@@ -73,10 +73,8 @@
         this.isLoading = true;
         this.errorMessage = ''; // Reset the error message
         try {
-          const response = await axios.post(`${backendUrl}` + 'deck', { url: this.deckLink });
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck', { url: this.deckLink });
           console.log(response.data);
-          this.$emit('add-deck', response.data);
-
         } catch (error) {
           if (error.response && error.response.data && error.response.data.detail) {
             this.errorMessage = error.response.data.detail;

@@ -58,8 +58,7 @@
               :roomId="roomId"
               :pIndex="pIndex"
               :userIndex="userIndex"
-              :cards="player.deck.cards"
-              @add-deck="handleAddDeck($event)">
+              :cards="player.deck.cards">
             </deck>
             <counter
               :key="`${player.name}-${player.score}`"
@@ -274,16 +273,6 @@
         if (this.ws) {
           this.ws.send(JSON.stringify(this.state));
         }
-      },
-      handleAddDeck(deck) {
-        console.log(deck);
-        const player = this.state.players.find(p => p.name === this.userName);
-        if (player) {
-          player.deck = deck;
-        } else {
-          console.error(`Player with name ${this.userName} not found.`);
-        }
-        this.sendPosition();
       },
       showCard(imageSrc) {
         this.modalImageSrc = imageSrc;

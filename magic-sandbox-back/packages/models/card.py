@@ -8,4 +8,13 @@ class Card:
         self.tapped = tapped
         self.z_index = z_index
 
-    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'type': self.type,
+            'image': self.image,
+            'position': self.position,
+            'tapped': self.tapped,
+            'z_index': self.z_index,
+        }

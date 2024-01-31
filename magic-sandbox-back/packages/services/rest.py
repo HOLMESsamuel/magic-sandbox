@@ -21,13 +21,14 @@ class TokenData(BaseModel):
 router = APIRouter()
 game_service = GameService()
 
-@router.post("/deck")
-async def scrap_deck(deck_input: DeckInput):
+@router.post("/room/{roomId}/player/{playerId}/deck")
+async def scrap_deck(playerId: str, roomId: str, deck_input: DeckInput):
     try:
         web_scraper = WebScraper()
         print("web scraper initialized")
         deck = web_scraper.get_deck(deck_input.url)
-        return deck
+        response = await game_service.add_deck(playerId, roomId, deck)
+        return response
     except ValueError as ve:
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:

@@ -2,7 +2,7 @@
     <div class="token" :style="[tokenStyle, tokenShape, tokenColor]" @click.stop="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
       <p>{{ text }}</p>  
       <div v-if="hover" class="hover-buttons">
-        <button class="button-center" @click.stop="modifyToken">👁️</button>
+        <button class="button-center" @click.stop="modifyToken">✏️</button>
         <button class="button-center" @click.stop="deleteToken">X</button>
       </div>
     </div>
@@ -167,10 +167,12 @@
         return;
       },
       async toogleTap() {
-        if(this.tapped) {
+        if(this.type === "token") {
+          if(this.tapped) {
             this.untap();
-        } else {
-            this.tap();
+          } else {
+              this.tap();
+          }
         }
       },
       async tap() {

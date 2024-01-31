@@ -211,6 +211,7 @@
   cursor: pointer;
   font-size: 2em;
   text-align: center;
+  border: black solid 2px;
 }
 
 .hover-buttons {

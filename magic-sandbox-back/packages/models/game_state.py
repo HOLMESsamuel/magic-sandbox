@@ -153,8 +153,16 @@ def play_card(player, cardId, position, max_z_index):
 def shuffle_deck(player):
     random.shuffle(player["deck"]["cards"])
 
-def create_token(player, text, type, max_z_index):
-    position = {"x": 500, "y": 500}
+def create_token(player, text, type, max_z_index, player_index):
+    #set the position to the center of the player's board
+    if player_index == 0:
+        position = {"x": 1410, "y": 614}
+    elif player_index == 1:
+        position = {"x": 964, "y": -820}
+    elif player_index == 2:
+        position = {"x": -1416, "y": -820}
+    else:
+        position = {"x": -1196, "y": 614}
     token = {
         "id": str(uuid.uuid4()),
         "text": text,

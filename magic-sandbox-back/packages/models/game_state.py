@@ -184,4 +184,14 @@ def delete_token(player, id):
     else:
         print("The board is empty, no token to delete.")
 
+def modify_token(player, id, text, type):
+    if player["board"]:
+        for index, token in enumerate(player["board"]["tokens"]):
+            if token["id"] == id:
+                player["board"]["tokens"][index]["text"] = text
+                player["board"]["tokens"][index]["type"] = type
+                break
+    else:
+        print("The board is empty, no token to delete.")
+
 

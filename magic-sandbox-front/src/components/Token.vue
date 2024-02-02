@@ -12,7 +12,7 @@
   import axios from 'axios';
 
   export default {
-    emits: ['update-token-position'],
+    emits: ['update-token-position', 'open-edit-token-modal'],
     props: {
       initialPosition: {
         type: Object,
@@ -201,6 +201,10 @@
         } catch (error) {
           console.log(error);
         }
+      },
+      modifyToken() {
+        this.$emit('open-edit-token-modal', { text: this.text, type: this.type, id: this.id });
+        return;
       }
     }
   };

@@ -133,3 +133,8 @@ async def create_token(playerId: str, roomId: str, token_data: TokenData = Body(
 async def delete_token(playerId: str, roomId: str, id: str):
     response = await game_service.delete_token(playerId, roomId, id)
     return response
+
+@router.put("/room/{roomId}/player/{playerId}/token/{id}")
+async def modify_token(playerId: str, roomId: str, id: str, token_data: TokenData = Body(...)):
+    response = await game_service.modify_token(playerId, roomId, id, token_data.text, token_data.type)
+    return response

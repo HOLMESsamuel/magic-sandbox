@@ -51,6 +51,7 @@
                 :maxZIndex="state.max_z_index"
                 :reverseMovement="userIndex === 1 || userIndex === 2"
                 @update-token-position="updateObjectPosition(player.name, tIndex, $event, 'token')"
+                @open-edit-token-modal="openEditTokenModal($event)"
               ></Token>
             </div>
             <deck 
@@ -110,8 +111,11 @@
   ></move-card-to-deck-modal>
   <token-modal
     :isTokenModalVisible="isTokenModalVisible"
+    :currentToken="currentToken"
+    :editTokenMode="editTokenMode"
     @close-token-modal="closeTokenModal"
     @create-token="createToken($event)"
+    @modify-token="modifyToken($event)"
   ></token-modal>
 </template>
   
@@ -149,7 +153,9 @@
         isDeckModalVisible: false,
         isMoveToDeckModalVisible: false,
         cardIdMovingToDeck: "",
-        isTokenModalVisible: false
+        isTokenModalVisible: false,
+        editTokenMode: false,
+        currentToken: null
       };
     },
     computed: {
@@ -287,6 +293,11 @@
       closeTokenModal() {
         this.isTokenModalVisible = false;
       },
+      openEditTokenModal(token) {
+        this.isTokenModalVisible = true;
+        this.editTokenMode = true;
+        this.currentToken = token;
+      },
       openMoveToDeckModal(cardId) {
         this.cardIdMovingToDeck = cardId;
         this.isMoveToDeckModalVisible = true;
@@ -304,6 +315,16 @@
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
           const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/token', token);
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async modifyToken(token) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/token/' + token.id, token);
+          this.editTokenMode = false;
           console.log(response.data);
         } catch (error) {
           console.log(error);

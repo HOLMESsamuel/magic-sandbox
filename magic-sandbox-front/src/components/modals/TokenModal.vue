@@ -19,7 +19,8 @@
         
         
         <div class="confirm-button-container">
-          <button class="confirm-button" @click="confirm">Create</button>
+          <button v-if="editTokenMode === false" class="confirm-button" @click="confirm">Create</button>
+          <button v-if="editTokenMode === true" class="confirm-button" @click="confirm">Modify</button>
         </div>
         <button class="close-button" @click.stop="closeModal"></button>
       </div>
@@ -28,22 +29,36 @@
   
   <script>
   export default {
-    emits: ["close-token-modal", "create-token"],
+    emits: ["close-token-modal", "create-token", "modify-token"],
     props: {
-      isTokenModalVisible: Boolean
+      isTokenModalVisible: Boolean,
+      editTokenMode: Boolean,
+      currentToken: Object
     },
     data () {
-      return {
-        tokenText: '',
-        tokenType: "token"
-      };
+      if(this.editTokenMode === true) {
+        return {
+          tokenText: this.currentToken.text,
+          tokenType: this.currentToken.type
+        };
+      } else {
+        return {
+          tokenText: '',
+          tokenType: "token"
+        };
+      }
+      
     },
     methods: {
       closeModal() {
         this.$emit('close-token-modal');
       },
       confirm() {
-        this.$emit('create-token', {text: this.tokenText, type: this.tokenType});
+        if(this.editTokenMode === true) {
+          this.$emit('modify-token', {text: this.tokenText, type: this.tokenType, id: this.currentToken.id});
+        } else {
+          this.$emit('create-token', {text: this.tokenText, type: this.tokenType});
+        }
         this.closeModal();
       }
     }

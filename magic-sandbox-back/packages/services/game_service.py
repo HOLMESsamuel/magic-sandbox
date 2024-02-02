@@ -116,3 +116,8 @@ class GameService:
         delete_token(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), id)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " token deleted"}
+    
+    async def modify_token(self, playerId: str, roomId: str, id: str, text: str, type: str):
+        modify_token(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), id, text, type)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " token deleted"}

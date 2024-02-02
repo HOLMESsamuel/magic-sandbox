@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Body, Depends, HTTPException
 from .web_scraper import WebScraper
 import random
+import asyncio
 from pydantic import BaseModel, validator
 
 from .game_service import GameService
@@ -26,7 +27,7 @@ async def scrap_deck(playerId: str, roomId: str, deck_input: DeckInput):
     try:
         web_scraper = WebScraper()
         print("web scraper initialized")
-        deck = web_scraper.get_deck(deck_input.url)
+        deck = await asyncio.to_thread(web_scraper.get_deck, deck_input.url)
         response = await game_service.add_deck(playerId, roomId, deck)
         return response
     except ValueError as ve:

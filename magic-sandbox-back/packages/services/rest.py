@@ -27,7 +27,9 @@ async def scrap_deck(playerId: str, roomId: str, deck_input: DeckInput):
     try:
         web_scraper = WebScraper()
         print("web scraper initialized")
-        deck = await asyncio.to_thread(web_scraper.get_deck, deck_input.url)
+        #multithread does not seam to work on container
+        #deck = await asyncio.to_thread(web_scraper.get_deck, deck_input.url)
+        deck = web_scraper.get_deck(deck_input.url)
         response = await game_service.add_deck(playerId, roomId, deck)
         return response
     except ValueError as ve:

@@ -43,9 +43,9 @@ async def scrap_deck(playerId: str, roomId: str, deck_input: DeckInput):
 def read_root():
     return {"Hello": "World"}
 
-@router.get("/dice")
-def throw_dice():
-    return random.randint(1, 20)
+@router.get("/room/{roomId}/player/{playerId}/dice/{diceValue}")
+def throw_dice(diceValue: int):
+    return random.randint(1, diceValue)
 
 @router.post("/room/{roomId}/player/{playerId}/deck/mill")
 async def mill_deck(playerId: str, roomId: str):

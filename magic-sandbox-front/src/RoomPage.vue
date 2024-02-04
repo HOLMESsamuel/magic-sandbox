@@ -70,7 +70,8 @@
               :initialScore="player.score"
               :userIndex="userIndex"
               @show-deck="showDeck($event)"
-              @open-token-modal="openTokenModal($event)">
+              @open-token-modal="openTokenModal($event)"
+              @open-dice-modal="openDiceModal">
             </counter>
             <hand
               :pIndex="pIndex"
@@ -117,6 +118,11 @@
     @create-token="createToken($event)"
     @modify-token="modifyToken($event)"
   ></token-modal>
+  <dice-modal
+    :isDiceModalVisible="isDiceModalVisible"
+    @close-dice-modal="closeDiceModal"
+    @throw-dice="throwDice($event)"
+  ></dice-modal>
 </template>
   
   <script>
@@ -129,6 +135,7 @@
   import DeckModal from './components/modals/DeckModal.vue';
   import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
   import TokenModal from './components/modals/TokenModal.vue';
+  import DiceModal from './components/modals/DiceModal.vue';
 
   import axios from 'axios';
 
@@ -155,7 +162,8 @@
         cardIdMovingToDeck: "",
         isTokenModalVisible: false,
         editTokenMode: false,
-        currentToken: null
+        currentToken: null,
+        isDiceModalVisible: false
       };
     },
     computed: {
@@ -202,7 +210,7 @@
       document.addEventListener('mouseup', this.endDrag);
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal
     },
     methods: {
       startPan(event) {
@@ -287,6 +295,12 @@
       showDeck() {
         this.isDeckModalVisible = true;
       },
+      openDiceModal() {
+        this.isDiceModalVisible = true;
+      },
+      closeDiceModal() {
+        this.isDiceModalVisible = false;
+      },
       openTokenModal() {
         this.isTokenModalVisible = true;
       },
@@ -310,6 +324,15 @@
       },
       closeMoveToDeckModal() {
         this.isMoveToDeckModalVisible = false;
+      },
+      async throwDice(diceValue) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.get(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/dice/' + diceValue);
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
       },
       async createToken(token) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;

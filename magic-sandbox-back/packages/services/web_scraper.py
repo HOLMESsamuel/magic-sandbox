@@ -1,3 +1,4 @@
+import uuid
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -30,15 +31,69 @@ class WebScraper:
         # Get the page source and parse it with BeautifulSoup
         soup = BeautifulSoup(self.driver.page_source, 'html.parser')
         return soup
-
+    
+    def get_archidekt_deck(self, url: str):
+        card_map_data, image_urls = self.get_archidekt_data(url)
+        return self.process_archidekt_card_map_into_deck(card_map_data, image_urls)
+    
+    def get_tapped_out_deck(self, url: str):
+        card_map_data = self.get_tapped_out_data(url)
+        return self.process_tapped_out_card_map_into_deck(card_map_data)
+    
     def get_deck(self, url: str):
-        card_map_data, image_urls = self.get_data(url)
-        return self.process_card_map_into_deck(card_map_data, image_urls)
+        if("archidekt" in url):
+            return self.get_archidekt_deck(url)
+        elif("tappedout" in url):
+            return self.get_tapped_out_deck(url)
+        else:
+            raise ValueError("The url must be from either archidekt or tapped out")
 
-    def get_data(self, url: str):
+    def get_tapped_out_data(self, url: str):
         try:
             response = requests.get(url)
             response.raise_for_status()  # Check for HTTP request errors
+
+            soup = BeautifulSoup(response.content, 'html.parser')
+
+            cards_info = []
+
+            # Find all 'li' elements with the class 'member' which represents each card entry
+            for li in soup.find_all('li', class_='member'):
+                # Find the 'a' tag within each 'li' for quantity
+                qty_tag = li.find('a', class_='qty')
+                if qty_tag:
+                    qty = qty_tag['data-qty']  # Extract the quantity
+                else:
+                    qty = 1  # Default quantity
+
+                # Now find the 'span' with class 'card' for card details
+                card_span = li.find('span', class_='card')
+                if card_span:
+                    # Find the 'a' tag within the 'span' for card details
+                    card_link = card_span.find('a', class_='card-link')
+                    if card_link:
+                        card_name = card_link['data-name']
+                        card_image = card_link['data-image']
+                        if card_image.startswith('//'):
+                            card_image = 'https:' + card_image  
+                        # Append a dictionary with card details and quantity to the cards_info list
+                        cards_info.append({
+                            'name': card_name,
+                            'image_url': card_image,
+                            'quantity': qty
+                        })
+            
+            return cards_info
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def get_archidekt_data(self, url: str):
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # Check for HTTP request errors
+
+            #static_content = BeautifulSoup(response.content, 'html.parser')
+            #print(static_content)
 
             soup = self.get_dynamic_content(url)
 
@@ -71,7 +126,7 @@ class WebScraper:
             print(f"Error: {e}")
 
 
-    def process_card_map_into_deck(self, card_map, image_urls):
+    def process_archidekt_card_map_into_deck(self, card_map, image_urls):
         cards = []
         for key, value in card_map.items():
             # if a card has multiple occurences there is only one entry in card map but the qty is set to the number
@@ -84,6 +139,19 @@ class WebScraper:
                 cards.append(card)
         deck = Deck(cards)
         return deck
+    
+    def process_tapped_out_card_map_into_deck(self, card_map):
+        try:
+            cards = []
+            for card_data in card_map:
+                # if a card has multiple occurences there is only one entry in card map but the qty is set to the number
+                for i in range(int(card_data["quantity"])):
+                    card = Card(str(uuid.uuid4()), card_data["name"], "type", card_data["image_url"])
+                    cards.append(card)
+            deck = Deck(cards)
+            return deck
+        except Exception as e:
+            print(e)
 
     def extract_image_id(self, src):
         # Use regex to find the numerical string after the '?'

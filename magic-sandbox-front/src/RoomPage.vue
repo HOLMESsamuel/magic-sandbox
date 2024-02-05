@@ -163,7 +163,8 @@
         isTokenModalVisible: false,
         editTokenMode: false,
         currentToken: null,
-        isDiceModalVisible: false
+        isDiceModalVisible: false,
+        alertMessage: ""
       };
     },
     computed: {
@@ -259,9 +260,13 @@
         this.ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
           this.state = data;
+          if(this.state.alertMessage && this.state.alertMessage !== this.alertMessage) {
+            this.alertMessage = this.state.alertMessage;
+            alert(this.alertMessage);
+          }
           console.log(this.state);
         };
-  
+
         this.ws.onerror = (error) => {
           console.error("WebSocket error:", error);
         };

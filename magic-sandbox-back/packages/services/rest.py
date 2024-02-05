@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Body, Depends, HTTPException
 from .web_scraper import WebScraper
-import random
 import asyncio
 from pydantic import BaseModel, validator
 
@@ -44,8 +43,9 @@ def read_root():
     return {"Hello": "World"}
 
 @router.get("/room/{roomId}/player/{playerId}/dice/{diceValue}")
-def throw_dice(diceValue: int):
-    return random.randint(1, diceValue)
+async def throw_dice(playerId: str, roomId: str, diceValue: int):
+    dice_result = await game_service.throw_dice(playerId, roomId, diceValue)
+    return dice_result
 
 @router.post("/room/{roomId}/player/{playerId}/deck/mill")
 async def mill_deck(playerId: str, roomId: str):

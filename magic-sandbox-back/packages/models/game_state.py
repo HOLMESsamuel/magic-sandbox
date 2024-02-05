@@ -4,7 +4,8 @@ import uuid
 def create_game_state():
     return {
         "players": [],
-        "max_z_index": 1
+        "max_z_index": 1,
+        "alertMessage": ""
     }
 
 def add_player_to_game_state_if_not_exist(game_state, player_name):
@@ -35,6 +36,9 @@ def reset_player(player):
 
 def add_deck(player, deck):
     player["deck"]["cards"] = deck.cards_to_dict()
+
+def throw_dice(game_state, player, dice_result, dice_value):
+    game_state["alertMessage"] = player["name"] + " threw a dice: " + str(dice_result) + "/" + str(dice_value)
 
 def mill_card(player, playerIndex):
     if player["deck"]:

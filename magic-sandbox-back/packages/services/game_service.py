@@ -14,6 +14,13 @@ class GameService:
         add_deck(get_player_from_game_state(game_state, playerId), deck)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": "Deck added for player " + playerId + " room " + roomId}
+    
+    async def throw_dice(self, playerId: str, roomId: str, dice_value: int):
+        dice_result = random.randint(1, dice_value)
+        game_state = state_manager.get_group_state(roomId)
+        throw_dice(game_state, get_player_from_game_state(game_state, playerId), dice_result, dice_value)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": "Player " + playerId + " room " + roomId + " threw a dice: " + str(dice_result) + "/" + str(dice_value)}
 
     async def mill_card(self, playerId: str, roomId: str): 
         game_state = state_manager.get_group_state(roomId)

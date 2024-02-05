@@ -38,7 +38,6 @@
         this.$emit('close-dice-modal');
       },
       confirm() {
-        console.log(this.diceValue);
         this.$emit('throw-dice', this.diceValue);
         this.closeModal();
       }

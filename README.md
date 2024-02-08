@@ -1,6 +1,6 @@
 # Magic sandbox
 
-With this project, I aim to create a platform to load MTG decks from websites like Archidekt and enable playing Magic: The Gathering online with friends. The platform does not implement game rules but allows players to move cards around, mimicking the real-life experience. This project will be self-hosted and can be shared online using tools like ngrok.
+With this project, I aim to create a platform to load MTG decks from websites like Archidekt and enable playing Magic: The Gathering online with friends. The platform does not implement game rules but allows players to move cards around, mimicking the real-life experience. This project will be self-hosted and for personal usage only.
 
 ## Technical Stack
 
@@ -9,6 +9,7 @@ With this project, I aim to create a platform to load MTG decks from websites li
 -   Frontend: Vue.js - A frontend framework that is integrated with vite
 -   Containerization: Docker - Used to containerize both frontend and backend services, ensuring easy deployment and consistent environments.
 -   Orchestration: Docker Compose - Used for defining and running multi-container Docker applications.
+-   Selenium: Python library to automate web browsing, allow to load web content.
 -   Webscraping: Beautiful Soup is a Python package for parsing HTML and XML documents. It creates a parse tree for parsed pages that can be used to extract data from HTML.
 
 ## Prerequisites
@@ -26,13 +27,6 @@ With this project, I aim to create a platform to load MTG decks from websites li
 
 ```
 docker-compose up --build
-```
-
-4. Serve online with ngrok
-
-```
-ngrok http 5000
-
 ```
 
 ## How to start backend locally

@@ -12,6 +12,7 @@
   <script>
   import CardModal from './modals/CardModal.vue';
   import axios from 'axios';
+  import { ref } from 'vue';
 
   export default {
     emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal'],
@@ -100,6 +101,7 @@
       startDrag(event) {
         event.preventDefault();
         this.isDragging = true;
+        console.log(window.innerWidth);
 
         // Calculate the initial position based on the cursor position
         const mouseX = (event.clientX - this.offsetX) / this.scale;
@@ -113,8 +115,8 @@
           this.cardOffsetY = mouseY - this.position.y + 140;
           
           if(this.reverseMovement) {
-            this.position.x = -mouseX + 1400;
-            this.position.y = -mouseY - 200;
+            this.position.x = -mouseX + window.innerWidth - 150;
+            this.position.y = -mouseY - 190;
             this.cardOffsetX = mouseX - this.position.x + 100;
             this.cardOffsetY = mouseY - this.position.y + 140;
           }

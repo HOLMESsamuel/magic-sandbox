@@ -57,8 +57,17 @@ class WebScraper:
 
             cards_info = []
 
-            # Find all 'li' elements with the class 'member' which represents each card entry
-            for li in soup.find_all('li', class_='member'):
+            self.add_cards_from_tapped_out(cards_info, soup)
+            self.add_commander_from_tapped_out(cards_info, soup)
+            
+            return cards_info
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def add_cards_from_tapped_out(self, cards_info, soup):
+        # Find all 'li' elements with the class 'member' which represents each card entry
+        for li in soup.find_all('li', class_='member'):
+            if 'maybe' not in li.get('id', ''): #checks if the card is not from the sideboard
                 # Find the 'a' tag within each 'li' for quantity
                 qty_tag = li.find('a', class_='qty')
                 if qty_tag:
@@ -82,18 +91,28 @@ class WebScraper:
                             'image_url': card_image,
                             'quantity': qty
                         })
-            
-            return cards_info
-        except Exception as e:
-            print(f"Error: {e}")
+
+    def add_commander_from_tapped_out(self, cards_info, soup):
+        for div in soup.find_all('div', class_='row'):
+                card_span = div.find('span')
+                if card_span:
+                    card_link = card_span.find('a', class_='card-hover')
+                    if card_link and card_link.find('img', class_='commander-img'):
+                        card_name = card_link['data-name']
+                        card_image = card_link['data-image']
+                        if card_image.startswith('//'):
+                            card_image = 'https:' + card_image
+                        cards_info.append({
+                            'name': card_name,
+                            'image_url': card_image,
+                            'quantity': 1
+                        })
+
 
     def get_archidekt_data(self, url: str):
         try:
             response = requests.get(url)
             response.raise_for_status()  # Check for HTTP request errors
-
-            #static_content = BeautifulSoup(response.content, 'html.parser')
-            #print(static_content)
 
             soup = self.get_dynamic_content(url)
 

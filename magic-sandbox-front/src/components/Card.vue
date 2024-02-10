@@ -12,7 +12,6 @@
   <script>
   import CardModal from './modals/CardModal.vue';
   import axios from 'axios';
-  import { ref } from 'vue';
 
   export default {
     emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal'],
@@ -342,6 +341,9 @@
   border: none;
   cursor: pointer;
   padding: 5px;
+  height: 60px;
+  width: 60px;
+  font-size: 2em;
   border-radius: 50%;
 }
 

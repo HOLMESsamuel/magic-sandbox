@@ -376,6 +376,7 @@
   width: 100%;
   height: 100vh;
   cursor: grab;
+  background-color: #b7aeaf;
 }
 .zoom-pan-container:active {
   cursor: grabbing;

@@ -341,6 +341,9 @@
   border: none;
   cursor: pointer;
   padding: 5px;
+  height: 60px;
+  width: 60px;
+  font-size: 2em;
   border-radius: 50%;
 }
 

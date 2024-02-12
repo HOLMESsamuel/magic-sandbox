@@ -1,23 +1,21 @@
 <template>
     <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
-      <img :src="imageSrc" :alt="name">
+      <img :src="flipped ? flipImage: imageSrc" :alt="name">
       <!-- Hover Buttons -->
       <div v-if="!inHand && hover" class="hover-buttons">
         <button class="button-center">👁️</button>
       </div>
+      <div v-if="!inHand && hover && flippable" class="hover-buttons">
+        <button class="button-right"></button>
+      </div>
     </div>
-    <CardModal :imageSrc="imageSrc" ref="cardModal"></CardModal>
   </template>
   
   <script>
-  import CardModal from './modals/CardModal.vue';
   import axios from 'axios';
 
   export default {
     emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal'],
-    components: {
-      CardModal
-    },
     props: {
       imageSrc: String,
       initialPosition: {
@@ -40,7 +38,10 @@
       inHand: Boolean,
       name: String,
       zIndex: Number,
-      maxZIndex: Number
+      maxZIndex: Number,
+      flippable: Boolean,
+      flipped: Boolean,
+      flipImage: String
     },
     data() {
       return {
@@ -100,7 +101,6 @@
       startDrag(event) {
         event.preventDefault();
         this.isDragging = true;
-        console.log(window.innerWidth);
 
         // Calculate the initial position based on the cursor position
         const mouseX = (event.clientX - this.offsetX) / this.scale;
@@ -206,7 +206,10 @@
         return !this.inHand;
       },
       showCardDetail() {
-        this.$emit('show-card', this.imageSrc);
+        this.$emit('show-card', this.flipped ? this.flipImage: this.imageSrc);
+      },
+      flipCard() {
+
       },
       handleCardClick(event) {
         if (this.dragging) {
@@ -215,10 +218,17 @@
         }
 
         if (event.target.matches('.button-center')) {
-          // If the clicked element is the button, show card details
+          // If the clicked element is the show button
           this.showCardDetail();
           return;
         }
+
+        if (event.target.matches('.button-right')) {
+          // If the clicked element is the flip button
+          this.flipCard();
+          return;
+        }
+
         if (this.inHand) {
           this.showCardDetail();
         } else {
@@ -247,6 +257,15 @@
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
           const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/untap', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async flipCard() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/flip', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -334,6 +353,25 @@
   display: flex;
   justify-content: space-between;
   align-items: start;
+  z-index: 10; /* Ensure it's above the card image */
+}
+
+.button-right {
+  position: absolute;
+  top: 0px;
+  right: 0px; 
+  background: #FFF;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  height: 100px;
+  width: 100px;
+  clip-path: polygon(50% 0%, 100% 0%, 100% 50%);  /* Triangle shape */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  overflow: visible;
 }
 
 .button-center {

@@ -79,6 +79,11 @@ class GameService:
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
         return {"message": playerId + " room " + roomId + " untap " + cardId}
     
+    async def flip_card(self, playerId: str, roomId: str, cardId: str):
+        flip_card(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), cardId)
+        await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))
+        return {"message": playerId + " room " + roomId + " flip " + cardId}
+    
     async def tap_token(self, playerId: str, roomId: str, tokenId: str):
         tap_token(get_player_from_game_state(state_manager.get_group_state(roomId), playerId), tokenId)
         await websocket_manager.broadcast(roomId, state_manager.get_group_state(roomId))

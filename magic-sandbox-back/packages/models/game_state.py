@@ -118,6 +118,12 @@ def untap_card(player, cardId):
             player["board"]["cards"][index]["tapped"] = False
             break
 
+def flip_card(player, cardId):
+    for index, card in enumerate(player["board"]["cards"]):
+        if card["id"] == cardId:
+            player["board"]["cards"][index]["flipped"] = not player["board"]["cards"][index]["flipped"]
+            break
+
 def tap_token(player, tokenId):
     for index, token in enumerate(player["board"]["tokens"]):
         if token["id"] == tokenId:

@@ -82,6 +82,11 @@ async def untap_card(playerId: str, roomId: str, cardId: str):
     response = await game_service.untap_card(playerId, roomId, cardId)
     return response
 
+@router.put("/room/{roomId}/player/{playerId}/card/{cardId}/flip")
+async def flip_card(playerId: str, roomId: str, cardId: str):
+    response = await game_service.flip_card(playerId, roomId, cardId)
+    return response
+
 @router.post("/room/{roomId}/player/{playerId}/token/{tokenId}/tap")
 async def tap_token(playerId: str, roomId: str, tokenId: str):
     response = await game_service.tap_token(playerId, roomId, tokenId)

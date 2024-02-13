@@ -67,7 +67,7 @@ class WebScraper:
     def add_cards_from_tapped_out(self, cards_info, soup):
         # Find all 'li' elements with the class 'member' which represents each card entry
         for li in soup.find_all('li', class_='member'):
-            if 'maybe' not in li.get('id', ''):  # checks if the card is not from the sideboard
+            if 'maybe' not in li.get('id', '') and 'side' not in li.get('id', ''):  # checks if the card is not from the sideboard
                 # Find the 'a' tag within each 'li' for quantity
                 qty_tag = li.find('a', class_='qty')
                 if qty_tag:

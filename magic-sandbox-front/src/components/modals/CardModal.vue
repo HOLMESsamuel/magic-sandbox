@@ -2,6 +2,7 @@
     <div v-if="isCardModalVisible" class="modal" @click="closeModal">
       <div class="modal-content" @click.stop> <!--allow to click anywhere to close the modal except on the card-->
         <img :src="modalImageSrc" alt="Enlarged Card" />
+        <img v-if="modalFlipImageSrc" :src="modalFlipImageSrc" alt="Enlarged Card flipped" />
         <button class="close-button" @click.stop="closeModal"></button>
       </div>
     </div>
@@ -12,6 +13,7 @@
     emits: ["close-card-modal"],
     props: {
       modalImageSrc: String,
+      modalFlipImageSrc: String,
       isCardModalVisible: Boolean
     },
     methods: {

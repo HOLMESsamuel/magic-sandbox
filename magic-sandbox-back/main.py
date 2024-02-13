@@ -1,10 +1,13 @@
-import asyncio
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from packages.services.websocket_manager import WebSocketManager
 from packages.services.state_manager import StateManager
 from packages.models.game_state import *
-from packages.services.rest import router as rest_router
+from packages.routes.board_routes import router as board_router
+from packages.routes.deck_routes import router as deck_router
+from packages.routes.card_routes import router as card_router
+from packages.routes.token_routes import router as token_router
+from packages.routes.hand_routes import router as hand_router
 from fastapi.encoders import jsonable_encoder
 
 app = FastAPI()
@@ -17,8 +20,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# includes endpoints from rest.py in /services
-app.include_router(rest_router)
+# includes endpoints from routes package
+app.include_router(board_router)
+app.include_router(deck_router)
+app.include_router(card_router)
+app.include_router(token_router)
+app.include_router(hand_router)
 
 state_manager = StateManager()
 websocket_manager = WebSocketManager()

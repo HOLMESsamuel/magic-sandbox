@@ -5,7 +5,7 @@
       <div v-if="!inHand && hover" class="hover-buttons">
         <button class="button-center">👁️</button>
       </div>
-      <div v-if="!inHand && hover && flippable" class="hover-buttons">
+      <div v-if="hover && flippable" class="hover-buttons">
         <button class="button-right"></button>
       </div>
     </div>
@@ -212,7 +212,7 @@
         return !this.inHand;
       },
       showCardDetail() {
-        this.$emit('show-card', this.flipped ? this.flipImage: this.imageSrc);
+        this.$emit('show-card', {image: this.imageSrc, flipImage: this.flipImage});
       },
       flipCard() {
 

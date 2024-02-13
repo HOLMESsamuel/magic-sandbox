@@ -62,6 +62,7 @@
   </div>
   <card-modal
     :modalImageSrc="modalImageSrc"
+    :modalFlipImageSrc="modalFlipImageSrc"
     :isCardModalVisible="isCardModalVisible"
     @close-card-modal="closeCardModal"
   ></card-modal>
@@ -125,6 +126,7 @@
         offsetX: 0,
         offsetY: 0,
         modalImageSrc: '',
+        modalFlipImageSrc: '',
         isCardModalVisible: false,
         isDeckModalVisible: false,
         isMoveToDeckModalVisible: false,
@@ -260,8 +262,9 @@
           this.ws.send(JSON.stringify(this.state));
         }
       },
-      showCard(imageSrc) {
-        this.modalImageSrc = imageSrc;
+      showCard(event) {
+        this.modalImageSrc = event.image;
+        this.modalFlipImageSrc = event.flipImage;
         this.isCardModalVisible = true;
       },
       showDeck() {

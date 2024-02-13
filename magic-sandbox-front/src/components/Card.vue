@@ -62,6 +62,11 @@
       cardStyle() {
         let transformStyles = '';
         let zIndex = 2;
+        let border = 'none'
+
+        if(this.imageSrc === '') {
+          border = "solid black 1px";
+        }
 
         if(this.zIndex) {
           zIndex = this.zIndex;
@@ -93,7 +98,8 @@
           position: 'fixed',
           cursor: 'pointer',
           transform: transformStyles,
-          'z-index': zIndex
+          'z-index': zIndex,
+          'border': border
         };
       }
     },

@@ -3,7 +3,7 @@
     <div class="modal-content" @click.stop>
       <div class="card-grid">
         <div v-for="(card, index) in sortedCards" :key="index" class="deck-view-card" @mouseover="hover = true" @mouseleave="hover = false">
-          <img :src="card.image" alt="Card Image" draggable="false">
+          <img :src="card.image" :alt="card.name" draggable="false">
           <button v-if="hover" class="add-to-hand-button" @click.stop="addToHand(card.id)">Add to Hand</button>
         </div>
       </div>

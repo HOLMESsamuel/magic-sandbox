@@ -178,7 +178,7 @@
       async tap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/token/' + this.id + '/tap', {});
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/token/' + this.id + '/tap', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -187,7 +187,7 @@
       async untap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/token/' + this.id + '/untap', {});
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/token/' + this.id + '/untap', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

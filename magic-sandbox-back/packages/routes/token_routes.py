@@ -25,12 +25,12 @@ async def modify_token(playerId: str, roomId: str, id: str, token_data: TokenDat
     response = await game_service.modify_token(playerId, roomId, id, token_data.text, token_data.type)
     return response
 
-@router.post("/room/{roomId}/player/{playerId}/token/{tokenId}/tap")
+@router.patch("/room/{roomId}/player/{playerId}/token/{tokenId}/tap")
 async def tap_token(playerId: str, roomId: str, tokenId: str):
     response = await game_service.tap_token(playerId, roomId, tokenId)
     return response
 
-@router.post("/room/{roomId}/player/{playerId}/token/{tokenId}/untap")
+@router.patch("/room/{roomId}/player/{playerId}/token/{tokenId}/untap")
 async def untap_token(playerId: str, roomId: str, tokenId: str):
     response = await game_service.untap_token(playerId, roomId, tokenId)
     return response

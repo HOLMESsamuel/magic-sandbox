@@ -115,7 +115,7 @@
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
           const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
           try{
-            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/hand/' + targetPlayerName, {});
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/hand/' + targetPlayerName, {});
             console.log(response.data);
           } catch (error) {
             console.log(error);

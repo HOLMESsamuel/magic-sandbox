@@ -115,7 +115,7 @@
         async updateScore() {
             const backendUrl = import.meta.env.VITE_BACKEND_URL;
             try{
-              const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/score/' + this.score, {});
+              const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/score/' + this.score, {});
               console.log(response.data);
             } catch (error) {
               console.log(error);
@@ -124,7 +124,7 @@
         async resetDeck() {
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
           try{
-            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/reset', {});
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/reset', {});
             console.log(response.data);
           } catch (error) {
             console.log(error);
@@ -134,7 +134,7 @@
         async millCard() {
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
           try{
-            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/mill', {});
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/mill', {});
             console.log(response.data);
           } catch (error) {
             console.log(error);
@@ -143,7 +143,7 @@
         async shuffleDeck() {
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
           try{
-            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/shuffle', {});
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/shuffle', {});
             console.log(response.data);
           } catch (error) {
             console.log(error);
@@ -152,7 +152,7 @@
         async detapAll() {
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
           try{
-            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/board/detap', {});
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/board/detap', {});
             console.log(response.data);
           } catch (error) {
             console.log(error);
@@ -161,7 +161,7 @@
         async mulligan() {
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
           try{
-            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/mulligan', {});
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/mulligan', {});
             console.log(response.data);
           } catch (error) {
             console.log(error);

@@ -87,7 +87,7 @@
       async handleCardDrop(position, cardId) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + cardId + '/play', position);
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + cardId + '/play', position);
           console.log(response.data);
         } catch (error) {
           console.log(error);

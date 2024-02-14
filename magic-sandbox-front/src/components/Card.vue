@@ -253,7 +253,7 @@
       async tap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/tap', {});
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/tap', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -262,7 +262,7 @@
       async untap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/untap', {});
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/untap', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -271,7 +271,7 @@
       async flipCard() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/flip', {});
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/flip', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

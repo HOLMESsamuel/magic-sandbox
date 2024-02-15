@@ -49,30 +49,32 @@ class ArchidektWebScraper(Scraper):
     def process_archidekt_card_map_into_deck(self, card_map, soup):
         cards = []
         for key, value in card_map.items():
-            # Construct the specific div id for the current card
-            card_div_id = f'deck-card-dom-{key}'
-            
-            card_div = soup.find('div', id=card_div_id)
-            
-            if card_div:
-                # Find all img tags within this div with the specific class
-                img_tags = card_div.find_all('img', class_='basicCard_image__cNHMf')
-                img_urls = [img['src'] for img in img_tags if img.has_attr('src')]
+            if "Maybeboard" not in value["categories"]: #filter cards that are in the maybeboard
+                # each card image is in a div whose id contains card id
+                # Construct the specific div id for the current card
+                card_div_id = f'deck-card-dom-{key}'
                 
-                # If there's only one img, we fetch its src for the image
-                # If there are two imgs, it means the card has two sides and we need both srcs
-                # Adjust the Card constructor call based on your Card class' requirements
-                for i in range(value.get('qty')):
-                    if len(img_urls) == 1:
-                        # Assuming your Card constructor can handle a single image URL
-                        card = Card(str(uuid.uuid4()), value.get('name'), value.get('type'), img_urls[0])
-                    elif len(img_urls) == 2:
-                        # Assuming your Card constructor can handle two image URLs for two-sided cards
-                        card = Card(str(uuid.uuid4()), value.get('name'), value.get('type'), img_urls[0], img_urls[1])
-                    else:
-                        card = Card(str(uuid.uuid4()), value.get('name'), value.get('type'), '')
+                card_div = soup.find('div', id=card_div_id)
+                
+                if card_div:
+                    # Find all img tags within this div with the specific class
+                    img_tags = card_div.find_all('img', class_='basicCard_image__cNHMf')
+                    img_urls = [img['src'] for img in img_tags if img.has_attr('src')]
                     
-                    cards.append(card)
+                    # If there's only one img, we fetch its src for the image
+                    # If there are two imgs, it means the card has two sides and we need both srcs
+                    # Adjust the Card constructor call based on your Card class' requirements
+                    for i in range(value.get('qty')):
+                        if len(img_urls) == 1:
+                            # Assuming your Card constructor can handle a single image URL
+                            card = Card(str(uuid.uuid4()), value.get('name'), value.get('type'), img_urls[0])
+                        elif len(img_urls) == 2:
+                            # Assuming your Card constructor can handle two image URLs for two-sided cards
+                            card = Card(str(uuid.uuid4()), value.get('name'), value.get('type'), img_urls[0], img_urls[1])
+                        else:
+                            card = Card(str(uuid.uuid4()), value.get('name'), value.get('type'), '')
+                        
+                        cards.append(card)
 
         deck = Deck(cards)
         return deck

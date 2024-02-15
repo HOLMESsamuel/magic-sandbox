@@ -25,6 +25,12 @@
   </template>
   
   <script>
+  function getDefaultData() {
+    return {
+      cardPosition: 0,
+      lastPositionChecked: false,
+    };
+  }
   export default {
     emits: ["close-move-to-deck-modal", "confirm-move"],
     props: {
@@ -33,13 +39,11 @@
       cardId: String
     },
     data() {
-      return {
-        cardPosition: 0,
-        lastPositionChecked: false
-      };
+      return getDefaultData();
     },
     methods: {
       closeModal() {
+        Object.assign(this.$data, getDefaultData());
         this.$emit('close-move-to-deck-modal');
       },
       async confirmMove() {

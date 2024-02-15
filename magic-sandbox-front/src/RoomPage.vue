@@ -80,6 +80,7 @@
     @confirm-move="moveCardToDeck($event)"
   ></move-card-to-deck-modal>
   <token-modal
+    :key="isTokenModalVisible"
     :isTokenModalVisible="isTokenModalVisible"
     :currentToken="currentToken"
     :editTokenMode="editTokenMode"
@@ -277,6 +278,7 @@
         this.isDiceModalVisible = false;
       },
       openTokenModal() {
+        this.editTokenMode = false;
         this.isTokenModalVisible = true;
       },
       closeTokenModal() {

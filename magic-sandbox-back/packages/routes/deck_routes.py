@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Body, HTTPException
-from ..services.web_scraper import WebScraper
+from ..services import WebScraperService
 from pydantic import BaseModel, validator
-
-from ..services.game_service import GameService
+from ..services import GameService
 
 router = APIRouter()
 game_service = GameService()
+web_scraper_service = WebScraperService()
 
 class DeckInput(BaseModel):
     url: str
@@ -19,7 +19,7 @@ class DeckInput(BaseModel):
 @router.post("/room/{roomId}/player/{playerId}/deck")
 async def scrap_deck(playerId: str, roomId: str, deck_input: DeckInput):
     try:
-        web_scraper = WebScraper()
+        web_scraper = web_scraper_service.get_scraper(deck_input.url)
         print("web scraper initialized")
         #multithread does not seem to work on container, or the ram is not sufficient
         #deck = await asyncio.to_thread(web_scraper.get_deck, deck_input.url)

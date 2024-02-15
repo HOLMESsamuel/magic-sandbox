@@ -8,8 +8,16 @@
             20
           </label>
           <label>
+            <input name="dice value" type="radio" v-model="diceValue" value="8">
+            8
+          </label>
+          <label>
             <input name="dice value" type="radio" v-model="diceValue" value="6">
             6
+          </label>
+          <label>
+            <input name="dice value" type="radio" v-model="diceValue" value="2">
+            2
           </label>
         </div>
         

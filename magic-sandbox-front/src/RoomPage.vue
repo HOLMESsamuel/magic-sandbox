@@ -80,6 +80,7 @@
     @confirm-move="moveCardToDeck($event)"
   ></move-card-to-deck-modal>
   <token-modal
+    :key="isTokenModalVisible"
     :isTokenModalVisible="isTokenModalVisible"
     :currentToken="currentToken"
     :editTokenMode="editTokenMode"
@@ -277,6 +278,7 @@
         this.isDiceModalVisible = false;
       },
       openTokenModal() {
+        this.editTokenMode = false;
         this.isTokenModalVisible = true;
       },
       closeTokenModal() {
@@ -331,7 +333,7 @@
       async moveCardToDeck(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/deck/' + event.cardPosition, {});
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/deck/' + event.cardPosition, {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -340,7 +342,7 @@
       async addToHand(cardId) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/deck/card/' + cardId + '/hand', {});
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/deck/card/' + cardId + '/hand', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -350,7 +352,7 @@
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/board/card/' + event.cardId + '/hand/' + targetPlayerName, {});
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/board/card/' + event.cardId + '/hand/' + targetPlayerName, {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

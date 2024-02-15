@@ -2,8 +2,8 @@
     <div class="token" :style="[tokenStyle, tokenShape, tokenColor]" @click.stop="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
       <p>{{ text }}</p>  
       <div v-if="hover" class="hover-buttons">
-        <button class="button-center" @click.stop="modifyToken">✏️</button>
-        <button class="button-center" @click.stop="deleteToken">X</button>
+        <button class="token-button" @click.stop="modifyToken">✏️</button>
+        <button class="token-button" @click.stop="deleteToken">X</button>
       </div>
     </div>
   </template>
@@ -178,7 +178,7 @@
       async tap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/token/' + this.id + '/tap', {});
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/token/' + this.id + '/tap', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -187,7 +187,7 @@
       async untap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/token/' + this.id + '/untap', {});
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/token/' + this.id + '/untap', {});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -230,19 +230,22 @@
   align-items: start;
 }
 
-.button-center {
+.token-button {
   background: #FFF;
   border: none;
   cursor: pointer;
   padding: 5px;
+  height: 60px;
+  width: 60px;
+  font-size: 1.2em;
   border-radius: 50%;
 }
 
-.button-center:hover {
+.token-button:hover {
   background: #a99d9d;
 }
 
-.button-center {
+.token-button {
   margin: 0 auto;
 }
 </style>

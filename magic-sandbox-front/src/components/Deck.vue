@@ -89,7 +89,7 @@
         if(this.pIndex == this.userIndex) {
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
           try{
-            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/draw', {});
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/draw', {});
             console.log(response.data);
           } catch (error) {
             console.log(error);

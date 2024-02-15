@@ -47,7 +47,6 @@
           tokenType: "token"
         };
       }
-      
     },
     methods: {
       closeModal() {

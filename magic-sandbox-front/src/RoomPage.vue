@@ -136,7 +136,8 @@
         editTokenMode: false,
         currentToken: null,
         isDiceModalVisible: false,
-        alertMessage: ""
+        alertMessage: "",
+        firstMessageReceived: false
       };
     },
     computed: {
@@ -184,6 +185,30 @@
       Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board
     },
     methods: {
+      computeBoardInitialPosition() { //set the initial offset to place the player's board roughly at the center of the screen
+        switch (this.userIndex) {
+          case 0:
+            this.offsetX = window.innerWidth/4;
+            this.offsetY = window.innerHeight/4;
+            return ;
+          case 1: 
+            this.offsetX = window.innerWidth/3;
+            this.offsetY = window.innerHeight/3;
+            return;
+          case 2:
+            this.offsetX = window.innerWidth/8;
+            this.offsetY = window.innerHeight/4;
+            return;
+          case 3:
+            this.offsetX = window.innerWidth/1.5;
+            this.offsetY = window.innerHeight/4;
+            return;
+          default:
+            this.offsetX = 0;
+            this.offsetY = 0;
+            return;
+        }
+      },
       startPan(event) {
         this.panning = true;
         this.panStartX = event.clientX - this.offsetX;
@@ -233,6 +258,10 @@
           if(this.state.alertMessage && this.state.alertMessage !== this.alertMessage) {
             this.alertMessage = this.state.alertMessage;
             alert(this.alertMessage);
+          }
+          if(this.firstMessageReceived === false) { //this part will trigger only when the first message is received it allows to call compute position method only after the players list is received
+            this.computeBoardInitialPosition();
+            this.firstMessageReceived = true;
           }
           console.log(this.state);
         };

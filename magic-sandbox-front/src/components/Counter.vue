@@ -11,7 +11,7 @@
         <div v-if="isDeckLoaded" :style="deckButtonStyle" class="deck-buttons"> <!-- if the player is the player using this frontend -->
           <button @click="millCard" class="deck-button">Mill</button>
           <button @click="lookDeck" class="deck-button">Look</button>
-          <button @click="shuffleDeck" class="deck-button">Shuffle</button>
+          <button @click="shuffleDeck(); play();" class="deck-button">Shuffle</button>
           <button @click="resetDeck" class="deck-button">Reset</button>
           <button @click="detapAll" class="deck-button">Detap</button>
           <button @click="mulligan" class="deck-button">Mulligan</button>
@@ -23,8 +23,17 @@
   
   <script>
     import axios from 'axios';
+    import { useSound } from '@vueuse/sound';
+    import shuffleSound from '../assets/shuffle.mp3'
   
     export default {
+      setup() {
+        const { play } = useSound(shuffleSound)
+
+        return {
+          play,
+        }
+      },
       emits: ["show-deck", "open-token-modal", "open-dice-modal"],
       props: {
         playerName: String,

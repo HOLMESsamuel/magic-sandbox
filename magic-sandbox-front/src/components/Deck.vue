@@ -7,7 +7,7 @@
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
     </div>
-    <div class="deck-loaded" v-if="isDeckLoaded" @click="drawCard">
+    <div class="deck-loaded" v-if="isDeckLoaded" @click="play(); drawCard();">
     </div>
 </div>
   
@@ -15,8 +15,17 @@
 
 <script>
   import axios from 'axios';
+  import { useSound } from '@vueuse/sound';
+  import drawSound from '../assets/draw.mp3'
 
   export default {
+    setup() {
+        const { play } = useSound(drawSound)
+
+        return {
+          play,
+        }
+      },
     props: {
       playerName: String,
       roomId: String,

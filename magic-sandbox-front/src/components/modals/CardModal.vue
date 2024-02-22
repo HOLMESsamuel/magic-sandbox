@@ -46,7 +46,7 @@
   
   .modal-content img {
     max-width: 90vw;
-    max-height: 90vh;
+    height: 90vh;
   }
 
   .close-button {

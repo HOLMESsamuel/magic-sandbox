@@ -16,7 +16,18 @@
             Counter
           </label>
         </div>
-        
+
+        <div v-if="!editTokenMode" class="copy-number-container">
+          <label>
+            Copy
+          </label>
+          <input 
+            type="number" 
+            v-model="copy"
+            max="1000" 
+            min="1"
+          > 
+        </div>
         
         <div class="confirm-button-container">
           <button v-if="editTokenMode === false" class="confirm-button" @click="confirm">Create</button>
@@ -39,12 +50,14 @@
       if(this.editTokenMode === true) {
         return {
           tokenText: this.currentToken.text,
-          tokenType: this.currentToken.type
+          tokenType: this.currentToken.type,
+          copy: 1
         };
       } else {
         return {
           tokenText: '',
-          tokenType: "token"
+          tokenType: "token",
+          copy: 1
         };
       }
     },
@@ -54,9 +67,9 @@
       },
       confirm() {
         if(this.editTokenMode === true) {
-          this.$emit('modify-token', {text: this.tokenText, type: this.tokenType, id: this.currentToken.id});
+          this.$emit('modify-token', {text: this.tokenText, type: this.tokenType, id: this.currentToken.id, copy: this.copy});
         } else {
-          this.$emit('create-token', {text: this.tokenText, type: this.tokenType});
+          this.$emit('create-token', {text: this.tokenText, type: this.tokenType, copy: this.copy});
         }
         this.closeModal();
       }
@@ -142,6 +155,12 @@
 .confirm-button-container {
   display: flex;
   justify-content: center;
+}
+
+.copy-number-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
 .token-modal .confirm-button {

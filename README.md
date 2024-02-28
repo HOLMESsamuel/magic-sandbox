@@ -20,10 +20,16 @@ With this project, I aim to create a platform to load MTG decks from websites li
 
 1. Clone the Repository: Clone this repository to your local machine.
 
-2. Navigate to the Project Directory:
+2. Navigate to the front Project Directory:
 
+3. run commands :
 
-3. Start the Containers: Use Docker Compose to build and start the services.
+```
+npm install
+npm run build
+```
+
+4. Start the Containers: Use Docker Compose to build and start the services.
 
 ```
 docker-compose up --build

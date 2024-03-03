@@ -1,0 +1,1 @@
+DEFAULT_CARD_BACK_URL = 'https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg'

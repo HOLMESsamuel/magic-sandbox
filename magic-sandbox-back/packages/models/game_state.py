@@ -123,6 +123,10 @@ def flip_card(player, cardId):
         if card["id"] == cardId:
             player["board"]["cards"][index]["flipped"] = not player["board"]["cards"][index]["flipped"]
             break
+    for index, card in enumerate(player["hand"]):
+        if card["id"] == cardId:
+            player["hand"][index]["flipped"] = not player["hand"][index]["flipped"]
+            break
 
 def tap_token(player, tokenId):
     for index, token in enumerate(player["board"]["tokens"]):

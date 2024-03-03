@@ -1,18 +1,22 @@
 <template>
-    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
-      <img :src="flipped ? flipImage: imageSrc" :alt="name">
+    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag" @contextmenu.prevent="showCustomMenu($event)">
+      <img :src="flipped ? flipImage : imageSrc" :alt="name">
       <!-- Hover Buttons -->
       <div v-if="!inHand && hover" class="hover-buttons">
         <button class="button-center">👁️</button>
       </div>
-      <div v-if="hover && flippable" class="hover-buttons">
-        <button class="button-right"></button>
-      </div>
+    </div>
+    <div v-if="showMenu" class="menu" :style="customMenuStyle" @contextmenu.prevent="this.showMenu = false">
+      <!-- Custom menu content here -->
+      <ul>
+        <li @click="flipCard">Flip</li>
+      </ul>
     </div>
   </template>
   
   <script>
   import axios from 'axios';
+  import * as Constants from '../constants'
 
   export default {
     emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal'],
@@ -39,9 +43,9 @@
       name: String,
       zIndex: Number,
       maxZIndex: Number,
-      flippable: Boolean,
       flipped: Boolean,
       flipImage: String
+
     },
     data() {
       return {
@@ -52,7 +56,9 @@
         correctedX: null,
         correctedY: null,
         startDragPosition: null,
-        hover: false
+        hover: false,
+        showMenu: false,
+        menuPosition: { x: 0, y: 0 }
       };
     },
     mounted() {
@@ -101,30 +107,68 @@
           'z-index': zIndex,
           'border': border
         };
-      }
+      },
+      customMenuStyle() {
+        let transformStyles = '';
+
+        // Add 180 degrees rotation based on player index
+        if (this.pIndex === 1 || this.pIndex === 2) {
+          transformStyles += 'rotate(180deg) ';
+        }
+
+        return {
+          transform: transformStyles,
+          top: this.menuPosition.y + 'px',
+          left: this.menuPosition.x + 'px'
+        };
+      },
+      handX() {
+        switch (this.pIndex) {
+          case 0:
+            return Constants.PLAYER_0_HAND_X1;
+          case 1:
+            return Constants.PLAYER_1_HAND_X1;
+          case 2:
+            return Constants.PLAYER_2_HAND_X1;
+          case 3:
+            return Constants.PLAYER_3_HAND_X1;
+        }
+      },
+      handY() {
+        switch (this.pIndex) {
+          case 0:
+            return Constants.PLAYER_0_HAND_Y1;
+          case 1:
+            return Constants.PLAYER_1_HAND_Y1;
+          case 2:
+            return Constants.PLAYER_2_HAND_Y1;
+          case 3:
+            return Constants.PLAYER_3_HAND_Y1;
+        }
+      },
     },
     methods: {
       startDrag(event) {
+        if(event.button === 2 ) { //right click
+          return;
+        }
         event.preventDefault();
         this.isDragging = true;
 
-        // Calculate the initial position based on the cursor position
         const mouseX = (event.clientX - this.offsetX) / this.scale;
         const mouseY = (event.clientY - this.offsetY) / this.scale;
 
         if (this.inHand) {
-          // If in hand, set the initial position under the cursor
-          this.position.x = mouseX;
-          this.position.y = mouseY;
-          this.cardOffsetX = mouseX - this.position.x + 100;
-          this.cardOffsetY = mouseY - this.position.y + 140;
+          this.cardOffsetX = Constants.CARD_HALF_WIDTH;
+          this.cardOffsetY = Constants.CARD_HALF_HEIGHT;
           
           if(this.reverseMovement) {
-            this.position.x = -mouseX + window.innerWidth - 150;
-            this.position.y = -mouseY - 190;
-            this.cardOffsetX = mouseX - this.position.x + 100;
-            this.cardOffsetY = mouseY - this.position.y + 140;
+            this.cardOffsetX = 2 * mouseX - window.innerWidth + Constants.CARD_HALF_WIDTH;
+            this.cardOffsetY = 2 * mouseY + Constants.CARD_HALF_HEIGHT;
           }
+
+          this.position.x = mouseX - this.cardOffsetX;
+          this.position.y = mouseY - this.cardOffsetY;
           
         } else {
           this.cardOffsetX = mouseX - this.position.x;
@@ -214,10 +258,37 @@
       showCardDetail() {
         this.$emit('show-card', {image: this.imageSrc, flipImage: this.flipImage});
       },
-      flipCard() {
-
+      showCustomMenu(event) {
+        this.showMenu = !this.showMenu;
+        const mouseX = (event.clientX - this.offsetX) / this.scale;
+        const mouseY = (event.clientY - this.offsetY) / this.scale;
+        if(this.inHand) {
+          if(this.reverseMovement) {
+            this.menuPosition = { 
+              x: -mouseX + window.innerWidth - this.handX - Constants.CARD_HALF_WIDTH, 
+              y: -mouseY - this.handY - Constants.CARD_HALF_HEIGHT
+            };
+          } else {
+            this.menuPosition = { 
+              x: mouseX-this.handX-Constants.CARD_HALF_WIDTH, 
+              y: mouseY-this.handY-Constants.CARD_HALF_HEIGHT
+            };
+          }
+        } else {
+          if(this.reverseMovement) {
+            this.menuPosition = { x: -mouseX + window.innerWidth, y: -mouseY};
+          } else {
+            this.menuPosition = { x: mouseX, y: mouseY};
+          }
+        }
+        
+        event.preventDefault();
       },
       handleCardClick(event) {
+        if(event.button === 2 ) { //right click
+          return;
+        }
+        this.showMenu = false;
         if (this.dragging) {
           // If dragging, don't execute any click logic
           return;
@@ -226,12 +297,6 @@
         if (event.target.matches('.button-center')) {
           // If the clicked element is the show button
           this.showCardDetail();
-          return;
-        }
-
-        if (event.target.matches('.button-right')) {
-          // If the clicked element is the flip button
-          this.flipCard();
           return;
         }
 
@@ -269,6 +334,7 @@
         }
       },
       async flipCard() {
+        this.showMenu = false;
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
           const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/flip', {});
@@ -312,10 +378,10 @@
         // Returns an array of rectangular areas for each player's hand
         // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }
         return [
-          { x1: 700, y1: 1075, x2: 2205, y2: 1375 }, //player 0
-          { x1: 263, y1: -1630, x2: 1760, y2: -1325 }, //player 1
-          { x1: -2200, y1: -1630, x2: -680, y2: -1325 }, //player 2
-          { x1: -1950, y1: 1050, x2: -430, y2: 1360 }  //player 3
+          { x1: Constants.PLAYER_0_HAND_X1, y1: Constants.PLAYER_0_HAND_Y1, x2: Constants.PLAYER_0_HAND_X2, y2: Constants.PLAYER_0_HAND_Y2 },
+          { x1: Constants.PLAYER_1_HAND_X1, y1: Constants.PLAYER_1_HAND_Y1, x2: Constants.PLAYER_1_HAND_X2, y2: Constants.PLAYER_1_HAND_Y2 },
+          { x1: Constants.PLAYER_2_HAND_X1, y1: Constants.PLAYER_2_HAND_Y1, x2: Constants.PLAYER_2_HAND_X2, y2: Constants.PLAYER_2_HAND_Y2 },
+          { x1: Constants.PLAYER_3_HAND_X1, y1: Constants.PLAYER_3_HAND_Y1, x2: Constants.PLAYER_3_HAND_X2, y2: Constants.PLAYER_3_HAND_Y2 }
         ];
       },
 
@@ -362,24 +428,6 @@
   z-index: 10; /* Ensure it's above the card image */
 }
 
-.button-right {
-  position: absolute;
-  top: 0px;
-  right: 0px; 
-  background: #FFF;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  height: 100px;
-  width: 100px;
-  clip-path: polygon(50% 0%, 100% 0%, 100% 50%);  /* Triangle shape */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
-  overflow: visible;
-}
-
 .button-center {
   background: #FFF;
   border: none;
@@ -397,6 +445,35 @@
 
 .button-center {
   margin: 0 auto;
+}
+
+.menu {
+  position: absolute;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000; /* Ensure the menu appears above other content */
+}
+
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.menu li:hover {
+  background-color: #f0f0f0;
+}
+
+.custom-context-menu {
+  padding: 20px;
+  background-color: #eee;
+  border: 1px solid #ddd;
 }
 </style>
 

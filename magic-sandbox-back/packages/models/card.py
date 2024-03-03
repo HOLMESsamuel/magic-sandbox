@@ -1,5 +1,7 @@
+from ..constants import DEFAULT_CARD_BACK_URL
+
 class Card:
-    def __init__(self, id, name, type, image, flip_image='', position=None, tapped=False, flipped=False, z_index=2):
+    def __init__(self, id, name, type, image, flip_image=DEFAULT_CARD_BACK_URL, position=None, tapped=False, flipped=False, z_index=2):
         self.id = id
         self.name = name
         self.type = type

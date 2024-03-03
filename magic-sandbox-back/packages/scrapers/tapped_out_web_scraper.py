@@ -4,6 +4,7 @@ import uuid
 from .scraper import Scraper
 from ..models.card import Card
 from ..models.deck import Deck
+from ..constants import DEFAULT_CARD_BACK_URL
 
 class TappedOutWebScraper(Scraper):
 
@@ -53,7 +54,7 @@ class TappedOutWebScraper(Scraper):
                             'name': card_name,
                             'image_url': card_image,
                             'quantity': qty,
-                            'flip_image_url': ''
+                            'flip_image_url': DEFAULT_CARD_BACK_URL
                         }
 
                         # Attempt to find the flip side image directly within the next 'span'
@@ -83,7 +84,7 @@ class TappedOutWebScraper(Scraper):
                             'name': card_name,
                             'image_url': card_image,
                             'quantity': 1,
-                            'flip_image_url': ''
+                            'flip_image_url': DEFAULT_CARD_BACK_URL
                         })
     
     def process_tapped_out_card_map_into_deck(self, card_map):

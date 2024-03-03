@@ -4,6 +4,7 @@ import uuid
 from .scraper import Scraper
 from ..models.card import Card
 from ..models.deck import Deck
+from ..constants import DEFAULT_CARD_BACK_URL
 
 class AetherhubWebScraper(Scraper):
 
@@ -42,7 +43,7 @@ class AetherhubWebScraper(Scraper):
                 'name': card_name,
                 'image_url': card_image,
                 'quantity': 1,
-                'flip_image_url': ''
+                'flip_image_url': DEFAULT_CARD_BACK_URL
             }
 
             # todo: flipside

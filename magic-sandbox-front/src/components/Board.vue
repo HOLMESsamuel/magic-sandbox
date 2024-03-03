@@ -18,7 +18,6 @@
         :inHand="false"
         :zIndex="card.z_index"
         :maxZIndex="maxZIndex"
-        :flippable="card.flip_image !== ''"
         :flipped="card.flipped"
         :flipImage="card.flip_image"
         :reverseMovement="userIndex === 1 || userIndex === 2"

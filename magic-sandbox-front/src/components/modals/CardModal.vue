@@ -2,15 +2,22 @@
     <div v-if="isCardModalVisible" class="modal" @click="closeModal">
       <div class="modal-content" @click.stop> <!--allow to click anywhere to close the modal except on the card-->
         <img :src="modalImageSrc" alt="Enlarged Card" />
-        <img v-if="modalFlipImageSrc" :src="modalFlipImageSrc" alt="Enlarged Card flipped" />
+        <img v-if="modalFlipImageSrc && modalFlipImageSrc !== DEFAULT_CARD_BACK_URL" :src="modalFlipImageSrc" alt="Enlarged Card flipped" />
         <button class="close-button" @click.stop="closeModal"></button>
       </div>
     </div>
   </template>
   
   <script>
+  import { DEFAULT_CARD_BACK_URL } from '../../constants';
+
   export default {
     emits: ["close-card-modal"],
+    data() {
+      return {
+        DEFAULT_CARD_BACK_URL
+      }
+    },
     props: {
       modalImageSrc: String,
       modalFlipImageSrc: String,

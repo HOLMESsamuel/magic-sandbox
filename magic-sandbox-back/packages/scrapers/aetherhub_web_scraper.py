@@ -28,8 +28,14 @@ class AetherhubWebScraper(Scraper):
             print(f"Error: {e}")
 
     def add_cards_from_aetherhub(self, cards_info, soup):
-        # All cards can be found under the tab_visual div
-        print(soup.select('div[id*="tab_visual_"]'))
+        # Find the first 'h5' with "Maybeboard" or "Sideboard"
+        stop_section = soup.find('h5', string=lambda text: "maybeboard" in text.lower() or "sideboard" in text.lower())
+
+        # If such a section exists, create a new soup from the beginning up to this point to exclude cards from maybeboard or sideboard
+        if stop_section:
+            stop_index = str(soup).find(str(stop_section))
+            new_html = str(soup)[:stop_index]
+            soup = BeautifulSoup(new_html, 'html.parser')
 
         # the img tag provides everything we need
         # every img of a card is repeated if it has multiple occurences
@@ -48,14 +54,12 @@ class AetherhubWebScraper(Scraper):
 
             # todo: flipside
 
-            # Append the card_info to cards_info
             cards_info.append(card_info)
     
     def process_aetherhub_card_map_into_deck(self, card_map):
         try:
             cards = []
             for card_data in card_map:
-                # if a card has multiple occurences there is only one entry in card map but the qty is set to the number
                 card = Card(str(uuid.uuid4()), card_data["name"], "type", card_data["image_url"], card_data['flip_image_url'])
                 cards.append(card)
             deck = Deck(cards)

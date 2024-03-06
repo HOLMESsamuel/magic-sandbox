@@ -40,7 +40,7 @@
     data() {
       return {
         position: this.initialPosition,
-        isDragging: false,
+        isTokenDragging: false,
         cardOffsetX: 0,
         cardOffsetY: 0,
         correctedX: null,
@@ -61,7 +61,7 @@
           zIndex = this.zIndex;
         }
         
-        if(this.isDragging) {
+        if(this.isTokenDragging) {
           zIndex = this.maxZIndex + 1;
         }
 
@@ -115,7 +115,7 @@
     methods: {
       startDrag(event) {
         event.preventDefault();
-        this.isDragging = true;
+        this.isTokenDragging = true;
 
         // Calculate the initial position based on the cursor position
         const mouseX = (event.clientX - this.offsetX) / this.scale;
@@ -143,7 +143,7 @@
         this.startDragPosition = { x: this.position.x, y: this.position.y };
       },
       drag(event) {
-        if (!this.isDragging) return;
+        if (!this.isTokenDragging) return;
         const mouseX = (event.clientX - this.offsetX) / this.scale;
         const mouseY = (event.clientY - this.offsetY) / this.scale;
 
@@ -162,7 +162,7 @@
         this.position.y = newPositionY;
       },
       endDrag() {
-        this.isDragging = false;
+        this.isTokenDragging = false;
         this.$emit('update-token-position', { x: this.position.x, y: this.position.y });
         return;
       },

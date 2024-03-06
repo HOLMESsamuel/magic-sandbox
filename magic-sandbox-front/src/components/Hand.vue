@@ -15,7 +15,6 @@
           :tapped="card.tapped"
           :inHand="true"
           :maxZIndex="maxZIndex"
-          :flippable="card.flip_image !== ''"
           :flipped="card.flipped"
           :flipImage="card.flip_image"
           :reverseMovement="reverseMovement"

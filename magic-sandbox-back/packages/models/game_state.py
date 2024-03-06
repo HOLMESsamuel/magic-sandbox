@@ -100,8 +100,12 @@ def move_card_to_deck(player, cardId, cardPosition):
                 card = player["hand"].pop(index)
                 player["deck"]["cards"].insert(cardPosition, card)
                 break
-    else:
-        print("The hand is empty, no card to move.")
+    if player["board"]:
+        for index, card in enumerate(player["board"]["cards"]):
+            if card["id"] == cardId:
+                card = player["board"]["cards"].pop(index)
+                player["deck"]["cards"].insert(cardPosition, card)
+                break
 
 def update_player_score(player, score):
     player['score'] = score

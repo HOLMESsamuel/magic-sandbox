@@ -10,6 +10,8 @@
       <!-- Custom menu content here -->
       <ul>
         <li @click="flipCard">Flip</li>
+        <li @click="openMoveToDeckModal">Move to deck</li>
+        <li v-if="!this.inHand" @click="moveToHand(this.userIndex)">Move to hand</li>
       </ul>
     </div>
   </template>
@@ -29,8 +31,8 @@
       scale: Number,
       offsetX: Number,
       offsetY: Number,
-      pIndex: Number,
-      userIndex: Number,
+      pIndex: Number, //index of the player owning the card
+      userIndex: Number, //index of the player
       reverseMovement: {
         type: Boolean,
         default: false
@@ -218,12 +220,12 @@
         }
 
         if(this.isMovingBoardToHand(handPlayerIndex)) {
-          this.$emit('move-from-board-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
+          this.moveToHand(handPlayerIndex);
           return;
         }
 
         if(this.isMovingFromHandToDeck(deckPlayerIndex)) {
-          this.$emit('open-move-to-deck-modal', this.id);
+          this.openMoveToDeckModal();
           return;
         }
 
@@ -258,31 +260,39 @@
       showCardDetail() {
         this.$emit('show-card', {image: this.imageSrc, flipImage: this.flipImage});
       },
+      openMoveToDeckModal() {
+        this.$emit('open-move-to-deck-modal', this.id);
+      },
+      moveToHand(handPlayerIndex) {
+        this.$emit('move-from-board-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
+      },
       showCustomMenu(event) {
-        this.showMenu = !this.showMenu;
-        const mouseX = (event.clientX - this.offsetX) / this.scale;
-        const mouseY = (event.clientY - this.offsetY) / this.scale;
-        if(this.inHand) {
-          if(this.reverseMovement) {
-            this.menuPosition = { 
-              x: -mouseX + window.innerWidth - this.handX - Constants.CARD_HALF_WIDTH, 
-              y: -mouseY - this.handY - Constants.CARD_HALF_HEIGHT
-            };
+        if(this.pIndex === this.userIndex) {// only the card owner can use right click
+          this.showMenu = !this.showMenu;
+          const mouseX = (event.clientX - this.offsetX) / this.scale;
+          const mouseY = (event.clientY - this.offsetY) / this.scale;
+          if(this.inHand) {
+            if(this.reverseMovement) {
+              this.menuPosition = { 
+                x: -mouseX + window.innerWidth - this.handX - Constants.CARD_HALF_WIDTH, 
+                y: -mouseY - this.handY - Constants.CARD_HALF_HEIGHT
+              };
+            } else {
+              this.menuPosition = { 
+                x: mouseX-this.handX-Constants.CARD_HALF_WIDTH, 
+                y: mouseY-this.handY-Constants.CARD_HALF_HEIGHT
+              };
+            }
           } else {
-            this.menuPosition = { 
-              x: mouseX-this.handX-Constants.CARD_HALF_WIDTH, 
-              y: mouseY-this.handY-Constants.CARD_HALF_HEIGHT
-            };
+            if(this.reverseMovement) {
+              this.menuPosition = { x: -mouseX + window.innerWidth, y: -mouseY};
+            } else {
+              this.menuPosition = { x: mouseX, y: mouseY};
+            }
           }
-        } else {
-          if(this.reverseMovement) {
-            this.menuPosition = { x: -mouseX + window.innerWidth, y: -mouseY};
-          } else {
-            this.menuPosition = { x: mouseX, y: mouseY};
-          }
+          
+          event.preventDefault();
         }
-        
-        event.preventDefault();
       },
       handleCardClick(event) {
         if(event.button === 2 ) { //right click

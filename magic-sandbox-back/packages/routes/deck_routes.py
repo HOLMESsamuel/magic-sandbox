@@ -53,7 +53,7 @@ async def shuffle_deck(playerId: str, roomId: str):
     response = await game_service.shuffle_deck(playerId, roomId)
     return response
 
-@router.put("/room/{roomId}/player/{playerId}/hand/card/{cardId}/deck/{cardPosition}")
+@router.put("/room/{roomId}/player/{playerId}/card/{cardId}/deck/{cardPosition}")
 async def move_card_to_deck(playerId: str, roomId: str, cardId: str, cardPosition: int):
     response = await game_service.move_card_to_deck(playerId, roomId, cardId, cardPosition)
     return response

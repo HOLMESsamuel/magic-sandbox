@@ -362,7 +362,7 @@
       async moveCardToDeck(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
-          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/deck/' + event.cardPosition, {});
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + event.cardId + '/deck/' + event.cardPosition, {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

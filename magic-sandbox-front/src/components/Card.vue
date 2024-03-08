@@ -249,7 +249,7 @@
         return handPlayerIndex !== null && !this.inHand;
       },
       isMovingFromHandToDeck(deckPlayerIndex) {
-        return deckPlayerIndex !== null && deckPlayerIndex != this.userIndex && this.inHand;
+        return deckPlayerIndex !== null && deckPlayerIndex === this.userIndex && this.inHand;
       },
       isMovingHandToBoard() {
         return this.inHand;

@@ -1,6 +1,6 @@
 # Magic sandbox
 
-With this project, I aim to create a platform to load MTG decks from websites like Archidekt and TappedOut and enable playing with them in a tabletop simulation with friends. The platform does not implement game rules but allows players to move cards around, mimicking the real-life experience. This project will be self-hosted and for personal usage only.
+With this project, I aim to create a platform to load decks and enable playing with them in a tabletop simulation with friends. The platform does not implement game rules but allows players to move cards around, mimicking the real-life experience. This project will be self-hosted and for personal usage only.
 
 ## Technical Stack
 

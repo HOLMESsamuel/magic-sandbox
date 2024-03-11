@@ -25,3 +25,23 @@ export const PLAYER_3_HAND_X1 = -1950;
 export const PLAYER_3_HAND_Y1 = 1050;
 export const PLAYER_3_HAND_X2 = -430;
 export const PLAYER_3_HAND_Y2 = 1360;
+
+export const PLAYER_0_DECK_X1 = 2300; 
+export const PLAYER_0_DECK_Y1 = 775;
+export const PLAYER_0_DECK_X2 = 2500;
+export const PLAYER_0_DECK_Y2 = 1020;
+
+export const PLAYER_1_DECK_X1 = -45;
+export const PLAYER_1_DECK_Y1 = -1325;
+export const PLAYER_1_DECK_X2 = 150;
+export const PLAYER_1_DECK_Y2 = -1035;
+
+export const PLAYER_2_DECK_X1 = -2500;
+export const PLAYER_2_DECK_Y1 = -1300;
+export const PLAYER_2_DECK_X2 = -2300;
+export const PLAYER_2_DECK_Y2 = -1000;
+
+export const PLAYER_3_DECK_X1 = -350;
+export const PLAYER_3_DECK_Y1 = 780;
+export const PLAYER_3_DECK_X2 = -150;
+export const PLAYER_3_DECK_Y2 = 1080;

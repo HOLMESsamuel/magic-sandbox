@@ -19,6 +19,8 @@
   <script>
   import axios from 'axios';
   import * as Constants from '../constants'
+  import {throttle} from 'lodash';
+  import {checkIfCardInPlayerDeck, checkIfCardInPlayerHand} from '../utils/utils'
 
   export default {
     emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal'],
@@ -180,28 +182,31 @@
         this.startDragPosition = { x: this.position.x, y: this.position.y };
       },
       drag(event) {
-        if (!this.isDragging) return;
-        const mouseX = (event.clientX - this.offsetX) / this.scale;
-        const mouseY = (event.clientY - this.offsetY) / this.scale;
+        if (this.isDragging !== false) {
+          const mouseX = (event.clientX - this.offsetX) / this.scale;
+          const mouseY = (event.clientY - this.offsetY) / this.scale;
 
-        // Calculate the new position
-        let newPositionX = mouseX - this.cardOffsetX;
-        let newPositionY = mouseY - this.cardOffsetY;
+          // Calculate the new position
+          let newPositionX = mouseX - this.cardOffsetX;
+          let newPositionY = mouseY - this.cardOffsetY;
 
-        if (this.reverseMovement) {
-          // For reversed movement, invert the direction
-          newPositionX = - newPositionX + 2 * this.startDragPosition.x;
-          newPositionY = - newPositionY + 2 * this.startDragPosition.y;
+          if (this.reverseMovement) {
+            // For reversed movement, invert the direction
+            newPositionX = - newPositionX + 2 * this.startDragPosition.x;
+            newPositionY = - newPositionY + 2 * this.startDragPosition.y;
+          }
+
+          // Update the card's position
+          this.position.x = newPositionX;
+          this.position.y = newPositionY;
+          return;
         }
-
-        // Update the card's position
-        this.position.x = newPositionX;
-        this.position.y = newPositionY;
+        this.isDragging = false;
       },
       endDrag(event) {
         this.isDragging = false;
-        let handPlayerIndex = this.checkIfCardInPlayerHand();
-        let deckPlayerIndex = this.checkIfCardInPlayerDeck();
+        let handPlayerIndex = checkIfCardInPlayerHand(this.position.x, this.position.y);
+        let deckPlayerIndex = checkIfCardInPlayerDeck(this.position.x, this.position.y);
         const draggedDistance = Math.sqrt(Math.pow(this.position.x - this.startDragPosition.x, 2) + Math.pow(this.position.y - this.startDragPosition.y, 2));
         
         //can't use a click because it triggers with mousedown, if the card does not move I consider it a click
@@ -352,65 +357,6 @@
         } catch (error) {
           console.log(error);
         }
-      },
-      //returns the player index if the card was dropped on his hand
-      checkIfCardInPlayerHand() {
-        const playersHandAreas = this.getPlayersHandAreas();
-        const cardCenter = {
-          x: this.position.x,
-          y: this.position.y
-        };
-
-        for (let i = 0; i < playersHandAreas.length; i++) {
-          if (this.isPointInsideRect(cardCenter, playersHandAreas[i])) {
-            return i;
-          }
-        }
-        return null;
-      },
-      //returns the player index if the card was dropped on his deck
-      checkIfCardInPlayerDeck() {
-        const playersDeckAreas = this.getPlayersDeckAreas();
-        const cardCenter = {
-          x: this.position.x,
-          y: this.position.y
-        };
-
-        for (let i = 0; i < playersDeckAreas.length; i++) {
-          if (this.isPointInsideRect(cardCenter, playersDeckAreas[i])) {
-            return i;
-          }
-        }
-        return null;
-      },
-
-      getPlayersHandAreas() {
-        // Returns an array of rectangular areas for each player's hand
-        // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }
-        return [
-          { x1: Constants.PLAYER_0_HAND_X1, y1: Constants.PLAYER_0_HAND_Y1, x2: Constants.PLAYER_0_HAND_X2, y2: Constants.PLAYER_0_HAND_Y2 },
-          { x1: Constants.PLAYER_1_HAND_X1, y1: Constants.PLAYER_1_HAND_Y1, x2: Constants.PLAYER_1_HAND_X2, y2: Constants.PLAYER_1_HAND_Y2 },
-          { x1: Constants.PLAYER_2_HAND_X1, y1: Constants.PLAYER_2_HAND_Y1, x2: Constants.PLAYER_2_HAND_X2, y2: Constants.PLAYER_2_HAND_Y2 },
-          { x1: Constants.PLAYER_3_HAND_X1, y1: Constants.PLAYER_3_HAND_Y1, x2: Constants.PLAYER_3_HAND_X2, y2: Constants.PLAYER_3_HAND_Y2 }
-        ];
-      },
-
-      getPlayersDeckAreas() {
-        // Returns an array of rectangular areas for each player's deck
-        // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }
-        return [
-          { x1: 2300, y1: 775, x2: 2500, y2: 1020 }, //player 0
-          { x1: -45, y1: -1325, x2: 150, y2: -1035 }, //player 1
-          { x1: -2500, y1: -1300, x2: -2300, y2: -1000 }, //player 2
-          { x1: -350, y1: 780, x2: -150, y2: 1080 }  //player 3
-        ];
-      },
-
-      isPointInsideRect(point, rect) {
-        return (
-          point.x >= rect.x1 && point.x <= rect.x2 &&
-          point.y >= rect.y1 && point.y <= rect.y2
-        );
       }
     }
   };

@@ -47,10 +47,10 @@ export const getPlayersDeckAreas = () => {
     // Returns an array of rectangular areas for each player's deck
     // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }
     return [
-      { x1: 2300, y1: 775, x2: 2500, y2: 1020 }, //player 0
-      { x1: -45, y1: -1325, x2: 150, y2: -1035 }, //player 1
-      { x1: -2500, y1: -1300, x2: -2300, y2: -1000 }, //player 2
-      { x1: -350, y1: 780, x2: -150, y2: 1080 }  //player 3
+        { x1: Constants.PLAYER_0_DECK_X1, y1: Constants.PLAYER_0_DECK_Y1, x2: Constants.PLAYER_0_DECK_X2, y2: Constants.PLAYER_0_DECK_Y2 },
+        { x1: Constants.PLAYER_1_DECK_X1, y1: Constants.PLAYER_1_DECK_Y1, x2: Constants.PLAYER_1_DECK_X2, y2: Constants.PLAYER_1_DECK_Y2 },
+        { x1: Constants.PLAYER_2_DECK_X1, y1: Constants.PLAYER_2_DECK_Y1, x2: Constants.PLAYER_2_DECK_X2, y2: Constants.PLAYER_2_DECK_Y2 },
+        { x1: Constants.PLAYER_3_DECK_X1, y1: Constants.PLAYER_3_DECK_Y1, x2: Constants.PLAYER_3_DECK_X2, y2: Constants.PLAYER_3_DECK_Y2 },
     ];
 }
 

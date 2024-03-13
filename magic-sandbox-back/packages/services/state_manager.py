@@ -1,3 +1,5 @@
+from ..models.game_state import GameState
+
 class StateManager:
     _instance = None
 
@@ -7,7 +9,7 @@ class StateManager:
             cls._instance.group_states = {}
         return cls._instance
 
-    def update_group_state(self, group_id, state):
+    def update_group_state(self, group_id, state : GameState):
         self.group_states[group_id] = state
 
     def get_group_state(self, group_id):

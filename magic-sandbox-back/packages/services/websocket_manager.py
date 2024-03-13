@@ -1,4 +1,5 @@
 import logging;
+from ..models.game_state import GameState
 
 class WebSocketManager:
     _instance = None
@@ -9,10 +10,10 @@ class WebSocketManager:
             cls._instance.connected_groups = {}
         return cls._instance
 
-    async def broadcast(self, group_id: str, state):
+    async def broadcast(self, group_id: str, state : GameState):
         for client in self.connected_groups.get(group_id, []):
             try:
-                await client.send_json(state)
+                await client.send_json(state.model_dump_json())
             except Exception as e:
                 logging.error(f"Error sending state to client: {e}", exc_info=True)
                 pass

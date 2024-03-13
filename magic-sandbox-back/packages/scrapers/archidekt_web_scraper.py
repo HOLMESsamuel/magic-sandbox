@@ -67,12 +67,12 @@ class ArchidektWebScraper(Scraper):
                     for i in range(value.get('qty')):
                         if len(img_urls) == 1:
                             # Assuming your Card constructor can handle a single image URL
-                            card = Card(str(uuid.uuid4()), value.get('name'), value.get('type'), img_urls[0])
+                            card = Card(id=str(uuid.uuid4()), name=value.get('name'), type=value.get('type'), image=img_urls[0])
                         elif len(img_urls) == 2:
                             # Assuming your Card constructor can handle two image URLs for two-sided cards
-                            card = Card(str(uuid.uuid4()), value.get('name'), value.get('type'), img_urls[0], img_urls[1])
+                            card = Card(id=str(uuid.uuid4()), name=value.get('name'), type=value.get('type'), image=img_urls[0], flip_image=img_urls[1])
                         else:
-                            card = Card(str(uuid.uuid4()), value.get('name'), value.get('type'), '')
+                            card = Card(id=str(uuid.uuid4()), name=value.get('name'), type=value.get('type'), image='')
                         
                         cards.append(card)
 

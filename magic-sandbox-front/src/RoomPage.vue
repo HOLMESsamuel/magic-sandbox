@@ -43,7 +43,7 @@
             </counter>
             <hand
               :pIndex="pIndex"
-              :cards="player.hand"
+              :cards="player.hand.cards"
               :roomId="roomId"
               :userIndex="userIndex"
               :player="player.name"
@@ -254,9 +254,9 @@
   
         this.ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
-          this.state = data;
-          if(this.state.alertMessage && this.state.alertMessage !== this.alertMessage) {
-            this.alertMessage = this.state.alertMessage;
+          this.state = JSON.parse(data);
+          if(this.state.alert_message && this.state.alert_message !== this.alertMessage) {
+            this.alertMessage = this.state.alert_message;
             alert(this.alertMessage);
           }
           if(this.firstMessageReceived === false) { //this part will trigger only when the first message is received it allows to call compute position method only after the players list is received

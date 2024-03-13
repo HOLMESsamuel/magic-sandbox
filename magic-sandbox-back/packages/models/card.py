@@ -1,26 +1,22 @@
+from pydantic import BaseModel
 from ..constants import DEFAULT_CARD_BACK_URL
 
-class Card:
-    def __init__(self, id, name, type, image, flip_image=DEFAULT_CARD_BACK_URL, position=None, tapped=False, flipped=False, z_index=2):
-        self.id = id
-        self.name = name
-        self.type = type
-        self.image = image
-        self.position = position if position else {'x': 2000, 'y': 200}
-        self.tapped = tapped
-        self.flipped = flipped
-        self.flip_image = flip_image
-        self.z_index = z_index
+class Card(BaseModel):
+    id : str
+    name : str
+    type : str
+    image : str
+    position : dict = {'x': 2000, 'y': 200}
+    tapped : bool = False
+    flipped : bool = False
+    flip_image : str = DEFAULT_CARD_BACK_URL
+    z_index : int = 2
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'type': self.type,
-            'image': self.image,
-            'position': self.position,
-            'tapped': self.tapped,
-            'flipped': self.flipped,
-            'flip_image': self.flip_image,
-            'z_index': self.z_index,
-        }
+    def tap(self):
+        self.tapped = True
+    
+    def untap(self):
+        self.tapped = False
+
+    def flip(self):
+        self.flipped = not self.flipped

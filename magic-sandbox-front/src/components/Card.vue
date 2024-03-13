@@ -1,3 +1,5 @@
+//TODO : isDragging is set to true oustide of start drag for unknown reason
+maybe use a drag started boolean and add a mouse move envent listener only if the drag has started
 <template>
     <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag" @contextmenu.prevent="showCustomMenu($event)">
       <img :src="flipped ? flipImage : imageSrc" :alt="name">
@@ -19,7 +21,6 @@
   <script>
   import axios from 'axios';
   import * as Constants from '../constants'
-  import {throttle} from 'lodash';
   import {checkIfCardInPlayerDeck, checkIfCardInPlayerHand} from '../utils/utils'
 
   export default {
@@ -54,21 +55,26 @@
     data() {
       return {
         position: this.initialPosition,
-        isDragging: false,
-        cardOffsetX: 0,
-        cardOffsetY: 0,
         correctedX: null,
         correctedY: null,
-        startDragPosition: null,
         hover: false,
         showMenu: false,
         menuPosition: { x: 0, y: 0 }
       };
     },
     mounted() {
-      document.addEventListener('mousemove', this.drag);
-    },
+    document.addEventListener('mousemove', this.drag);
+  },
     computed: {
+      isDragging() {
+        return this.$store.state.currentlyDraggingCardId === this.id;
+      },
+      startDragPosition() {
+        return this.$store.state.startDragPosition;
+      },
+      cardOffset() {
+        return this.$store.state.cardOffset;
+      },
       cardStyle() {
         let transformStyles = '';
         let zIndex = 2;
@@ -82,7 +88,7 @@
           zIndex = this.zIndex;
         }
         
-        if(this.isDragging) {
+        if(this.isDragging === true) {
           zIndex = this.maxZIndex + 1;
         }
 
@@ -96,7 +102,7 @@
           transformStyles += 'rotate(180deg) ';
         }
 
-        if(this.inHand && !this.isDragging) {
+        if(this.inHand && this.isDragging === false) {
           return {
             transform: transformStyles
           }
@@ -153,42 +159,48 @@
     },
     methods: {
       startDrag(event) {
+        if(this.isDragging === true) {
+          return;
+        }
         if(event.button === 2 ) { //right click
           return;
         }
         event.preventDefault();
-        this.isDragging = true;
 
         const mouseX = (event.clientX - this.offsetX) / this.scale;
         const mouseY = (event.clientY - this.offsetY) / this.scale;
 
+        let cardOffsetX = mouseX - this.position.x;
+        let cardOffsetY = mouseY - this.position.y;
+
         if (this.inHand) {
-          this.cardOffsetX = Constants.CARD_HALF_WIDTH;
-          this.cardOffsetY = Constants.CARD_HALF_HEIGHT;
+          cardOffsetX = Constants.CARD_HALF_WIDTH;
+          cardOffsetY = Constants.CARD_HALF_HEIGHT;
           
           if(this.reverseMovement) {
-            this.cardOffsetX = 2 * mouseX - window.innerWidth + Constants.CARD_HALF_WIDTH;
-            this.cardOffsetY = 2 * mouseY + Constants.CARD_HALF_HEIGHT;
+            cardOffsetX = 2 * mouseX - window.innerWidth + Constants.CARD_HALF_WIDTH;
+            cardOffsetY = 2 * mouseY + Constants.CARD_HALF_HEIGHT;
           }
 
-          this.position.x = mouseX - this.cardOffsetX;
-          this.position.y = mouseY - this.cardOffsetY;
+          this.position.x = mouseX - cardOffsetX;
+          this.position.y = mouseY - cardOffsetY;
           
-        } else {
-          this.cardOffsetX = mouseX - this.position.x;
-          this.cardOffsetY = mouseY - this.position.y;
         }
 
-        this.startDragPosition = { x: this.position.x, y: this.position.y };
+        this.$store.commit('startDragging', {
+          cardId : this.id, 
+          startDragPosition : { x: this.position.x, y: this.position.y }, 
+          cardOffset : {x: cardOffsetX, y : cardOffsetY}
+        });
       },
       drag(event) {
-        if (this.isDragging !== false) {
+        if (this.$store.state.currentlyDraggingCardId === this.id) { //if the card is supposed to be dragging
           const mouseX = (event.clientX - this.offsetX) / this.scale;
           const mouseY = (event.clientY - this.offsetY) / this.scale;
 
           // Calculate the new position
-          let newPositionX = mouseX - this.cardOffsetX;
-          let newPositionY = mouseY - this.cardOffsetY;
+          let newPositionX = mouseX - this.cardOffset.x;
+          let newPositionY = mouseY - this.cardOffset.y;
 
           if (this.reverseMovement) {
             // For reversed movement, invert the direction
@@ -201,13 +213,12 @@
           this.position.y = newPositionY;
           return;
         }
-        this.isDragging = false;
       },
       endDrag(event) {
-        this.isDragging = false;
+        const draggedDistance = Math.sqrt(Math.pow(this.position.x - this.startDragPosition.x, 2) + Math.pow(this.position.y - this.startDragPosition.y, 2));
+        this.$store.commit('endDragging');
         let handPlayerIndex = checkIfCardInPlayerHand(this.position.x, this.position.y);
         let deckPlayerIndex = checkIfCardInPlayerDeck(this.position.x, this.position.y);
-        const draggedDistance = Math.sqrt(Math.pow(this.position.x - this.startDragPosition.x, 2) + Math.pow(this.position.y - this.startDragPosition.y, 2));
         
         //can't use a click because it triggers with mousedown, if the card does not move I consider it a click
         if(draggedDistance < 5) {

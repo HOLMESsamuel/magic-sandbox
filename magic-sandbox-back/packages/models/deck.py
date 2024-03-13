@@ -1,9 +1,12 @@
 import random
+from pydantic import BaseModel
+from .card import Card
 
-class Deck:
-    def __init__(self, cards):
-        self.cards = cards
+class Deck(BaseModel):
+    cards : list[Card] = []
 
-    # Convert all cards in the deck to dictionaries
-    def cards_to_dict(self):
-        return [card.to_dict() for card in self.cards]
+    def shuffle(self):
+        random.shuffle(self.cards)
+
+    def reset(self):
+        self.cards = []

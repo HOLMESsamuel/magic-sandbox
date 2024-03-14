@@ -19,6 +19,7 @@
           :flipImage="card.flip_image"
           :reverseMovement="reverseMovement"
           @play-card="handleCardDrop($event, card.id)"
+          @move-from-hand-to-hand="moveFromHandToHand($event)"
           @show-card="showCard($event)"
           @open-move-to-deck-modal="emitMoveToDeckModalEvent($event)"
         ></Card>
@@ -34,7 +35,7 @@
   import axios from 'axios';
 
   export default {
-    emits: ['open-move-to-deck-modal', 'show-card'],
+    emits: ['open-move-to-deck-modal', 'show-card', 'move-from-hand-to-hand'],
     components: {
       Card
     },
@@ -54,31 +55,35 @@
       maxZIndex: Number
     },
     computed: {
+      isCardFromHandMoving() {
+        return this.cards.some(card => card.id === this.$store.state.currentlyDraggingCardId);
+      },
       handStyle() {
+        const zIndex = this.isCardFromHandMoving ? this.maxZIndex + 1 : 0;
         switch (this.pIndex) {
           case 0:
             return {
               left: "800px",
               top: "1200px",
-              'z-index': this.maxZIndex
+              'z-index': zIndex
             };
           case 1:
             return {
               left: "350px",
               top: "-1500px",
-              'z-index': this.maxZIndex
+              'z-index': zIndex
             };
           case 2:
             return {
               left: "-2100px",
               top: "-1500px",
-              'z-index': this.maxZIndex
+              'z-index': zIndex
             };
           case 3:
             return {
               left: "-1850px",
               top: "1200px",
-              'z-index': this.maxZIndex
+              'z-index': zIndex
             };
         }  
       },
@@ -97,9 +102,11 @@
         this.$emit('open-move-to-deck-modal', event);
       },
       showCard(imageSrc) {
-        console.log("show card");
         this.$emit('show-card', imageSrc);
       },
+      moveFromHandToHand(event) {
+            this.$emit('move-from-hand-to-hand', event);
+      }
     }
   };
   </script>

@@ -1,5 +1,3 @@
-//TODO : isDragging is set to true oustide of start drag for unknown reason
-maybe use a drag started boolean and add a mouse move envent listener only if the drag has started
 <template>
     <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag" @contextmenu.prevent="showCustomMenu($event)">
       <img :src="flipped ? flipImage : imageSrc" :alt="name">
@@ -240,7 +238,7 @@ maybe use a drag started boolean and add a mouse move envent listener only if th
           return;
         }
 
-        if(this.isMovingFromHandToDeck(deckPlayerIndex)) {
+        if(this.isMovingFromHandToDeck(deckPlayerIndex) || this.isMovingBoardToDeck(deckPlayerIndex)) {
           this.openMoveToDeckModal();
           return;
         }
@@ -263,6 +261,9 @@ maybe use a drag started boolean and add a mouse move envent listener only if th
       },
       isMovingBoardToHand(handPlayerIndex) {
         return handPlayerIndex !== null && !this.inHand;
+      },
+      isMovingBoardToDeck(deckPlayerIndex) {
+        return deckPlayerIndex !== null && !this.inHand;
       },
       isMovingFromHandToDeck(deckPlayerIndex) {
         return deckPlayerIndex !== null && deckPlayerIndex === this.userIndex && this.inHand;

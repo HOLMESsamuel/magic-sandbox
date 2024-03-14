@@ -24,7 +24,6 @@
         @open-move-to-deck-modal="openMoveToDeckModal($event)"
         @update-position="updateObjectPosition(player.name, cIndex, $event, 'card')"
         @show-card="showCard($event)"
-        @move-from-hand-to-hand="moveFromHandToHand($event)"
         @move-from-board-to-hand="moveFromBoardToHand($event)"
         ></Card>
         <Token
@@ -54,7 +53,6 @@
 <script>
   import Card from './Card.vue';
   import Token from './Token.vue';
-  import axios from 'axios';
 
   export default {
     emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal'],
@@ -95,12 +93,6 @@
         openMoveToDeckModal(cardId) {
             this.$emit('open-move-to-deck-modal', cardId);
         },
-        moveFromHandToHand(event) {
-            this.$emit('move-from-hand-to-hand', event);
-        },
-        moveFromHandToBoard(event) {
-          this.$emit('play-card', event);
-        },
         updateObjectPosition(playerName, cIndex, position, type) {
           this.$emit('update-position', {playerName: playerName, index: cIndex, position: position, type: type});
         },
@@ -109,16 +101,6 @@
         },
         moveFromBoardToHand(event) {
           this.$emit('move-from-board-to-hand', event);
-        },
-        async moveFromHandToHand(event) {
-          const backendUrl = import.meta.env.VITE_BACKEND_URL;
-          const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
-          try{
-            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/hand/' + targetPlayerName, {});
-            console.log(response.data);
-          } catch (error) {
-            console.log(error);
-          }
         },
         openEditTokenModal(event) {
           this.$emit('open-edit-token-modal', event);

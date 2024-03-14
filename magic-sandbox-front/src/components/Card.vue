@@ -88,8 +88,8 @@ maybe use a drag started boolean and add a mouse move envent listener only if th
           zIndex = this.zIndex;
         }
         
-        if(this.isDragging === true) {
-          zIndex = this.maxZIndex + 1;
+        if(this.$store.state.currentlyDraggingCardId === this.id) {
+          zIndex = this.maxZIndex + 1000;
         }
 
         // Add 90 degrees rotation if the card is tapped

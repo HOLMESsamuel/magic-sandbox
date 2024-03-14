@@ -37,7 +37,7 @@ class GameState(BaseModel):
 
     def move_card_from_hand_to_hand(self, player : Player, cardId, target_player : Player):
         if player.hand:
-            for index, card in enumerate(player.hand):
+            for index, card in enumerate(player.hand.cards):
                 if card.id == cardId:
                     card = player.hand.cards.pop(index)
                     target_player.hand.cards.append(card)

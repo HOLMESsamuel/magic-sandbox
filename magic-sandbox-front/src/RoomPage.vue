@@ -1,4 +1,7 @@
 <template>
+  <button @click="openSettingsModal" class="settings-button">
+    <img src="./assets/gear.svg">
+  </button>
   <div class="zoom-pan-container" ref="zoomPanContainer" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
     <div :style="zoomPanStyles">
       <div :style="containerStyle">
@@ -94,6 +97,11 @@
     @close-dice-modal="closeDiceModal"
     @throw-dice="throwDice($event)"
   ></dice-modal>
+  <settings-modal
+    :isSettingsModalVisible="isSettingsModalVisible"
+    @close-settings-modal="closeSettingsModal"
+    @disconnect="disconnect"
+  ></settings-modal>
 </template>
   
   <script>
@@ -107,8 +115,8 @@
   import DeckModal from './components/modals/DeckModal.vue';
   import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
   import TokenModal from './components/modals/TokenModal.vue';
+  import SettingsModal from './components/modals/SettingsModal.vue';
   import DiceModal from './components/modals/DiceModal.vue';
-
   import axios from 'axios';
 
   export default {
@@ -132,6 +140,7 @@
         isCardModalVisible: false,
         isDeckModalVisible: false,
         isMoveToDeckModalVisible: false,
+        isSettingsModalVisible: false,
         cardIdMovingToDeck: "",
         isTokenModalVisible: false,
         editTokenMode: false,
@@ -183,7 +192,7 @@
       this.connectWebSocket();
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal
     },
     methods: {
       computeBoardInitialPosition() { //set the initial offset to place the player's board roughly at the center of the screen
@@ -275,6 +284,20 @@
           console.log("WebSocket connection closed");
         };
       },
+      async disconnect() {
+        this.ws.close();
+
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.delete(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName);
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+
+        this.$router.push({ name: 'ConnectionPage'});
+
+      },
       updateObjectPosition(event) {
         const player = this.state.players.find(p => p.name === event.playerName);
         this.state.max_z_index += 1;
@@ -331,6 +354,12 @@
       },
       closeMoveToDeckModal() {
         this.isMoveToDeckModalVisible = false;
+      },
+      openSettingsModal() {
+        this.isSettingsModalVisible = true;
+      },
+      closeSettingsModal() {
+        this.isSettingsModalVisible = false;
       },
       async throwDice(diceValue) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -412,6 +441,19 @@
   width: 200px;
   height: 280px; 
   position: fixed;
+  cursor: pointer;
+}
+
+.settings-button {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 10000;
+  background: none;
+  border: none;
+}
+
+.settings-button :hover{
   cursor: pointer;
 }
 

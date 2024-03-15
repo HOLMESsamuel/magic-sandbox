@@ -1,4 +1,4 @@
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from packages.services.websocket_manager import WebSocketManager
 from packages.services.state_manager import StateManager
@@ -45,7 +45,7 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str):
 
     state_manager.update_group_state(group_id, game_state)
 
-    await websocket_manager.broadcast(group_id, state_manager.get_group_state(group_id))
+    await websocket_manager.broadcast(group_id, game_state)
 
     try:
         while True:
@@ -53,9 +53,18 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str):
             data = await websocket.receive_json()
             game_state = GameState.model_validate(data)
             state_manager.update_group_state(group_id, game_state)
-            await websocket_manager.broadcast(group_id, state_manager.get_group_state(group_id))
-    except Exception as e:
-        print(e)
-        pass
+            await websocket_manager.broadcast(group_id, game_state)
+    except WebSocketDisconnect:
+        # triggered when the ws is closed
+        print(f"{name} disconnected")
+        websocket_manager.remove_connection(group_id, websocket)
+
+@app.delete("/room/{roomId}/player/{playerId}")
+async def disconnect_player(roomId: str, playerId: str):
+    game_state : GameState = state_manager.get_group_state(roomId)
+    game_state.remove_player(playerId)
+    await websocket_manager.broadcast(roomId, game_state)
+
+
 
 

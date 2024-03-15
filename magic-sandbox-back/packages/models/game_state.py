@@ -6,6 +6,12 @@ class GameState(BaseModel):
     max_z_index : int = 1
     alert_message : str = ""
 
+    def remove_player(self, player_id):
+        for player in self.players:
+            if player.name == player_id:
+                self.players.remove(player)
+                break
+
     def add_player_if_not_exist(self, player_name):
         for player in self.players:
             if player.name == player_name:

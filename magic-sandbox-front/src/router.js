@@ -3,7 +3,7 @@ import ConnectionPage from './ConnectionPage.vue';
 import RoomPage from './RoomPage.vue';
 
 const routes = [
-  { path: '/', component: ConnectionPage },
+  { path: '/', component: ConnectionPage, name: 'ConnectionPage' },
   { path: '/room/:roomId', component: RoomPage, name: 'Room', props: true }
 ];
 

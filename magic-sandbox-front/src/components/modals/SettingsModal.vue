@@ -1,16 +1,18 @@
 <template>
     <div v-if="isSettingsModalVisible" class="modal" @click="closeModal">
-      <div class="modal-content" @click.stop>
+      <div class="settings-modal-content" @click.stop>
         <div class="sound-switch-container">
-          <label>Sound</label>
-          <button @click="toggleSound" class="sound-button">
-            <!--<img v-if="this.$store.state.soundOn === true" src="./assets/sound-on.svg">
-            <img v-if="this.$store.state.soundOn === false" src="./assets/sound-off.svg">-->
-            <p v-if="this.$store.state.soundOn === true">ON</p>
-            <p v-if="this.$store.state.soundOn === false">OFF</p>
+          <label>Sound : </label>
+          <button v-if="this.$store.state.soundOn === true" @click="toggleSound" class="sound-button sound-button-on">
+            <p>ON</p>
+          </button>
+          <button v-if="this.$store.state.soundOn === false" @click="toggleSound" class="sound-button sound-button-off">
+            <p>OFF</p>
           </button>
         </div>
-        <button :onClick="disconnect" class="disconnect-button">disconnect</button>
+        <div class="disconnect-button-container">
+          <button :onClick="disconnect" class="disconnect-button">disconnect</button>
+        </div>
         <button class="close-button" @click.stop="closeModal"></button>
       </div>
     </div>
@@ -56,16 +58,14 @@
   align-items: center;
   }
   
-  .modal-content {
+  .settings-modal-content {
   background-color: white;
   padding: 30px;
   border-radius: 10px;
   position: relative; /* Needed for absolute positioning of the button */
-  overflow-y: auto; /* Enables vertical scrolling */
   max-height: 90vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   }
   
   .close-button {
@@ -111,10 +111,55 @@
   .settings-button {
     background: none;
     border: none;
-}
+  }
 
-  .sound-button:hover{
+  .disconnect-button-container {
+    align-self: center;
+    margin: 0 auto;
+  }
+
+  .sound-switch-container {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    gap: 5px;
+  }
+
+  .sound-switch-container > label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sound-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+    height: 30px;
+    width: 50px;
+    text-align: center;
+  }
+
+  .sound-button-on {
+    background-color: #4CAF50;
+  }
+
+  .sound-button-on:hover {
+    background-color: #45a049;
+  }
+
+  .sound-button-off {
+    background-color: #c51e1e;
+  }
+
+  .sound-button-off:hover {
+    background-color: #a51717;
   }
   </style>
   

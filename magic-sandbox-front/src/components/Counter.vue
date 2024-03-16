@@ -11,7 +11,7 @@
         <div v-if="isDeckLoaded" :style="deckButtonStyle" class="deck-buttons"> <!-- if the player is the player using this frontend -->
           <button @click="millCard" class="deck-button">Mill</button>
           <button @click="lookDeck" class="deck-button">Look</button>
-          <button @click="shuffleDeck(); play();" class="deck-button">Shuffle</button>
+          <button @click="shuffleDeck(); if (this.$store.state.soundOn === true) {play()};" class="deck-button">Shuffle</button>
           <button @click="resetDeck" class="deck-button">Reset</button>
           <button @click="detapAll" class="deck-button">Detap</button>
           <button @click="mulligan" class="deck-button">Mulligan</button>

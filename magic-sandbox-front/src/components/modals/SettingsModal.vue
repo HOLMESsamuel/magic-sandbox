@@ -10,6 +10,11 @@
             <p>OFF</p>
           </button>
         </div>
+        <div class="slider-container">
+          <label for="luminosity">Luminosity : </label>
+          <input @input="updateLuminosity" type="range" id="luminosity" v-model="luminosity" min="0" max="100">
+          <span>{{ luminosity }}</span>
+        </div>
         <div class="disconnect-button-container">
           <button :onClick="disconnect" class="disconnect-button">disconnect</button>
         </div>
@@ -19,6 +24,7 @@
   </template>
   
   <script>
+
   export default {
     emits: ["close-settings-modal", "disconnect"],
     props: {
@@ -26,7 +32,8 @@
     },
     data() {
       return {
-        hover: false
+        hover: false,
+        luminosity: 50
       };
     },
     methods: {
@@ -39,6 +46,9 @@
       },
       toggleSound() {
         this.$store.commit('toggleSound');
+      },
+      updateLuminosity() {
+        this.$store.commit('updateLuminosity', this.luminosity)
       }
     }
   };
@@ -160,6 +170,16 @@
 
   .sound-button-off:hover {
     background-color: #a51717;
+  }
+
+  .slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    gap: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   </style>
   

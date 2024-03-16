@@ -2,7 +2,7 @@
   <button @click="openSettingsModal" class="settings-button">
     <img src="./assets/gear.svg">
   </button>
-  <div class="zoom-pan-container" ref="zoomPanContainer" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
+  <div class="zoom-pan-container" :style="brightnessStyle" ref="zoomPanContainer" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
     <div :style="zoomPanStyles">
       <div :style="containerStyle">
         <div class="axis-horizontal"></div>
@@ -186,6 +186,14 @@
           default: // Default case if player index is not found
             return {};
         }
+      },
+      brightnessStyle() {
+        const luminosity = this.$store.state.luminosity;
+        const baseLuminosity = 50; // The luminosity value at which the brightness is "normal"
+        // Convert the luminosity range from [0, 100] to a brightness percentage.
+        // Assuming luminosity 50 does not change the brightness, adjust the scale accordingly.
+        const brightness = (luminosity / baseLuminosity) * 100;
+        return { filter: `brightness(${brightness}%)` };
       }
     },
     mounted() {
@@ -465,6 +473,7 @@
   cursor: grab;
   background-color: #b7aeaf;
 }
+
 .zoom-pan-container:active {
   cursor: grabbing;
 }

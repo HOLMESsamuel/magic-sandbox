@@ -9,7 +9,9 @@ const store = createStore({
     return {
         currentlyDraggingCardId : null,
         startDragPosition : null,
-        cardOffset : {x : 0, y : 0}
+        cardOffset : {x : 0, y : 0},
+        soundOn : true,
+        luminosity : 50
     }
   },
   mutations: {
@@ -22,6 +24,12 @@ const store = createStore({
         state.currentlyDraggingCardId = null;
         state.startDragPosition = null;
         state.cardOffset = {x : 0, y : 0};
+    },
+    toggleSound (state) {
+      state.soundOn = !state.soundOn;
+    },
+    updateLuminosity(state, luminosity) {
+      state.luminosity = luminosity;
     }
   }
 })

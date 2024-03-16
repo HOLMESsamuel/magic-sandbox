@@ -7,7 +7,7 @@
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
     </div>
-    <div class="deck-loaded" v-if="isDeckLoaded" @click="play(); drawCard();">
+    <div class="deck-loaded" v-if="isDeckLoaded" @click="if (this.$store.state.soundOn === true) {play()}; drawCard();">
     </div>
 </div>
   

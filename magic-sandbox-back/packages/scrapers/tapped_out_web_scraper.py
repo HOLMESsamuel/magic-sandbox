@@ -93,7 +93,7 @@ class TappedOutWebScraper(Scraper):
             for card_data in card_map:
                 # if a card has multiple occurences there is only one entry in card map but the qty is set to the number
                 for i in range(int(card_data["quantity"])):
-                    card = Card(id=str(uuid.uuid4()), name=card_data["name"], type="type", image=card_data["image_url"], flip_image=card_data['flip_image_url'])
+                    card = Card(id=str(uuid.uuid4()), name=card_data["name"], image=card_data["image_url"], flip_image=card_data['flip_image_url'])
                     cards.append(card)
             deck = Deck(cards=cards)
             return deck

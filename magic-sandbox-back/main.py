@@ -1,13 +1,13 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from packages.services.websocket_manager import WebSocketManager
-from packages.services.state_manager import StateManager
-from packages.models.game_state import *
-from packages.routes.board_routes import router as board_router
-from packages.routes.deck_routes import router as deck_router
-from packages.routes.card_routes import router as card_router
-from packages.routes.token_routes import router as token_router
-from packages.routes.hand_routes import router as hand_router
+from src.services.websocket_manager import WebSocketManager
+from src.services.state_manager import StateManager
+from src.models.game_state import *
+from src.routes.board_routes import router as board_router
+from src.routes.deck_routes import router as deck_router
+from src.routes.card_routes import router as card_router
+from src.routes.token_routes import router as token_router
+from src.routes.hand_routes import router as hand_router
 
 app = FastAPI()
 # Configure CORS

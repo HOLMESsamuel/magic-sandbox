@@ -4,7 +4,6 @@ from ..constants import DEFAULT_CARD_BACK_URL
 class Card(BaseModel):
     id : str
     name : str
-    type : str
     image : str
     position : dict = {'x': 2000, 'y': 200}
     tapped : bool = False

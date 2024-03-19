@@ -47,38 +47,39 @@ class ArchidektWebScraper(Scraper):
 
 
     def process_archidekt_card_map_into_deck(self, card_map, soup):
-        cards = []
-        for key, value in card_map.items():
-            if "Maybeboard" not in value["categories"]: #filter cards that are in the maybeboard
-                # each card image is in a div whose id contains card id
-                # Construct the specific div id for the current card
-                card_div_id = f'deck-card-dom-{key}'
-                
-                card_div = soup.find('div', id=card_div_id)
-                
-                if card_div:
-                    # Find all img tags within this div with the specific class
-                    img_tags = card_div.find_all('img', class_='basicCard_image__cNHMf')
-                    img_urls = [img['src'] for img in img_tags if img.has_attr('src')]
+        try:
+            cards = []
+            for key, value in card_map.items():
+                if "Maybeboard" not in value["categories"]: #filter cards that are in the maybeboard
+                    # each card image is in a div whose id contains card id
+                    # Construct the specific div id for the current card
+                    card_div_id = f'deck-card-dom-{key}'
                     
-                    # If there's only one img, we fetch its src for the image
-                    # If there are two imgs, it means the card has two sides and we need both srcs
-                    # Adjust the Card constructor call based on your Card class' requirements
-                    for i in range(value.get('qty')):
-                        if len(img_urls) == 1:
-                            # Assuming your Card constructor can handle a single image URL
-                            card = Card(id=str(uuid.uuid4()), name=value.get('name'), type=value.get('type'), image=img_urls[0])
-                        elif len(img_urls) == 2:
-                            # Assuming your Card constructor can handle two image URLs for two-sided cards
-                            card = Card(id=str(uuid.uuid4()), name=value.get('name'), type=value.get('type'), image=img_urls[0], flip_image=img_urls[1])
-                        else:
-                            card = Card(id=str(uuid.uuid4()), name=value.get('name'), type=value.get('type'), image='')
+                    card_div = soup.find('div', id=card_div_id)
+                    
+                    if card_div:
+                        # Find all img tags within this div with the specific class
+                        img_tags = card_div.find_all('img', class_='basicCard_image__cNHMf')
+                        img_urls = [img['src'] for img in img_tags if img.has_attr('src')]
                         
-                        cards.append(card)
-
-        deck = Deck(cards)
-        return deck
-    
+                        # If there's only one img, we fetch its src for the image
+                        # If there are two imgs, it means the card has two sides and we need both srcs
+                        # Adjust the Card constructor call based on your Card class' requirements
+                        for i in range(value.get('qty')):
+                            if len(img_urls) == 1:
+                                # Assuming your Card constructor can handle a single image URL
+                                card = Card(id=str(uuid.uuid4()), name=value.get('name'), image=img_urls[0])
+                            elif len(img_urls) == 2:
+                                # Assuming your Card constructor can handle two image URLs for two-sided cards
+                                card = Card(id=str(uuid.uuid4()), name=value.get('name'), image=img_urls[0], flip_image=img_urls[1])
+                            else:
+                                card = Card(id=str(uuid.uuid4()), name=value.get('name'), image='')
+                            
+                            cards.append(card)
+            deck = Deck(cards=cards)
+            return deck
+        except Exception as e:
+            print(e)
 
     def extract_image_id(self, src):
         # Use regex to find the numerical string after the '?'

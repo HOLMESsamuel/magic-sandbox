@@ -1,6 +1,6 @@
 import pytest
-from packages.services.web_scraper_service import WebScraperService
-from packages.scrapers import ArchidektWebScraper, TappedOutWebScraper, AetherhubWebScraper
+from src.services.web_scraper_service import WebScraperService
+from src.scrapers import ArchidektWebScraper, TappedOutWebScraper, AetherhubWebScraper
 
 @pytest.mark.parametrize("url, expected", [
     ("https://archidekt.com/decks/6953017/eldrazi_cascade", ArchidektWebScraper),

@@ -1,5 +1,5 @@
 from unittest.mock import MagicMock
-from packages.services.websocket_manager import WebSocketManager
+from src.services.websocket_manager import WebSocketManager
 
 def test_remove_connection():
     manager = WebSocketManager()

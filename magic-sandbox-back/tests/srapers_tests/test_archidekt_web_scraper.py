@@ -1,4 +1,3 @@
-import pytest
 from src.scrapers.archidekt_web_scraper import ArchidektWebScraper
 
 def test_archidekt_web_scraper_integration():

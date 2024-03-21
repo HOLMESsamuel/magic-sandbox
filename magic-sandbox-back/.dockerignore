@@ -12,3 +12,5 @@ dist
 *.egg-info
 .eggs
 *.log
+*.coverage
+/tests

@@ -25,6 +25,7 @@
         @update-position="updateObjectPosition(player.name, cIndex, $event, 'card')"
         @show-card="showCard($event)"
         @move-from-board-to-hand="moveFromBoardToHand($event)"
+        @move-to-graveyard="moveToGraveyard($event)"
         ></Card>
         <Token
         v-for="(token, tIndex) in player.board.tokens"
@@ -55,7 +56,7 @@
   import Token from './Token.vue';
 
   export default {
-    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal'],
+    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard'],
     components: {
         Card, Token
     },
@@ -101,6 +102,9 @@
         },
         moveFromBoardToHand(event) {
           this.$emit('move-from-board-to-hand', event);
+        },
+        moveToGraveyard(event) {
+          this.$emit('move-to-graveyard', event);
         },
         openEditTokenModal(event) {
           this.$emit('open-edit-token-modal', event);

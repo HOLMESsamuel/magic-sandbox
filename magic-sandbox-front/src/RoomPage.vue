@@ -24,6 +24,7 @@
               @show-card="showCard($event)"
               @move-from-board-to-hand="moveFromBoardToHand($event)"
               @open-edit-token-modal="openEditTokenModal($event)"
+              @move-to-graveyard="moveToGraveyard($event)"
             ></Board>
             <deck 
               :playerName="player.name" 
@@ -58,7 +59,15 @@
               @open-move-to-deck-modal="openMoveToDeckModal($event)"
               @move-from-hand-to-hand="moveFromHandToHand($event)"
               @show-card="showCard($event)"
+              @move-to-graveyard="moveToGraveyard($event)"
             ></hand>
+            <graveyard
+              :playerName="player.name" 
+              :roomId="roomId"
+              :pIndex="pIndex"
+              :userIndex="userIndex"
+              :cards="player.graveyard.cards"
+            ></graveyard>
           </div>
         </div>
       </div>
@@ -111,6 +120,7 @@
   import Board from './components/Board.vue';
   import Hand from './components/Hand.vue'
   import Token from './components/Token.vue'
+  import Graveyard from './components/Graveyard.vue';
   import CardModal from './components/modals/CardModal.vue';
   import DeckModal from './components/modals/DeckModal.vue';
   import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
@@ -200,7 +210,7 @@
       this.connectWebSocket();
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard
     },
     methods: {
       computeBoardInitialPosition() { //set the initial offset to place the player's board roughly at the center of the screen
@@ -433,6 +443,16 @@
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
         try{
           const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/hand/' + targetPlayerName, {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async moveToGraveyard(event) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + event.cardId + '/graveyard/' + targetPlayerName, {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

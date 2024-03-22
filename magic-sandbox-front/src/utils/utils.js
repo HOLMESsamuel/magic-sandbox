@@ -32,6 +32,30 @@ export const checkIfCardInPlayerDeck = (x, y) => {
     return null;
 }
 
+export const checkIfCardInPlayerGraveyard = (x, y) => {
+  const playersGraveyardAreas = getPlayersGraveyardAreas();
+  const cardCenter = {
+    x: x,
+    y: y
+  };
+
+  for (let i = 0; i < playersGraveyardAreas.length; i++) {
+    if (isPointInsideRect(cardCenter, playersGraveyardAreas[i])) {
+      return i;
+    }
+  }
+  return null;
+}
+
+export const getPlayersGraveyardAreas = () => {
+  return [
+    { x1: Constants.PLAYER_0_GRAVEYARD_X1, y1: Constants.PLAYER_0_GRAVEYARD_Y1, x2: Constants.PLAYER_0_GRAVEYARD_X2, y2: Constants.PLAYER_0_GRAVEYARD_Y2 },
+    { x1: Constants.PLAYER_1_GRAVEYARD_X1, y1: Constants.PLAYER_1_GRAVEYARD_Y1, x2: Constants.PLAYER_1_GRAVEYARD_X2, y2: Constants.PLAYER_1_GRAVEYARD_Y2 },
+    { x1: Constants.PLAYER_2_GRAVEYARD_X1, y1: Constants.PLAYER_2_GRAVEYARD_Y1, x2: Constants.PLAYER_2_GRAVEYARD_X2, y2: Constants.PLAYER_2_GRAVEYARD_Y2 },
+    { x1: Constants.PLAYER_3_GRAVEYARD_X1, y1: Constants.PLAYER_3_GRAVEYARD_Y1, x2: Constants.PLAYER_3_GRAVEYARD_X2, y2: Constants.PLAYER_3_GRAVEYARD_Y2 },
+];
+}
+
 export const getPlayersHandAreas = () => {
     // Returns an array of rectangular areas for each player's hand
     // Each area can be an object like { x1: left, y1: top, x2: right, y2: bottom }

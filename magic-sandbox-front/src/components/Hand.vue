@@ -22,6 +22,7 @@
           @move-from-hand-to-hand="moveFromHandToHand($event)"
           @show-card="showCard($event)"
           @open-move-to-deck-modal="emitMoveToDeckModalEvent($event)"
+          @move-to-graveyard="moveToGraveyard($event)"
         ></Card>
       </div>
       <div v-if="pIndex != userIndex" v-for="(card, index) in cards" :key="index" class="hand-card">
@@ -35,7 +36,7 @@
   import axios from 'axios';
 
   export default {
-    emits: ['open-move-to-deck-modal', 'show-card', 'move-from-hand-to-hand'],
+    emits: ['open-move-to-deck-modal', 'show-card', 'move-from-hand-to-hand', 'move-to-graveyard'],
     components: {
       Card
     },
@@ -106,6 +107,9 @@
       },
       moveFromHandToHand(event) {
             this.$emit('move-from-hand-to-hand', event);
+      },
+      moveToGraveyard(event) {
+          this.$emit('move-to-graveyard', event);
       }
     }
   };

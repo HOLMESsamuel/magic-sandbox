@@ -101,11 +101,6 @@ class Player(BaseModel):
         card = self.pop_card(cardId)
         if card:
             self.deck.cards.insert(cardPosition, card)
-
-    def move_card_to_graveyard(self, cardId):
-        card = self.pop_card(cardId)
-        if card:
-            self.graveyard.cards.append(card)
         
     def create_token(self, text, type, max_z_index):
         #set the position to the center of the player's board

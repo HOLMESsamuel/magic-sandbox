@@ -170,10 +170,11 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " token deleted"}
     
-    async def move_card_to_graveyard(self, playerId: str, roomId: str, cardId: str):
+    async def move_card_to_graveyard(self, playerId: str, roomId: str, cardId: str, targetPlayerId: str):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
-        player.move_card_to_graveyard(cardId)
+        target_player : Player = game_state.get_player(targetPlayerId)
+        game_state.move_card_to_graveyard(player, cardId, target_player)
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " card move to graveyard"}
     

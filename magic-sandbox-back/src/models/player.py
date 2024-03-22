@@ -69,17 +69,7 @@ class Player(BaseModel):
     def mill_card(self):
         if self.deck:
             card = self.deck.cards.pop(0)  
-            if self.index == 0:
-                card.position = {'x': 2400, 'y': 610}
-            elif self.index == 1:
-                card.position  = {'x': 50, 'y': -890}
-            elif self.index == 2:
-                card.position  = {'x': -2400, 'y': -890}
-            elif self.index == 3:
-                card.position  = {'x': -250, 'y': 610}
-            self.board.cards.append(card)
-        else:
-            print("The deck is empty, no card to move.")
+            self.graveyard.cards.append(card)
     
     def flip_card(self, cardId):
         board_card = self.board.get_card(cardId)

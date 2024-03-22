@@ -8,6 +8,7 @@ from src.routes.deck_routes import router as deck_router
 from src.routes.card_routes import router as card_router
 from src.routes.token_routes import router as token_router
 from src.routes.hand_routes import router as hand_router
+from src.routes.graveyard_routes import router as graveyard_router
 
 app = FastAPI()
 # Configure CORS
@@ -25,6 +26,7 @@ app.include_router(deck_router)
 app.include_router(card_router)
 app.include_router(token_router)
 app.include_router(hand_router)
+app.include_router(graveyard_router)
 
 state_manager = StateManager()
 websocket_manager = WebSocketManager()

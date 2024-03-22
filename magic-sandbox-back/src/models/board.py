@@ -1,20 +1,15 @@
 from pydantic import BaseModel
 from .card import Card
 from .token import Token
+from .card_container_abstract import CardContainerAbstract
 
-class Board(BaseModel):
+class Board(BaseModel, CardContainerAbstract):
   cards : list[Card] = []
   tokens : list[Token] = [] 
 
   def reset(self):
     self.cards = []
     self.tokens = []
-
-  def get_card(self, cardId) -> Card:
-    for card in self.cards:
-        if card.id == cardId:
-            return card
-    return None
 
   def get_token(self, tokenId) -> Token:
     for token in self.tokens:

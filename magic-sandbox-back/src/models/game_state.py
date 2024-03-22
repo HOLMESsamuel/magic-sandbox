@@ -31,24 +31,21 @@ class GameState(BaseModel):
     def move_card_from_board_to_hand(self, cardId, target_player : Player):
         for player in self.players:
             if player.board:
-                for index, card in enumerate(player.board.cards):
-                    if card.id == cardId:
-                        card = player.board.cards.pop(index)
-                        print(card)
-                        card.untap()
-                        target_player.hand.cards.append(card)
-                        break
-            else:
-                print("The board is empty, no card to move.")
+                card = player.board.pop_card(cardId)
+                if card:
+                    card.untap()
+                    target_player.hand.cards.append(card)
+                    break
 
     def move_card_from_hand_to_hand(self, player : Player, cardId, target_player : Player):
         if player.hand:
-            for index, card in enumerate(player.hand.cards):
-                if card.id == cardId:
-                    card = player.hand.cards.pop(index)
-                    target_player.hand.cards.append(card)
-                    break
-        else:
-            print("The hand is empty, no card to move.")
+            card = player.hand.pop_card(cardId)
+            if card:
+                target_player.hand.cards.append(card)
+
+    def move_card_from_graveyard_to_hand(self, player : Player, cardId, target_player : Player):
+        card = player.graveyard.pop_card(cardId)
+        if card:
+            target_player.hand.cards.append(card)
 
 

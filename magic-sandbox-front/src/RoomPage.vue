@@ -2,7 +2,7 @@
   <button @click="openSettingsModal" class="settings-button">
     <img src="./assets/gear.svg">
   </button>
-  <div class="zoom-pan-container" :style="brightnessStyle" ref="zoomPanContainer" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
+  <div class="zoom-pan-container" :style="brightnessStyle" ref="zoomPanContainer" @keydown.esc="toggleSettingsModal" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan" tabindex="0">
     <div :style="zoomPanStyles">
       <div :style="containerStyle">
         <div class="axis-horizontal"></div>
@@ -368,6 +368,9 @@
       },
       closeSettingsModal() {
         this.isSettingsModalVisible = false;
+      },
+      toggleSettingsModal() {
+        this.isSettingsModalVisible = !this.isSettingsModalVisible;
       },
       async throwDice(diceValue) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;

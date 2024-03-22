@@ -67,6 +67,7 @@
               :pIndex="pIndex"
               :userIndex="userIndex"
               :cards="player.graveyard.cards"
+              @open-graveyard-modal="openGraveyardModal()"
             ></graveyard>
           </div>
         </div>
@@ -111,6 +112,12 @@
     @close-settings-modal="closeSettingsModal"
     @disconnect="disconnect"
   ></settings-modal>
+  <graveyard-modal
+    :isGraveyardModalVisible="isGraveyardModalVisible"
+    :cards="userGraveyard"
+    @close-graveyard-modal="closeGraveyardModal()"
+    @add-card-to-hand="moveFromGraveyardToHand($event)"
+  ></graveyard-modal>
 </template>
   
   <script>
@@ -124,6 +131,7 @@
   import CardModal from './components/modals/CardModal.vue';
   import DeckModal from './components/modals/DeckModal.vue';
   import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
+  import GraveyardModal from './components/modals/GraveyardModal.vue';
   import TokenModal from './components/modals/TokenModal.vue';
   import SettingsModal from './components/modals/SettingsModal.vue';
   import DiceModal from './components/modals/DiceModal.vue';
@@ -157,7 +165,8 @@
         currentToken: null,
         isDiceModalVisible: false,
         alertMessage: "",
-        firstMessageReceived: false
+        firstMessageReceived: false,
+        isGraveyardModalVisible: false
       };
     },
     computed: {
@@ -178,6 +187,12 @@
           return this.state.players[this.userIndex].deck.cards;
         }
         return []; // Return an empty array if the user or cards are not available
+      },
+      userGraveyard() {
+        if (this.state.players.length > this.userIndex && this.state.players[this.userIndex] && this.state.players[this.userIndex].graveyard.cards) {
+          return this.state.players[this.userIndex].graveyard.cards;
+        }
+        return [];
       },
       containerStyle() {
         switch (this.userIndex) {
@@ -210,7 +225,7 @@
       this.connectWebSocket();
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal
     },
     methods: {
       computeBoardInitialPosition() { //set the initial offset to place the player's board roughly at the center of the screen
@@ -364,6 +379,12 @@
         this.cardIdMovingToDeck = cardId;
         this.isMoveToDeckModalVisible = true;
       },
+      openGraveyardModal() {
+        this.isGraveyardModalVisible = true;
+      },
+      closeGraveyardModal() {
+        this.isGraveyardModalVisible = false;
+      },
       closeCardModal() {
         this.isCardModalVisible = false;
       },
@@ -423,6 +444,15 @@
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
           const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/deck/card/' + cardId + '/hand', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async moveFromGraveyardToHand(cardId) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/graveyard/card/' + cardId + '/hand/' + this.userName, {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

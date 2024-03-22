@@ -1,5 +1,8 @@
 <template>
-    <div :style="graveyardStyle" class="graveyard-container">
+    <div :style="graveyardStyle" class="graveyard-container" @mouseover="hover = true" @mouseleave="hover = false">
+        <div v-if="hover" class="hover-buttons">
+            <button @click="openGraveyardModal" class="button-center">👁️</button>
+        </div>
         <div class="graveyard-image-container">
             <img v-if="cards && cards.length >0" :src="cards[cards.length-1].image">
         </div>
@@ -16,6 +19,12 @@
         pIndex: Number, //index of the player
         userIndex: Number, //index of this frontend user
         cards: Array
+      },
+      emits: ["open-graveyard-modal"],
+      data() {
+        return {
+            hover: false
+        };
       },
       computed: {
         graveyardStyle() {
@@ -46,7 +55,9 @@
         }
       },
       methods: {
-        
+        openGraveyardModal() {
+            this.$emit('open-graveyard-modal');
+        }
       },
     };
   </script>
@@ -70,6 +81,36 @@
     object-position: center; 
 
   }
+
+  .hover-buttons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  z-index: 10; /* Ensure it's above the card image */
+}
+
+.button-center {
+  background: #FFF;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  height: 60px;
+  width: 60px;
+  font-size: 2em;
+  border-radius: 50%;
+}
+
+.button-center:hover {
+  background: #a99d9d;
+}
+
+.button-center {
+  margin: 0 auto;
+}
   
   </style>
   

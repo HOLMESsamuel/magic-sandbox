@@ -19,10 +19,10 @@
   <script>
   import axios from 'axios';
   import * as Constants from '../constants'
-  import {checkIfCardInPlayerDeck, checkIfCardInPlayerHand} from '../utils/utils'
+  import {checkIfCardInPlayerDeck, checkIfCardInPlayerGraveyard, checkIfCardInPlayerHand} from '../utils/utils'
 
   export default {
-    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal'],
+    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard'],
     props: {
       imageSrc: String,
       initialPosition: {
@@ -217,6 +217,7 @@
         this.$store.commit('endDragging');
         let handPlayerIndex = checkIfCardInPlayerHand(this.position.x, this.position.y);
         let deckPlayerIndex = checkIfCardInPlayerDeck(this.position.x, this.position.y);
+        let graveyardPlayerIndex = checkIfCardInPlayerGraveyard(this.position.x, this.position.y);
         
         //can't use a click because it triggers with mousedown, if the card does not move I consider it a click
         if(draggedDistance < 5) {
@@ -236,6 +237,11 @@
         if(this.isMovingBoardToHand(handPlayerIndex)) {
           this.moveToHand(handPlayerIndex);
           return;
+        }
+
+        if(this.isMovingToGraveyard(graveyardPlayerIndex)){
+          this.moveToGraveyard(graveyardPlayerIndex);
+          return
         }
 
         if(this.isMovingFromHandToDeck(deckPlayerIndex) || this.isMovingBoardToDeck(deckPlayerIndex)) {
@@ -268,6 +274,9 @@
       isMovingFromHandToDeck(deckPlayerIndex) {
         return deckPlayerIndex !== null && deckPlayerIndex === this.userIndex && this.inHand;
       },
+      isMovingToGraveyard(graveyardPlayerIndex) {
+        return graveyardPlayerIndex !== null
+      },
       isMovingHandToBoard() {
         return this.inHand;
       },
@@ -282,6 +291,9 @@
       },
       moveToHand(handPlayerIndex) {
         this.$emit('move-from-board-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
+      },
+      moveToGraveyard(graveyardPlayerIndex) {
+        this.$emit('move-to-graveyard', { cardId: this.id, targetPlayerIndex: graveyardPlayerIndex });
       },
       showCustomMenu(event) {
         if(this.pIndex === this.userIndex) {// only the card owner can use right click

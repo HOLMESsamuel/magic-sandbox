@@ -4,6 +4,7 @@ from .deck import Deck
 from .board import Board
 from .card import Card
 from .token import Token
+from .graveyard import Graveyard
 from pydantic import BaseModel, Field
 
 class Player(BaseModel):
@@ -13,15 +14,27 @@ class Player(BaseModel):
     hand: Hand = Field(default_factory=Hand)
     deck: Deck = Field(default_factory=Deck)
     board: Board = Field(default_factory=Board)
+    graveyard: Graveyard = Field(default_factory=Graveyard)
 
     def get_card(self, cardId) -> Card:
-        for index, card in enumerate(self.hand.cards):
-            if card.id == cardId:
-                return card
-        for index, card in enumerate(self.board.cards):
-            if card.id == cardId:
-                return card
+        hand_card : Card = self.hand.get_card(cardId)
+        if hand_card:
+            return hand_card
+        board_card : Card = self.board.get_card(cardId)
+        if board_card:
+            return board_card
         return None
+    
+    def pop_card(self, cardId) -> Card:
+        if self.hand:
+            for index, card in enumerate(self.hand.cards):
+                if card.id == cardId:
+                    return self.hand.cards.pop(index)
+                    
+        if self.board:
+            for index, card in enumerate(self.board.cards):
+                if card.id == cardId:
+                    return self.board.cards.pop(index)
         
 
     def draw_card(self):
@@ -35,6 +48,7 @@ class Player(BaseModel):
         self.score = 20
         self.hand.reset()
         self.deck.reset()
+        self.graveyard.reset()
         self.board.reset()
 
     def play_card(self, cardId, position, max_z_index):
@@ -55,17 +69,7 @@ class Player(BaseModel):
     def mill_card(self):
         if self.deck:
             card = self.deck.cards.pop(0)  
-            if self.index == 0:
-                card.position = {'x': 2400, 'y': 610}
-            elif self.index == 1:
-                card.position  = {'x': 50, 'y': -890}
-            elif self.index == 2:
-                card.position  = {'x': -2400, 'y': -890}
-            elif self.index == 3:
-                card.position  = {'x': -250, 'y': 610}
-            self.board.cards.append(card)
-        else:
-            print("The deck is empty, no card to move.")
+            self.graveyard.cards.append(card)
     
     def flip_card(self, cardId):
         board_card = self.board.get_card(cardId)
@@ -79,28 +83,14 @@ class Player(BaseModel):
             return
         
     def move_card_from_deck_to_hand(self, cardId):
-        if self.deck:
-            for index, card in enumerate(self.deck.cards):
-                if card.id == cardId:
-                    card = self.deck.cards.pop(index)
-                    self.hand.cards.append(card)
-                    break
-        else:
-            print("The deck is empty, no card to move.")
+        card = self.deck.pop_card(cardId)
+        if card:
+            self.hand.cards.append(card)
 
     def move_card_to_deck(self, cardId, cardPosition):
-        if self.hand:
-            for index, card in enumerate(self.hand.cards):
-                if card.id == cardId:
-                    card = self.hand.cards.pop(index)
-                    self.deck.cards.insert(cardPosition, card)
-                    break
-        if self.board:
-            for index, card in enumerate(self.board.cards):
-                if card.id == cardId:
-                    card = self.board.cards.pop(index)
-                    self.deck.cards.insert(cardPosition, card)
-                    break
+        card = self.pop_card(cardId)
+        if card:
+            self.deck.cards.insert(cardPosition, card)
         
     def create_token(self, text, type, max_z_index):
         #set the position to the center of the player's board

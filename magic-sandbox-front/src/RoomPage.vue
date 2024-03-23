@@ -2,7 +2,7 @@
   <button @click="openSettingsModal" class="settings-button">
     <img src="./assets/gear.svg">
   </button>
-  <div class="zoom-pan-container" :style="brightnessStyle" ref="zoomPanContainer" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan">
+  <div class="zoom-pan-container" :style="brightnessStyle" ref="zoomPanContainer" @keydown.esc="toggleSettingsModal" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan" tabindex="0">
     <div :style="zoomPanStyles">
       <div :style="containerStyle">
         <div class="axis-horizontal"></div>
@@ -24,6 +24,7 @@
               @show-card="showCard($event)"
               @move-from-board-to-hand="moveFromBoardToHand($event)"
               @open-edit-token-modal="openEditTokenModal($event)"
+              @move-to-graveyard="moveToGraveyard($event)"
             ></Board>
             <deck 
               :playerName="player.name" 
@@ -58,7 +59,16 @@
               @open-move-to-deck-modal="openMoveToDeckModal($event)"
               @move-from-hand-to-hand="moveFromHandToHand($event)"
               @show-card="showCard($event)"
+              @move-to-graveyard="moveToGraveyard($event)"
             ></hand>
+            <graveyard
+              :playerName="player.name" 
+              :roomId="roomId"
+              :pIndex="pIndex"
+              :userIndex="userIndex"
+              :cards="player.graveyard.cards"
+              @open-graveyard-modal="openGraveyardModal($event)"
+            ></graveyard>
           </div>
         </div>
       </div>
@@ -99,9 +109,15 @@
   ></dice-modal>
   <settings-modal
     :isSettingsModalVisible="isSettingsModalVisible"
-    @close-settings-modal="closeSettingsModal"
+    @close-settings-modal="closeSettingsModal()"
     @disconnect="disconnect"
   ></settings-modal>
+  <graveyard-modal
+    :isGraveyardModalVisible="isGraveyardModalVisible"
+    :cards="graveyardModalCards()"
+    @close-graveyard-modal="closeGraveyardModal()"
+    @add-card-to-hand="moveFromGraveyardToHand($event)"
+  ></graveyard-modal>
 </template>
   
   <script>
@@ -111,9 +127,11 @@
   import Board from './components/Board.vue';
   import Hand from './components/Hand.vue'
   import Token from './components/Token.vue'
+  import Graveyard from './components/Graveyard.vue';
   import CardModal from './components/modals/CardModal.vue';
   import DeckModal from './components/modals/DeckModal.vue';
   import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
+  import GraveyardModal from './components/modals/GraveyardModal.vue';
   import TokenModal from './components/modals/TokenModal.vue';
   import SettingsModal from './components/modals/SettingsModal.vue';
   import DiceModal from './components/modals/DiceModal.vue';
@@ -147,7 +165,9 @@
         currentToken: null,
         isDiceModalVisible: false,
         alertMessage: "",
-        firstMessageReceived: false
+        firstMessageReceived: false,
+        isGraveyardModalVisible: false,
+        graveyardModalPlayerIndex: null
       };
     },
     computed: {
@@ -200,7 +220,7 @@
       this.connectWebSocket();
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal
     },
     methods: {
       computeBoardInitialPosition() { //set the initial offset to place the player's board roughly at the center of the screen
@@ -324,6 +344,12 @@
           this.ws.send(JSON.stringify(this.state));
         }
       },
+      graveyardModalCards() {
+        if (this.graveyardModalPlayerIndex !== null) {
+          return this.state.players[this.graveyardModalPlayerIndex].graveyard.cards;
+        }
+        return [];
+      },
       showCard(event) {
         this.modalImageSrc = event.image;
         this.modalFlipImageSrc = event.flipImage;
@@ -354,6 +380,14 @@
         this.cardIdMovingToDeck = cardId;
         this.isMoveToDeckModalVisible = true;
       },
+      openGraveyardModal(pIndex) {
+        this.isGraveyardModalVisible= true;
+        this.graveyardModalPlayerIndex = pIndex;
+      },
+      closeGraveyardModal() {
+        this.isGraveyardModalVisible = false;
+        this.graveyardModalPlayerIndex = null;
+      },
       closeCardModal() {
         this.isCardModalVisible = false;
       },
@@ -368,6 +402,9 @@
       },
       closeSettingsModal() {
         this.isSettingsModalVisible = false;
+      },
+      toggleSettingsModal() {
+        this.isSettingsModalVisible = !this.isSettingsModalVisible;
       },
       async throwDice(diceValue) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -415,6 +452,16 @@
           console.log(error);
         }
       },
+      async moveFromGraveyardToHand(cardId) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const targetPlayerName = this.state.players[this.graveyardModalPlayerIndex].name;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ targetPlayerName + '/graveyard/card/' + cardId + '/hand/' + this.userName, {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
       async moveFromBoardToHand(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
@@ -430,6 +477,16 @@
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
         try{
           const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/hand/card/' + event.cardId + '/hand/' + targetPlayerName, {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async moveToGraveyard(event) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + event.cardId + '/graveyard/' + targetPlayerName, {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

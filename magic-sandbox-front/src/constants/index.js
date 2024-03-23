@@ -45,3 +45,23 @@ export const PLAYER_3_DECK_X1 = -350;
 export const PLAYER_3_DECK_Y1 = 780;
 export const PLAYER_3_DECK_X2 = -150;
 export const PLAYER_3_DECK_Y2 = 1080;
+
+export const PLAYER_0_GRAVEYARD_X1 = 2300; 
+export const PLAYER_0_GRAVEYARD_Y1 = 475;
+export const PLAYER_0_GRAVEYARD_X2 = 2500;
+export const PLAYER_0_GRAVEYARD_Y2 = 720;
+
+export const PLAYER_1_GRAVEYARD_X1 = -45;
+export const PLAYER_1_GRAVEYARD_Y1 = -1025;
+export const PLAYER_1_GRAVEYARD_X2 = 150;
+export const PLAYER_1_GRAVEYARD_Y2 = -735;
+
+export const PLAYER_2_GRAVEYARD_X1 = -2500;
+export const PLAYER_2_GRAVEYARD_Y1 = -1025;
+export const PLAYER_2_GRAVEYARD_X2 = -2300;
+export const PLAYER_2_GRAVEYARD_Y2 = -735;
+
+export const PLAYER_3_GRAVEYARD_X1 = -350;
+export const PLAYER_3_GRAVEYARD_Y1 = 475;
+export const PLAYER_3_GRAVEYARD_X2 = -150;
+export const PLAYER_3_GRAVEYARD_Y2 = 720;

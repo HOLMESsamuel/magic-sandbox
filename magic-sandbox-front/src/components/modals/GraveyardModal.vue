@@ -1,7 +1,7 @@
 <template>
     <div v-if="isGraveyardModalVisible" class="modal" @click="closeModal">
       <div class="modal-content" @click.stop>
-        <h2 v-if="sortedCards">{{sortedCards.length}} cards</h2>
+        <h2 v-if="sortedCards">{{sortedCards.length}} card<span v-if="sortedCards.length > 1">s</span></h2>
         <div class="card-grid">
           <div v-for="(card, index) in sortedCards" :key="index" class="graveyard-view-card" @mouseover="hover = true" @mouseleave="hover = false">
             <img :src="card.image" :alt="card.name" draggable="false">

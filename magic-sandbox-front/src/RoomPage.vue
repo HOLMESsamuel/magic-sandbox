@@ -67,7 +67,7 @@
               :pIndex="pIndex"
               :userIndex="userIndex"
               :cards="player.graveyard.cards"
-              @open-graveyard-modal="openGraveyardModal()"
+              @open-graveyard-modal="openGraveyardModal($event)"
             ></graveyard>
           </div>
         </div>
@@ -109,12 +109,12 @@
   ></dice-modal>
   <settings-modal
     :isSettingsModalVisible="isSettingsModalVisible"
-    @close-settings-modal="closeSettingsModal"
+    @close-settings-modal="closeSettingsModal()"
     @disconnect="disconnect"
   ></settings-modal>
   <graveyard-modal
     :isGraveyardModalVisible="isGraveyardModalVisible"
-    :cards="userGraveyard"
+    :cards="graveyardModalCards()"
     @close-graveyard-modal="closeGraveyardModal()"
     @add-card-to-hand="moveFromGraveyardToHand($event)"
   ></graveyard-modal>
@@ -166,7 +166,8 @@
         isDiceModalVisible: false,
         alertMessage: "",
         firstMessageReceived: false,
-        isGraveyardModalVisible: false
+        isGraveyardModalVisible: false,
+        graveyardModalPlayerIndex: null
       };
     },
     computed: {
@@ -187,12 +188,6 @@
           return this.state.players[this.userIndex].deck.cards;
         }
         return []; // Return an empty array if the user or cards are not available
-      },
-      userGraveyard() {
-        if (this.state.players.length > this.userIndex && this.state.players[this.userIndex] && this.state.players[this.userIndex].graveyard.cards) {
-          return this.state.players[this.userIndex].graveyard.cards;
-        }
-        return [];
       },
       containerStyle() {
         switch (this.userIndex) {
@@ -349,6 +344,12 @@
           this.ws.send(JSON.stringify(this.state));
         }
       },
+      graveyardModalCards() {
+        if (this.graveyardModalPlayerIndex !== null) {
+          return this.state.players[this.graveyardModalPlayerIndex].graveyard.cards;
+        }
+        return [];
+      },
       showCard(event) {
         this.modalImageSrc = event.image;
         this.modalFlipImageSrc = event.flipImage;
@@ -379,11 +380,13 @@
         this.cardIdMovingToDeck = cardId;
         this.isMoveToDeckModalVisible = true;
       },
-      openGraveyardModal() {
-        this.isGraveyardModalVisible = true;
+      openGraveyardModal(pIndex) {
+        this.isGraveyardModalVisible= true;
+        this.graveyardModalPlayerIndex = pIndex;
       },
       closeGraveyardModal() {
         this.isGraveyardModalVisible = false;
+        this.graveyardModalPlayerIndex = null;
       },
       closeCardModal() {
         this.isCardModalVisible = false;
@@ -451,8 +454,9 @@
       },
       async moveFromGraveyardToHand(cardId) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const targetPlayerName = this.state.players[this.graveyardModalPlayerIndex].name;
         try{
-          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/graveyard/card/' + cardId + '/hand/' + this.userName, {});
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ targetPlayerName + '/graveyard/card/' + cardId + '/hand/' + this.userName, {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

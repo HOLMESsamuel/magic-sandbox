@@ -4,7 +4,7 @@
             <button @click="openGraveyardModal" class="button-center">👁️</button>
         </div>
         <div class="graveyard-image-container">
-            <img v-if="cards && cards.length >0" :src="cards[cards.length-1].image">
+            <img v-if="cards && cards.length >0" :src="cards[cards.length-1].image" draggable="false">
         </div>
     </div>
 </template>
@@ -56,7 +56,7 @@
       },
       methods: {
         openGraveyardModal() {
-            this.$emit('open-graveyard-modal');
+            this.$emit('open-graveyard-modal', this.pIndex);
         }
       },
     };

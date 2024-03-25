@@ -65,13 +65,13 @@
   },
     computed: {
       isDragging() {
-        return this.$store.state.currentlyDraggingCardId === this.id;
+        return this.$store.state.currentlyDraggingId === this.id;
       },
       startDragPosition() {
         return this.$store.state.startDragPosition;
       },
       cardOffset() {
-        return this.$store.state.cardOffset;
+        return this.$store.state.offset;
       },
       cardStyle() {
         let transformStyles = '';
@@ -86,7 +86,7 @@
           zIndex = this.zIndex;
         }
         
-        if(this.$store.state.currentlyDraggingCardId === this.id) {
+        if(this.$store.state.currentlyDraggingId === this.id) {
           zIndex = this.maxZIndex + 1000;
         }
 
@@ -186,13 +186,13 @@
         }
 
         this.$store.commit('startDragging', {
-          cardId : this.id, 
+          id : this.id, 
           startDragPosition : { x: this.position.x, y: this.position.y }, 
-          cardOffset : {x: cardOffsetX, y : cardOffsetY}
+          offset : {x: cardOffsetX, y : cardOffsetY}
         });
       },
       drag(event) {
-        if (this.$store.state.currentlyDraggingCardId === this.id) { //if the card is supposed to be dragging
+        if (this.$store.state.currentlyDraggingId === this.id) { //if the card is supposed to be dragging
           const mouseX = (event.clientX - this.offsetX) / this.scale;
           const mouseY = (event.clientY - this.offsetY) / this.scale;
 

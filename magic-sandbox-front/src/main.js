@@ -7,23 +7,23 @@ import { createStore } from 'vuex'
 const store = createStore({
   state () {
     return {
-        currentlyDraggingCardId : null,
+        currentlyDraggingId : null,
         startDragPosition : null,
-        cardOffset : {x : 0, y : 0},
+        offset : {x : 0, y : 0},
         soundOn : true,
         luminosity : 50
     }
   },
   mutations: {
-    startDragging (state, {cardId, startDragPosition, cardOffset}) {
-      state.currentlyDraggingCardId = cardId;
+    startDragging (state, {id, startDragPosition, offset}) {
+      state.currentlyDraggingId = id;
       state.startDragPosition = startDragPosition;
-      state.cardOffset = cardOffset;
+      state.offset = offset;
     },
     endDragging (state) {
-        state.currentlyDraggingCardId = null;
+        state.currentlyDraggingId = null;
         state.startDragPosition = null;
-        state.cardOffset = {x : 0, y : 0};
+        state.offset = {x : 0, y : 0};
     },
     toggleSound (state) {
       state.soundOn = !state.soundOn;

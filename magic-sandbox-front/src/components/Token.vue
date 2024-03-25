@@ -40,12 +40,8 @@
     data() {
       return {
         position: this.initialPosition,
-        isTokenDragging: false,
-        cardOffsetX: 0,
-        cardOffsetY: 0,
         correctedX: null,
         correctedY: null,
-        startDragPosition: null,
         hover: false
       };
     },
@@ -53,6 +49,15 @@
       document.addEventListener('mousemove', this.drag);
     },
     computed: {
+      isTokenDragging() {
+        return this.$store.state.currentlyDraggingId === this.id;
+      },
+      startDragTokenPosition() {
+        return this.$store.state.startDragPosition;
+      },
+      tokenOffset() {
+        return this.$store.state.offset;
+      },
       tokenStyle() {
         let transformStyles = '';
         let zIndex = 2;
@@ -115,46 +120,34 @@
     methods: {
       startDrag(event) {
         event.preventDefault();
-        this.isTokenDragging = true;
 
         // Calculate the initial position based on the cursor position
         const mouseX = (event.clientX - this.offsetX) / this.scale;
         const mouseY = (event.clientY - this.offsetY) / this.scale;
 
-        if (this.inHand) {
-          // If in hand, set the initial position under the cursor
-          this.position.x = mouseX;
-          this.position.y = mouseY;
-          this.cardOffsetX = mouseX - this.position.x + 100;
-          this.cardOffsetY = mouseY - this.position.y + 140;
-          
-          if(this.reverseMovement) {
-            this.position.x = -mouseX + 1300;
-            this.position.y = -mouseY - 200;
-            this.cardOffsetX = mouseX - this.position.x + 100;
-            this.cardOffsetY = mouseY - this.position.y + 140;
-          }
-          
-        } else {
-          this.cardOffsetX = mouseX - this.position.x;
-          this.cardOffsetY = mouseY - this.position.y;
-        }
+        
+        let tokenOffsetX = mouseX - this.position.x;
+        let tokenOffsetY = mouseY - this.position.y;
 
-        this.startDragPosition = { x: this.position.x, y: this.position.y };
+        this.$store.commit('startDragging', {
+          id : this.id, 
+          startDragPosition : { x: this.position.x, y: this.position.y }, 
+          offset : {x: tokenOffsetX, y : tokenOffsetY}
+        });
       },
       drag(event) {
-        if (!this.isTokenDragging) return;
+        if (this.$store.state.currentlyDraggingId !== this.id) return;
         const mouseX = (event.clientX - this.offsetX) / this.scale;
         const mouseY = (event.clientY - this.offsetY) / this.scale;
 
         // Calculate the new position
-        let newPositionX = mouseX - this.cardOffsetX;
-        let newPositionY = mouseY - this.cardOffsetY;
+        let newPositionX = mouseX - this.tokenOffset.x;
+        let newPositionY = mouseY - this.tokenOffset.y;
 
         if (this.reverseMovement) {
           // For reversed movement, invert the direction
-          newPositionX = - newPositionX + 2 * this.startDragPosition.x;
-          newPositionY = - newPositionY + 2 * this.startDragPosition.y;
+          newPositionX = - newPositionX + 2 * this.startDragTokenPosition.x;
+          newPositionY = - newPositionY + 2 * this.startDragTokenPosition.y;
         }
 
         // Update the card's position
@@ -162,7 +155,7 @@
         this.position.y = newPositionY;
       },
       endDrag() {
-        this.isTokenDragging = false;
+        this.$store.commit('endDragging');
         this.$emit('update-token-position', { x: this.position.x, y: this.position.y });
         return;
       },

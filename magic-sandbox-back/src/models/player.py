@@ -103,7 +103,7 @@ class Player(BaseModel):
         else:
             position = {"x": -1196, "y": 614}
         
-        token = Token(id=str(uuid.uuid4()), text=text, position=position, max_z_index = max_z_index, type = type)
+        token = Token(id=str(uuid.uuid4()), text=text, position=position, z_index = max_z_index, type = type)
         self.board.tokens.append(token)
 
     def delete_token(self, tokenId):

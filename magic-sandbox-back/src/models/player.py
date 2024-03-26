@@ -89,6 +89,7 @@ class Player(BaseModel):
 
     def move_card_to_deck(self, cardId, cardPosition):
         card = self.pop_card(cardId)
+        card.tapped = False
         if card:
             self.deck.cards.insert(cardPosition, card)
         

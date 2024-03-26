@@ -45,6 +45,14 @@
               @open-token-modal="openTokenModal($event)"
               @open-dice-modal="openDiceModal">
             </counter>
+            <graveyard
+              :playerName="player.name" 
+              :roomId="roomId"
+              :pIndex="pIndex"
+              :userIndex="userIndex"
+              :cards="player.graveyard.cards"
+              @open-graveyard-modal="openGraveyardModal($event)"
+            ></graveyard>
             <hand
               :pIndex="pIndex"
               :cards="player.hand.cards"
@@ -61,14 +69,6 @@
               @show-card="showCard($event)"
               @move-to-graveyard="moveToGraveyard($event)"
             ></hand>
-            <graveyard
-              :playerName="player.name" 
-              :roomId="roomId"
-              :pIndex="pIndex"
-              :userIndex="userIndex"
-              :cards="player.graveyard.cards"
-              @open-graveyard-modal="openGraveyardModal($event)"
-            ></graveyard>
           </div>
         </div>
       </div>

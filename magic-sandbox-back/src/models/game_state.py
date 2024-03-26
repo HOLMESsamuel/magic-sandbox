@@ -50,6 +50,7 @@ class GameState(BaseModel):
 
     def move_card_to_graveyard(self, player : Player, cardId, target_player : Player):
         card = player.pop_card(cardId)
+        card.tapped = False
         if card:
             target_player.graveyard.cards.append(card)
 

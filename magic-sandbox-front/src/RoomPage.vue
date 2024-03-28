@@ -108,6 +108,8 @@
     @throw-dice="throwDice($event)"
   ></dice-modal>
   <settings-modal
+    :roomId="roomId"
+    :playerName="userName"
     :isSettingsModalVisible="isSettingsModalVisible"
     @close-settings-modal="closeSettingsModal()"
     @disconnect="disconnect"

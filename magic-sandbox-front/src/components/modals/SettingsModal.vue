@@ -15,6 +15,10 @@
           <input @input="updateLuminosity" type="range" id="luminosity" v-model="luminosity" min="0" max="100">
           <span>{{ luminosity }}</span>
         </div>
+        <div class="import-background-container">
+          <label>Background image : </label>
+          <input type="file" @change="uploadFile" ref="file">
+        </div>
         <div class="disconnect-button-container">
           <button :onClick="disconnect" class="disconnect-button">disconnect</button>
         </div>
@@ -24,16 +28,20 @@
   </template>
   
   <script>
+  import axios from 'axios';
 
   export default {
     emits: ["close-settings-modal", "disconnect"],
     props: {
-      isSettingsModalVisible: Boolean
+      isSettingsModalVisible: Boolean,
+      roomId: String,
+      playerName: String
     },
     data() {
       return {
         hover: false,
-        luminosity: 50
+        luminosity: 50,
+        backgroundImage : null
       };
     },
     methods: {
@@ -49,6 +57,21 @@
       },
       updateLuminosity() {
         this.$store.commit('updateLuminosity', this.luminosity)
+      },
+      async uploadFile() {
+        this.backgroundImage = this.$refs.file.files[0];
+
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+        try {
+          const formData = new FormData();
+          formData.append('file', this.backgroundImage);
+          const headers = { 'Content-Type': 'multipart/form-data' };
+          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/background', formData, { headers });
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };
@@ -179,6 +202,11 @@
     width: 300px;
     gap: 5px;
     margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .import-background-container {
+    margin-top: 5px;
     margin-bottom: 10px;
   }
   </style>

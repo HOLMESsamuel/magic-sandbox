@@ -1,5 +1,6 @@
 <template>
-    <div v-if="player && player.board && player.board.cards">
+    <div v-if="player">
+      <div v-if="player.board && player.board.cards">
         <Card
         v-for="(card, cIndex) in player.board.cards"
         :key="`${card.id}-${card.position.x}-${card.position.y}`"
@@ -48,7 +49,9 @@
         @update-token-position="updateObjectPosition(player.name, tIndex, $event, 'token')"
         @open-edit-token-modal="openEditTokenModal($event)"
         ></Token>
+      </div>
     </div>
+    
 </template>
 
 <script>
@@ -85,10 +88,6 @@
         startDragPosition: null,
         hover: false
       };
-    },
-    mounted() {
-    },
-    computed: {
     },
     methods: {
         openMoveToDeckModal(cardId) {

@@ -17,7 +17,20 @@
         </div>
         <div class="import-background-container">
           <label>Background image : </label>
-          <input type="file" @change="uploadFile" ref="file">
+          <input type="file" ref="file">
+        </div>
+        <div class="width-slider-container">
+          <label for="width">Background width : </label>
+          <input type="range" id="width" v-model="width" min="0" max="5000">
+          <span>{{ width }}</span>
+        </div>
+        <div class="height-slider-container">
+          <label for="height">Background height : </label>
+          <input type="range" id="height" v-model="height" min="0" max="5000">
+          <span>{{ height }}</span>
+        </div>
+        <div class="validate-background-button-container">
+          <button :onClick="validateBackground" class="validate-button">confirm background</button>
         </div>
         <div class="disconnect-button-container">
           <button :onClick="disconnect" class="disconnect-button">disconnect</button>
@@ -41,6 +54,8 @@
       return {
         hover: false,
         luminosity: 50,
+        width: 3000,
+        height: 1500,
         backgroundImage : null
       };
     },
@@ -58,20 +73,32 @@
       updateLuminosity() {
         this.$store.commit('updateLuminosity', this.luminosity)
       },
-      async uploadFile() {
+      async validateBackground() {
         this.backgroundImage = this.$refs.file.files[0];
 
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-        try {
-          const formData = new FormData();
-          formData.append('file', this.backgroundImage);
-          const headers = { 'Content-Type': 'multipart/form-data' };
-          const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/background', formData, { headers });
-          console.log(response.data);
-        } catch (error) {
-          console.log(error);
+        if(this.backgroundImage) {
+          try {
+            const formData = new FormData();
+            formData.append('file', this.backgroundImage);
+            formData.append('width', this.width);
+            formData.append('height', this.height);
+            const headers = { 'Content-Type': 'multipart/form-data' };
+            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/background', formData, { headers });
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          try {
+            const response = await axios.delete(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/background');
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
         }
+
+        
       }
     }
   };

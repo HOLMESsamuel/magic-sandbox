@@ -16,6 +16,8 @@ class Player(BaseModel):
     board: Board = Field(default_factory=Board)
     graveyard: Graveyard = Field(default_factory=Graveyard)
     background: str = ""
+    background_width: int = 3000
+    background_height: int = 1500
 
     def get_card(self, cardId) -> Card:
         hand_card : Card = self.hand.get_card(cardId)
@@ -127,5 +129,10 @@ class Player(BaseModel):
         else:
             print("The board is empty, no token to delete.")
 
-    def add_background(self, file_path):
+    def add_background(self, file_path, width, height):
         self.background = file_path
+        self.background_width = width
+        self.background_height = height
+
+    def remove_background(self):
+        self.background = ''

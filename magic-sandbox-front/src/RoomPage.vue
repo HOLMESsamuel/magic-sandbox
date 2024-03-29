@@ -9,6 +9,10 @@
         <div class="axis-vertical"></div>
         <div>
           <div v-for="(player, pIndex) in state.players">
+            <background
+              :player="player"
+              :pIndex="pIndex"
+            ></background>
             <Board
               :roomId="roomId"
               :player="player"
@@ -108,6 +112,8 @@
     @throw-dice="throwDice($event)"
   ></dice-modal>
   <settings-modal
+    :roomId="roomId"
+    :playerName="userName"
     :isSettingsModalVisible="isSettingsModalVisible"
     @close-settings-modal="closeSettingsModal()"
     @disconnect="disconnect"
@@ -128,6 +134,7 @@
   import Hand from './components/Hand.vue'
   import Token from './components/Token.vue'
   import Graveyard from './components/Graveyard.vue';
+  import Background from './components/Background.vue';
   import CardModal from './components/modals/CardModal.vue';
   import DeckModal from './components/modals/DeckModal.vue';
   import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
@@ -220,7 +227,7 @@
       this.connectWebSocket();
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background
     },
     methods: {
       computeBoardInitialPosition() { //set the initial offset to place the player's board roughly at the center of the screen

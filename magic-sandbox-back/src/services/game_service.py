@@ -185,3 +185,17 @@ class GameService:
         game_state.move_card_from_graveyard_to_hand(player, card_id, target_player)
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " card moved from graveyard to hand"}
+    
+    async def add_player_background(self, roomId: str, playerId: str, file_path: str, width: int, height: int):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.add_background(file_path, width, height)
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " added a background"}
+    
+    async def remove_player_background(self, roomId: str, playerId: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.remove_background()
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " removed a background"}

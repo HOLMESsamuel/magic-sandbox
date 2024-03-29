@@ -15,6 +15,23 @@
           <input @input="updateLuminosity" type="range" id="luminosity" v-model="luminosity" min="0" max="100">
           <span>{{ luminosity }}</span>
         </div>
+        <div class="import-background-container">
+          <label>Background image : </label>
+          <input type="file" ref="file">
+        </div>
+        <div class="width-slider-container">
+          <label for="width">Background width : </label>
+          <input type="range" id="width" v-model="width" min="0" max="5000">
+          <span>{{ width }}</span>
+        </div>
+        <div class="height-slider-container">
+          <label for="height">Background height : </label>
+          <input type="range" id="height" v-model="height" min="0" max="5000">
+          <span>{{ height }}</span>
+        </div>
+        <div class="validate-background-button-container">
+          <button :onClick="validateBackground" class="validate-button">confirm background</button>
+        </div>
         <div class="disconnect-button-container">
           <button :onClick="disconnect" class="disconnect-button">disconnect</button>
         </div>
@@ -24,16 +41,22 @@
   </template>
   
   <script>
+  import axios from 'axios';
 
   export default {
     emits: ["close-settings-modal", "disconnect"],
     props: {
-      isSettingsModalVisible: Boolean
+      isSettingsModalVisible: Boolean,
+      roomId: String,
+      playerName: String
     },
     data() {
       return {
         hover: false,
-        luminosity: 50
+        luminosity: 50,
+        width: 3000,
+        height: 1500,
+        backgroundImage : null
       };
     },
     methods: {
@@ -49,6 +72,33 @@
       },
       updateLuminosity() {
         this.$store.commit('updateLuminosity', this.luminosity)
+      },
+      async validateBackground() {
+        this.backgroundImage = this.$refs.file.files[0];
+
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        if(this.backgroundImage) {
+          try {
+            const formData = new FormData();
+            formData.append('file', this.backgroundImage);
+            formData.append('width', this.width);
+            formData.append('height', this.height);
+            const headers = { 'Content-Type': 'multipart/form-data' };
+            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/background', formData, { headers });
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          try {
+            const response = await axios.delete(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/background');
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+        
       }
     }
   };
@@ -179,6 +229,11 @@
     width: 300px;
     gap: 5px;
     margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .import-background-container {
+    margin-top: 5px;
     margin-bottom: 10px;
   }
   </style>

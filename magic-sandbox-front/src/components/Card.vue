@@ -1,9 +1,9 @@
 <template>
-    <div class="card" :style="cardStyle" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag" @contextmenu.prevent="showCustomMenu($event)">
+    <div class="card" @click.stop="handleCardClick" :style="cardStyle" @dblclick.stop="handleCardDoubleClick()" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag" @contextmenu.prevent="showCustomMenu($event)">
       <img :src="flipped ? flipImage : imageSrc" :alt="name">
       <!-- Hover Buttons -->
       <div v-if="!inHand && hover" class="hover-buttons">
-        <button class="button-center">👁️</button>
+        <button @click.stop="showCardDetail" class="button-center">👁️</button>
       </div>
     </div>
     <div v-if="showMenu" class="menu" :style="customMenuStyle" @contextmenu.prevent="this.showMenu = false">
@@ -57,7 +57,8 @@
         correctedY: null,
         hover: false,
         showMenu: false,
-        menuPosition: { x: 0, y: 0 }
+        menuPosition: { x: 0, y: 0 },
+        clickTimeout: null,
       };
     },
     mounted() {
@@ -213,17 +214,12 @@
         }
       },
       endDrag(event) {
-        const draggedDistance = Math.sqrt(Math.pow(this.position.x - this.startDragPosition.x, 2) + Math.pow(this.position.y - this.startDragPosition.y, 2));
+        event.preventDefault();
         this.$store.commit('endDragging');
         let handPlayerIndex = checkIfCardInPlayerHand(this.position.x, this.position.y);
         let deckPlayerIndex = checkIfCardInPlayerDeck(this.position.x, this.position.y);
         let graveyardPlayerIndex = checkIfCardInPlayerGraveyard(this.position.x, this.position.y);
-        
-        //can't use a click because it triggers with mousedown, if the card does not move I consider it a click
-        if(draggedDistance < 5) {
-          this.handleCardClick(event);
-          return;
-        }
+
 
         if(this.isReturningToSameHand(handPlayerIndex)) {
           return;
@@ -327,23 +323,31 @@
         if(event.button === 2 ) { //right click
           return;
         }
-        this.showMenu = false;
-        if (this.dragging) {
-          // If dragging, don't execute any click logic
+        //if another click action has been triggered, return
+        if (this.clickTimeout !== null) {
+          clearTimeout(this.clickTimeout);
+          this.clickTimeout = null;
           return;
         }
-
-        if (event.target.matches('.button-center')) {
-          // If the clicked element is the show button
-          this.showCardDetail();
-          return;
-        }
-
-        if (this.inHand) {
-          this.showCardDetail();
-        } else {
-          this.toogleTap();
-        }
+        //else we set a timeout, the action inside is executed within the delay if nothing else removes it
+        this.clickTimeout = setTimeout(() => {
+          this.showMenu = false;
+          if (this.isDragging) {
+            return;
+          }
+          if (this.inHand) {
+            this.showCardDetail();
+          } else {
+            this.toogleTap();
+          }
+          this.clickTimeout = null;
+        }, 150); 
+      },
+      handleCardDoubleClick() {
+        //remove the simple click timeout
+        clearTimeout(this.clickTimeout);
+        this.clickTimeout = null;
+        this.showCardDetail();
       },
       async toogleTap() {
         if(!this.inHand) {

@@ -26,7 +26,7 @@
         ></Card>
       </div>
       <div v-if="pIndex != userIndex" v-for="(card, index) in cards" :key="index" class="hand-card">
-        <img src="../assets/card_back.webp" alt="Card Image">
+        <img src="../assets/card_back.webp" :style="hiddenCardStyle" class="Card Image">
       </div>
     </div>
   </template>
@@ -58,6 +58,22 @@
     computed: {
       isCardFromHandMoving() {
         return this.cards.some(card => card.id === this.$store.state.currentlyDraggingCardId);
+      },
+      hiddenCardStyle() {
+        let transformStyle = {};
+        if(this.userIndex === 1 || this.userIndex ===2) {
+          transformStyle.transform = 'rotate(180deg)';
+        }
+
+        if(this.$store.state.rotate === true) {
+          if(transformStyle.transform) {
+            transformStyle.transform = '';
+          } else {
+            transformStyle.transform = "rotate(180deg)";
+          }
+        }
+
+        return transformStyle;
       },
       handStyle() {
         const zIndex = this.isCardFromHandMoving ? this.maxZIndex + 1 : 0;

@@ -11,7 +11,8 @@ const store = createStore({
         startDragPosition : null,
         offset : {x : 0, y : 0},
         soundOn : true,
-        luminosity : 50
+        luminosity : 50,
+        rotate : false
     }
   },
   mutations: {
@@ -30,6 +31,9 @@ const store = createStore({
     },
     updateLuminosity(state, luminosity) {
       state.luminosity = luminosity;
+    },
+    toggleRotate(state) {
+      state.rotate = !state.rotate;
     }
   }
 })

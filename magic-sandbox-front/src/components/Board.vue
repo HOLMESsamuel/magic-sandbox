@@ -21,7 +21,7 @@
         :maxZIndex="maxZIndex"
         :flipped="card.flipped"
         :flipImage="card.flip_image"
-        :reverseMovement="userIndex === 1 || userIndex === 2"
+        :reverseMovement="reverseMovement"
         @open-move-to-deck-modal="openMoveToDeckModal($event)"
         @update-position="updateObjectPosition(player.name, cIndex, $event, 'card')"
         @show-card="showCard($event)"
@@ -45,7 +45,7 @@
         :offsetY="offsetY"
         :zIndex="token.z_index"
         :maxZIndex="maxZIndex"
-        :reverseMovement="userIndex === 1 || userIndex === 2"
+        :reverseMovement="reverseMovement"
         @update-token-position="updateObjectPosition(player.name, tIndex, $event, 'token')"
         @open-edit-token-modal="openEditTokenModal($event)"
         ></Token>

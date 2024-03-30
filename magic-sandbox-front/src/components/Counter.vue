@@ -81,6 +81,15 @@
                 style.transform = 'rotate(180deg)';
           }
 
+          //invert everything if rotate is true
+          if (this.$store.state.rotate) {
+            if (style.transform) {
+              style.transform = '';
+            } else {
+              style.transform = 'rotate(180deg)';
+            }
+          }
+
           return style;
 
         },

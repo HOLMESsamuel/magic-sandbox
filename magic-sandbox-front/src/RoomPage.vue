@@ -2,6 +2,9 @@
   <button @click="openSettingsModal" class="settings-button">
     <img src="./assets/gear.svg">
   </button>
+  <button @click="rotate" class="rotate-button">
+    <img src="./assets/rotate.svg">
+  </button>
   <div class="zoom-pan-container" :style="brightnessStyle" ref="zoomPanContainer" @keydown.esc="toggleSettingsModal" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan" tabindex="0">
     <div :style="zoomPanStyles">
       <div :style="containerStyle">
@@ -22,7 +25,7 @@
               :offsetX="offsetX"
               :offsetY="offsetY"
               :maxZIndex="state.max_z_index"
-              :reverseMovement="userIndex === 1 || userIndex === 2"
+              :reverseMovement="isReverseMovement"
               @open-move-to-deck-modal="openMoveToDeckModal($event)"
               @update-position="updateObjectPosition($event)"
               @show-card="showCard($event)"
@@ -190,6 +193,13 @@
       userIndex() {
         return this.state.players.findIndex(player => player.name === this.userName);
       },
+      isReverseMovement() {
+        if(this.$store.state.rotate === false) {
+          return this.userIndex === 1 || this.userIndex === 2;
+        } else {
+          return this.userIndex === 0 || this.userIndex === 3;
+        }
+      },
       userCards() {
         if (this.state.players.length > this.userIndex && this.state.players[this.userIndex] && this.state.players[this.userIndex].deck.cards) {
           return this.state.players[this.userIndex].deck.cards;
@@ -197,22 +207,33 @@
         return []; // Return an empty array if the user or cards are not available
       },
       containerStyle() {
+        let transformStyle = {};
         switch (this.userIndex) {
-          case 0: // First player, normal view
-            return {};
-          case 1: // Second player, rotated 180 degrees
-            return {
+          case 0:
+          case 3: // First player, normal view
+            break;
+          case 1:
+          case 2: // Second player, rotated 180 degrees
+            transformStyle = {
               transform: 'rotate(180deg)'
             };
-          case 2: // Third player, rotated 180 degrees and translated
-            return {
-              transform: 'rotate(180deg)'
-            };
-          case 3: // Fourth player, normal view
-            return {};
+            break;
           default: // Default case if player index is not found
-            return {};
+            break;
         }
+
+        //invert everything if rotate is true
+        if (this.$store.state.rotate) {
+          if (transformStyle.transform) {
+            transformStyle.transform = '';
+          } else {
+            transformStyle = {
+              transform: 'rotate(180deg)'
+            };
+          }
+        }
+
+        return transformStyle;
       },
       brightnessStyle() {
         const luminosity = this.$store.state.luminosity;
@@ -413,6 +434,9 @@
       toggleSettingsModal() {
         this.isSettingsModalVisible = !this.isSettingsModalVisible;
       },
+      rotate() {
+        this.$store.commit('toggleRotate');
+      },
       async throwDice(diceValue) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
@@ -526,6 +550,19 @@
 }
 
 .settings-button :hover{
+  cursor: pointer;
+}
+
+.rotate-button {
+  position: fixed;
+  bottom: 25px;
+  right: 60px;
+  z-index: 10000;
+  background: none;
+  border: none;
+}
+
+.rotate-button :hover {
   cursor: pointer;
 }
 

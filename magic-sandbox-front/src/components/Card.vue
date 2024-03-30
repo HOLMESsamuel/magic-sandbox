@@ -335,9 +335,7 @@
           if (this.isDragging) {
             return;
           }
-          if (this.inHand) {
-            this.showCardDetail();
-          } else {
+          if (!this.inHand) {
             this.toogleTap();
           }
           this.clickTimeout = null;

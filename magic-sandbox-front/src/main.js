@@ -9,6 +9,8 @@ const store = createStore({
     return {
         currentlyDraggingId : null,
         startDragPosition : null,
+        startClientX: 0,
+        startClientY: 0,
         offset : {x : 0, y : 0},
         soundOn : true,
         luminosity : 50,
@@ -16,15 +18,15 @@ const store = createStore({
     }
   },
   mutations: {
-    startDragging (state, {id, startDragPosition, offset}) {
+    startDragging (state, {id, startClientX, startClientY, startDragPosition, offset}) {
       state.currentlyDraggingId = id;
+      state.startClientX = startClientX;
+      state.startClientY = startClientY;
       state.startDragPosition = startDragPosition;
       state.offset = offset;
     },
     endDragging (state) {
         state.currentlyDraggingId = null;
-        state.startDragPosition = null;
-        state.offset = {x : 0, y : 0};
     },
     toggleSound (state) {
       state.soundOn = !state.soundOn;

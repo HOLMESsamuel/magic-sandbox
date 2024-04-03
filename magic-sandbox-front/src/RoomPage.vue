@@ -85,6 +85,7 @@
     :modalImageSrc="modalImageSrc"
     :modalFlipImageSrc="modalFlipImageSrc"
     :isCardModalVisible="isCardModalVisible"
+    :isMoveToDeckModalVisible="isMoveToDeckModalVisible"
     @close-card-modal="closeCardModal"
   ></card-modal>
   <deck-modal
@@ -116,7 +117,7 @@
   ></dice-modal>
   <settings-modal
     :roomId="roomId"
-    :playerName="userName"
+    :player="userPlayer"
     :isSettingsModalVisible="isSettingsModalVisible"
     @close-settings-modal="closeSettingsModal()"
     @disconnect="disconnect"
@@ -189,6 +190,9 @@
           transform: `translate(${this.offsetX}px, ${this.offsetY}px) scale(${this.scale})`,
           transformOrigin: '0 0'
         };
+      },
+      userPlayer() {
+        return this.state.players.find(player => player.name === this.userName);
       },
       userIndex() {
         return this.state.players.findIndex(player => player.name === this.userName);
@@ -424,6 +428,7 @@
       },
       closeMoveToDeckModal() {
         this.isMoveToDeckModalVisible = false;
+        this.isCardModalVisible = false;
       },
       openSettingsModal() {
         this.isSettingsModalVisible = true;

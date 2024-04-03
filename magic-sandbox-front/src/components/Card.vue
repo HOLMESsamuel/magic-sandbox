@@ -164,6 +164,8 @@
         if(event.button === 2 ) { //right click
           return;
         }
+        clearTimeout(this.clickTimeout);
+        this.clickTimeout = null;
         event.preventDefault();
 
         const mouseX = (event.clientX - this.offsetX) / this.scale;
@@ -188,12 +190,16 @@
 
         this.$store.commit('startDragging', {
           id : this.id, 
+          startClientX: event.clientX,
+          startClientY: event.clientY,
           startDragPosition : { x: this.position.x, y: this.position.y }, 
           offset : {x: cardOffsetX, y : cardOffsetY}
         });
       },
       drag(event) {
         if (this.$store.state.currentlyDraggingId === this.id) { //if the card is supposed to be dragging
+          clearTimeout(this.clickTimeout);
+          this.clickTimeout = null;
           const mouseX = (event.clientX - this.offsetX) / this.scale;
           const mouseY = (event.clientY - this.offsetY) / this.scale;
 
@@ -214,6 +220,8 @@
         }
       },
       endDrag(event) {
+        clearTimeout(this.clickTimeout);
+        this.clickTimeout = null;
         event.preventDefault();
         this.$store.commit('endDragging');
         let handPlayerIndex = checkIfCardInPlayerHand(this.position.x, this.position.y);
@@ -320,6 +328,9 @@
         }
       },
       handleCardClick(event) {
+        if(event.clientX !== this.$store.state.startClientX || event.clientY !== this.$store.state.startClientY) {
+          return;
+        }
         if(event.button === 2 ) { //right click
           return;
         }
@@ -332,10 +343,9 @@
         //else we set a timeout, the action inside is executed within the delay if nothing else removes it
         this.clickTimeout = setTimeout(() => {
           this.showMenu = false;
-          if (this.isDragging) {
-            return;
-          }
-          if (!this.inHand) {
+          if (this.inHand) {
+            this.showCardDetail();
+          } else {
             this.toogleTap();
           }
           this.clickTimeout = null;

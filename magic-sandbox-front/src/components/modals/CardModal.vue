@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isCardModalVisible" class="modal" @click="closeModal">
+    <div v-if="isCardModalVisible && !isMoveToDeckModalVisible" class="modal" @click="closeModal">
       <div class="modal-content">
         <img :src="modalImageSrc" alt="Enlarged Card" />
         <img v-if="modalFlipImageSrc && modalFlipImageSrc !== DEFAULT_CARD_BACK_URL" :src="modalFlipImageSrc" alt="Enlarged Card flipped" />
@@ -21,7 +21,8 @@
     props: {
       modalImageSrc: String,
       modalFlipImageSrc: String,
-      isCardModalVisible: Boolean
+      isCardModalVisible: Boolean,
+      isMoveToDeckModalVisible: Boolean
     },
     methods: {
       closeModal() {

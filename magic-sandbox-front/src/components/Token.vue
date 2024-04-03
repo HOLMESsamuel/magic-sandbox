@@ -131,6 +131,8 @@
 
         this.$store.commit('startDragging', {
           id : this.id, 
+          startClientX: event.clientX,
+          startClientY: event.clientY,
           startDragPosition : { x: this.position.x, y: this.position.y }, 
           offset : {x: tokenOffsetX, y : tokenOffsetY}
         });

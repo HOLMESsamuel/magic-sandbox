@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isSettingsModalVisible" class="modal" @click="closeModal">
+    <div v-if="isSettingsModalVisible" class="settings-modal" @click="closeModal">
       <div class="settings-modal-content" @click.stop>
         <div class="sound-switch-container">
           <label>Sound : </label>
@@ -15,22 +15,25 @@
           <input @input="updateLuminosity" type="range" id="luminosity" v-model="luminosity" min="0" max="100">
           <span>{{ luminosity }}</span>
         </div>
-        <div class="import-background-container">
-          <label>Background image : </label>
-          <input type="file" ref="file">
-        </div>
-        <div class="width-slider-container">
-          <label for="width">Background width : </label>
-          <input type="range" id="width" v-model="width" min="0" max="5000">
-          <span>{{ width }}</span>
-        </div>
-        <div class="height-slider-container">
-          <label for="height">Background height : </label>
-          <input type="range" id="height" v-model="height" min="0" max="5000">
-          <span>{{ height }}</span>
-        </div>
-        <div class="validate-background-button-container">
-          <button :onClick="validateBackground" class="validate-button">confirm background</button>
+        <div class="background-settings-container">
+          <p>Background image</p>
+          <div class="import-background-container">
+            <input type="file" ref="file">
+          </div>
+          <div class="width-slider-container">
+            <label for="width">width : </label>
+            <input type="range" id="width" v-model="width" min="0" max="5000">
+            <span>{{ width }}</span>
+          </div>
+          <div class="height-slider-container">
+            <label for="height">height : </label>
+            <input type="range" id="height" v-model="height" min="0" max="5000">
+            <span>{{ height }}</span>
+          </div>
+          <div class="validate-background-button-container">
+            <button :onClick="validateBackground" class="validate-button">confirm</button>
+            <button :onClick="deleteBackground" class="delete-button">delete</button>
+          </div>
         </div>
         <div class="disconnect-button-container">
           <button :onClick="disconnect" class="disconnect-button">disconnect</button>
@@ -48,14 +51,14 @@
     props: {
       isSettingsModalVisible: Boolean,
       roomId: String,
-      playerName: String
+      player: Object
     },
     data() {
       return {
         hover: false,
         luminosity: 50,
-        width: 3000,
-        height: 1500,
+        width: this.player? this.player.background_width : 3000,
+        height: this.player? this.player.background_height : 1500,
         backgroundImage : null
       };
     },
@@ -84,21 +87,25 @@
             formData.append('width', this.width);
             formData.append('height', this.height);
             const headers = { 'Content-Type': 'multipart/form-data' };
-            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/background', formData, { headers });
+            const response = await axios.post(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player.name + '/background', formData, { headers });
             console.log(response.data);
           } catch (error) {
             console.log(error);
           }
         } else {
-          try {
-            const response = await axios.delete(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/background');
+          this.deleteBackground();
+        }
+      },
+      async deleteBackground() {
+        this.$refs.file = null;
+        this.backgroundImage = null;
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try {
+            const response = await axios.delete(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player.name + '/background');
             console.log(response.data);
           } catch (error) {
             console.log(error);
           }
-        }
-
-        
       }
     }
   };
@@ -106,7 +113,7 @@
   
   
   <style>
-  .modal {
+  .settings-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -126,6 +133,17 @@
   max-height: 90vh;
   display: flex;
   flex-direction: column;
+  }
+
+  .background-settings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(210, 210, 210);
+    border-radius: 4px;
+    padding: 10px;
+    padding-bottom: 20px;
   }
   
   .close-button {
@@ -162,6 +180,29 @@
     color: white;
     padding: 10px 20px;
     margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .delete-button {
+    background-color: #c51e1e;
+    color: white;
+    padding: 8px 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .validate-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 15px;
+    margin-top: 10px;
+    margin-right: 5px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -210,7 +251,7 @@
     background-color: #4CAF50;
   }
 
-  .sound-button-on:hover {
+  .sound-button-on:hover, .validate-button:hover {
     background-color: #45a049;
   }
 
@@ -218,7 +259,7 @@
     background-color: #c51e1e;
   }
 
-  .sound-button-off:hover {
+  .sound-button-off:hover, .delete-button:hover, .disconnect-button:hover{
     background-color: #a51717;
   }
 

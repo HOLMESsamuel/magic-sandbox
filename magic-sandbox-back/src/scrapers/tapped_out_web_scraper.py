@@ -84,8 +84,10 @@ class TappedOutWebScraper(Scraper):
                             'name': card_name,
                             'image_url': card_image,
                             'quantity': 1,
-                            'flip_image_url': DEFAULT_CARD_BACK_URL
+                            'flip_image_url': DEFAULT_CARD_BACK_URL,
+                            'commander': True
                         })
+
     
     def process_tapped_out_card_map_into_deck(self, card_map):
         try:
@@ -94,7 +96,13 @@ class TappedOutWebScraper(Scraper):
                 # if a card has multiple occurences there is only one entry in card map but the qty is set to the number
                 for i in range(int(card_data["quantity"])):
                     card = Card(id=str(uuid.uuid4()), name=card_data["name"], image=card_data["image_url"], flip_image=card_data['flip_image_url'])
-                    cards.append(card)
+                    # adding commander on the top of the deck if it exists
+                    if "commander" in card_data:
+                        card.commander = True
+                        cards.insert(0,card)
+                        print("commander found")
+                    else:    
+                        cards.append(card)
             deck = Deck(cards=cards)
             return deck
         except Exception as e:

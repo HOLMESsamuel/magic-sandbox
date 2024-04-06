@@ -92,6 +92,22 @@
           }
         } finally {
           this.isLoading = false;
+          //Draw commander
+          if(this.pIndex == this.userIndex) {
+            try{
+              const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/draw/commander', {});
+              console.log(response.data);
+            } catch (error) {
+              console.log(error);
+            }
+          }
+          // Shuffle Deck
+          try{
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/shuffle', {});
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
         }
       },
       async drawCard() {

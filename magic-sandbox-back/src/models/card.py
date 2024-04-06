@@ -10,6 +10,7 @@ class Card(BaseModel):
     flipped : bool = False
     flip_image : str = DEFAULT_CARD_BACK_URL
     z_index : int = 2
+    commander : bool  = False
 
     def tap(self):
         self.tapped = True

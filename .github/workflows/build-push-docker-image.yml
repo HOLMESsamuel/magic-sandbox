@@ -71,12 +71,25 @@ jobs:
         cd magic-sandbox-front
         npm run build
 
+    - name: Upload Build Artifacts #allow to use it on a different job
+      uses: actions/upload-artifact@v2
+      with:
+        name: frontend-build
+        path: magic-sandbox-front/build/
+        retention-days: 1
+
   build-push-frontend-image:
     needs: build-frontend
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
+
+    - name: Download Build Artifacts #recover the artifact built on last job
+      uses: actions/download-artifact@v2
+      with:
+        name: frontend-build
+        path: magic-sandbox-front/build/
 
     - name: Login to Docker Hub
       uses: docker/login-action@v2

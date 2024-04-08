@@ -38,12 +38,12 @@
               :roomId="roomId"
               :pIndex="pIndex"
               :userIndex="userIndex"
-              :cards="player.deck.cards">
+              :cards="player.deck ? player.deck.cards : []">
             </deck>
             <counter
               :key="`${player.name}-${player.score}`"
               :playerName="player.name"
-              :isDeckLoaded="player.deck.cards && player.deck.cards.length > 0"
+              :isDeckLoaded="player.deck && player.deck.cards && player.deck.cards.length > 0"
               :roomId="roomId"
               :pIndex="pIndex"
               :initialScore="player.score"

@@ -41,27 +41,26 @@ class Player(BaseModel):
         
 
     def draw_card(self):
-        if self.deck.cards and len(self.deck.cards) > 0:
+        if self.deck and self.deck.cards and len(self.deck.cards) > 0:
             card = self.deck.cards.pop(0)
             self.hand.cards.append(card)
         else:
             print("The deck is empty, no card to move.")
 
     def draw_commander(self):
-        if self.deck.cards and len(self.deck.cards) > 0:
-            card = self.deck.cards.pop(0)
-            if card.commander == False:
-                self.deck.cards.append(card)
-            else:    
-                if self.index == 0:
-                    card.position = {'x': 800, 'y': 200}
-                if self.index == 1:
-                    card.position = {'x': 1650, 'y': -480}
-                if self.index == 2:
-                    card.position = {'x': -800, 'y': -480}
-                if self.index == 3:
-                    card.position = {'x': -1850, 'y': 200}        
-                self.board.cards.append(card)
+        if self.deck and self.deck.cards and len(self.deck.cards) > 0:
+            for index, card in enumerate(self.deck.cards):
+                if card.commander == True:   
+                    if self.index == 0:
+                        card.position = {'x': 800, 'y': 200}
+                    if self.index == 1:
+                        card.position = {'x': 1650, 'y': -480}
+                    if self.index == 2:
+                        card.position = {'x': -800, 'y': -480}
+                    if self.index == 3:
+                        card.position = {'x': -1850, 'y': 200}  
+                    self.board.cards.append(self.deck.cards.pop(index) )
+                    return
         else:
             print("The deck is empty, no card to move.")        
 

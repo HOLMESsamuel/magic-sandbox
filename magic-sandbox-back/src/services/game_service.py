@@ -15,6 +15,9 @@ class GameService:
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
         player.deck = deck
+        if player.deck :
+            player.draw_commander()
+            player.deck.shuffle()
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": "Deck added for player " + playerId + " room " + roomId}
     
@@ -46,13 +49,6 @@ class GameService:
         player.draw_card()
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " draw a card"}
-    
-    async def draw_commander(self, playerId: str, roomId: str): 
-        game_state : GameState = state_manager.get_group_state(roomId)
-        player : Player = game_state.get_player(playerId)
-        player.draw_commander()
-        await websocket_manager.broadcast(roomId, game_state)
-        return {"message": playerId + " room " + roomId + " draws his commander"}
     
     async def move_card_from_deck_to_hand(self, playerId: str, roomId: str, cardId: str):
         game_state : GameState = state_manager.get_group_state(roomId)

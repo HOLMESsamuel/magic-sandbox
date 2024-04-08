@@ -57,12 +57,17 @@ class ArchidektWebScraper(Scraper):
                     
                     card_div = soup.find('div', id=card_div_id)
 
+                    
                     # Finding commander name
+                    commander_name = None
                     commander_span = soup.find('span', title='Commander')
-                    next_div = commander_span.find_parent().find_parent().find_parent().find_parent().find_next().find_next()
-                    commander_name = next_div.find('input').get('value')
-                    print("commander_name")
-                    print(commander_name[2:-2])
+                    if commander_span :
+                        next_div = commander_span.find_parent().find_parent().find_parent().find_parent().find_next().find_next()
+                        if next_div:
+                            commander_name = next_div.find('input').get('value')
+                            print("commander_name")
+                            print(commander_name[2:-2])
+                    
                     
                     if card_div:
                         # Find all img tags within this div with the specific class
@@ -83,10 +88,8 @@ class ArchidektWebScraper(Scraper):
                             if commander_name and value.get('name') == commander_name[2:-2]:
                                 card.commander = True       
                             if card.commander == True:
-                                cards.insert(0,card)
                                 print("commander found")
-                            else:
-                                cards.append(card)
+                            cards.append(card)
             deck = Deck(cards=cards)
             return deck
         except Exception as e:

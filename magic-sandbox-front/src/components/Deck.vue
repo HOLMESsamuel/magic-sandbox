@@ -94,6 +94,9 @@
           this.isLoading = false;
         }
       },
+      async drawCommander() {
+
+      },
       async drawCard() {
         if(this.pIndex == this.userIndex) {
           const backendUrl = import.meta.env.VITE_BACKEND_URL;

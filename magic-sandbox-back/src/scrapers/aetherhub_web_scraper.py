@@ -39,7 +39,8 @@ class AetherhubWebScraper(Scraper):
 
         # the img tag provides everything we need
         # every img of a card is repeated if it has multiple occurences
-        for card in soup.select('div[id*="tab_visual_"] img'):
+        card_map = soup.select('div[id*="tab_visual_"] img')
+        for idx,card in enumerate(card_map):
             # Image alt for card name, data-src for the url
             card_name = card['alt']
             card_image = card['data-src']
@@ -52,6 +53,10 @@ class AetherhubWebScraper(Scraper):
                 'flip_image_url': DEFAULT_CARD_BACK_URL
             }
 
+            # commander is always first in scrapped cards
+            if len(card_map) >= 100 and idx==0:
+                card_info['commander'] = True
+
             # todo: flipside
 
             cards_info.append(card_info)
@@ -61,7 +66,13 @@ class AetherhubWebScraper(Scraper):
             cards = []
             for card_data in card_map:
                 card = Card(id=str(uuid.uuid4()), name=card_data["name"], image=card_data["image_url"], flip_image=card_data['flip_image_url'])
-                cards.append(card)
+                # adding commander on the top of the deck if it exists
+                if "commander" in card_data:
+                    card.commander = True
+                    cards.insert(0,card)
+                    print("commander found")
+                else:    
+                    cards.append(card)
             deck = Deck(cards=cards)
             return deck
         except Exception as e:

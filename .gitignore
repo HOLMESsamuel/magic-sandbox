@@ -40,3 +40,5 @@ dist
 *.log
 
 *.coverage
+
+magic-sandbox-back/uploads/*

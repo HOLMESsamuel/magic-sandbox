@@ -15,6 +15,9 @@ class GameService:
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
         player.deck = deck
+        if player.deck :
+            player.draw_commander()
+            player.deck.shuffle()
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": "Deck added for player " + playerId + " room " + roomId}
     

@@ -40,7 +40,7 @@ class ArchidektWebScraper(Scraper):
 
             # Navigate to the desired data
             card_map = json_data.get('props', {}).get('pageProps', {}).get('redux', {}).get('deck', {}).get('cardMap', {})
-
+            
             return card_map, soup
         except requests.exceptions.RequestException as e:
             print(f"Error: {e}")
@@ -56,25 +56,39 @@ class ArchidektWebScraper(Scraper):
                     card_div_id = f'deck-card-dom-{key}'
                     
                     card_div = soup.find('div', id=card_div_id)
+
+                    
+                    # Finding commander name
+                    commander_name = None
+                    commander_span = soup.find('span', title='Commander')
+                    if commander_span :
+                        next_div = commander_span.find_parent().find_parent().find_parent().find_parent().find_next().find_next()
+                        if next_div:
+                            commander_name = next_div.find('input').get('value')
+                            print("commander_name")
+                            print(commander_name[2:-2])
+                    
                     
                     if card_div:
                         # Find all img tags within this div with the specific class
                         img_tags = card_div.find_all('img', class_='basicCard_image__cNHMf')
                         img_urls = [img['src'] for img in img_tags if img.has_attr('src')]
-                        
                         # If there's only one img, we fetch its src for the image
                         # If there are two imgs, it means the card has two sides and we need both srcs
                         # Adjust the Card constructor call based on your Card class' requirements
-                        for i in range(value.get('qty')):
+                        for i in range(value.get('qty')): 
+                            card = Card(id=str(uuid.uuid4()), name=value.get('name'), image='')  
                             if len(img_urls) == 1:
                                 # Assuming your Card constructor can handle a single image URL
-                                card = Card(id=str(uuid.uuid4()), name=value.get('name'), image=img_urls[0])
-                            elif len(img_urls) == 2:
+                                card.image = img_urls[0]
+                            if len(img_urls) == 2:
                                 # Assuming your Card constructor can handle two image URLs for two-sided cards
-                                card = Card(id=str(uuid.uuid4()), name=value.get('name'), image=img_urls[0], flip_image=img_urls[1])
-                            else:
-                                card = Card(id=str(uuid.uuid4()), name=value.get('name'), image='')
-                            
+                                card.flip_image = img_urls[1]
+                            # adding commander on the top of the deck if it exists
+                            if commander_name and value.get('name') == commander_name[2:-2]:
+                                card.commander = True       
+                            if card.commander == True:
+                                print("commander found")
                             cards.append(card)
             deck = Deck(cards=cards)
             return deck

@@ -40,7 +40,6 @@ class ArchidektWebScraper(Scraper):
 
             # Navigate to the desired data
             card_map = json_data.get('props', {}).get('pageProps', {}).get('redux', {}).get('deck', {}).get('cardMap', {})
-            
             return card_map, soup
         except requests.exceptions.RequestException as e:
             print(f"Error: {e}")
@@ -48,31 +47,16 @@ class ArchidektWebScraper(Scraper):
 
     def process_archidekt_card_map_into_deck(self, card_map, soup):
         try:
+            card_image_divs = soup.find_all('img', id='basicCardImage')
             cards = []
+            command_terms = {"Commander", "commander", "commandant", "Commandant"}
             for key, value in card_map.items():
                 if "Maybeboard" not in value["categories"]: #filter cards that are in the maybeboard
-                    # each card image is in a div whose id contains card id
-                    # Construct the specific div id for the current card
-                    card_div_id = f'deck-card-dom-{key}'
                     
-                    card_div = soup.find('div', id=card_div_id)
-
+                    matching_divs = self.find_best_matching_image_divs(value.get('name'), card_image_divs)
                     
-                    # Finding commander name
-                    commander_name = None
-                    commander_span = soup.find('span', title='Commander')
-                    if commander_span :
-                        next_div = commander_span.find_parent().find_parent().find_parent().find_parent().find_next().find_next()
-                        if next_div:
-                            commander_name = next_div.find('input').get('value')
-                            print("commander_name")
-                            print(commander_name[2:-2])
-                    
-                    
-                    if card_div:
-                        # Find all img tags within this div with the specific class
-                        img_tags = card_div.find_all('img', class_='basicCard_image__cNHMf')
-                        img_urls = [img['src'] for img in img_tags if img.has_attr('src')]
+                    if matching_divs:
+                        img_urls = [img['src'] for img in matching_divs if img.has_attr('src')]
                         # If there's only one img, we fetch its src for the image
                         # If there are two imgs, it means the card has two sides and we need both srcs
                         # Adjust the Card constructor call based on your Card class' requirements
@@ -84,11 +68,9 @@ class ArchidektWebScraper(Scraper):
                             if len(img_urls) == 2:
                                 # Assuming your Card constructor can handle two image URLs for two-sided cards
                                 card.flip_image = img_urls[1]
-                            # adding commander on the top of the deck if it exists
-                            if commander_name and value.get('name') == commander_name[2:-2]:
-                                card.commander = True       
-                            if card.commander == True:
-                                print("commander found")
+                            # adding commander if it exists
+                            if any(term in value["categories"] for term in command_terms):
+                                card.commander = True      
                             cards.append(card)
             deck = Deck(cards=cards)
             return deck
@@ -105,3 +87,23 @@ class ArchidektWebScraper(Scraper):
                 return "back" + match.group(1) # Return the matched group (the number after '?')
         else:
             return None
+        
+    def find_best_matching_image_divs(self, name, card_image_divs):
+        best_matches = []
+        max_score = 0
+        for div in card_image_divs:
+            name_words = name.lower().split()
+            title_words = div['title'].lower().split()
+            score = 0
+            # Use a sliding window to match word sequences
+            for i in range(len(title_words) - len(name_words) + 1):
+                if title_words[i:i+len(name_words)] == name_words:
+                    score = len(name_words)  # Score by the number of matched words in sequence
+                    break
+            if score > max_score:
+                max_score = score
+                best_matches = [div]  # Reset the best_matches list with the new best match
+            elif score == max_score and score != 0:
+                best_matches.append(div)  # Append to best_matches only if score equals max_score and is not zero
+
+        return best_matches

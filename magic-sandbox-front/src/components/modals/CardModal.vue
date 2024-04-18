@@ -1,6 +1,6 @@
 <template>
-    <div v-if="isCardModalVisible && !isMoveToDeckModalVisible" class="modal" @click="closeModal">
-      <div class="modal-content">
+    <div v-if="isCardModalVisible && !isMoveToDeckModalVisible" class="cardModal" @click="closeModal">
+      <div class="card-modal-content">
         <img :src="modalImageSrc" alt="Enlarged Card" />
         <img v-if="modalFlipImageSrc && modalFlipImageSrc !== DEFAULT_CARD_BACK_URL" :src="modalFlipImageSrc" alt="Enlarged Card flipped" />
         <button class="close-button" @click.stop="closeModal"></button>
@@ -33,7 +33,7 @@
   </script>
   
   <style>
-  .modal {
+  .cardModal {
     position: fixed;
     top: 0;
     left: 0;
@@ -45,14 +45,16 @@
     align-items: center;
   }
   
-  .modal-content {
+  .card-modal-content {
     background-color: white;
     padding: 30px;
     border-radius: 10px;
     position: relative; /* Needed for absolute positioning of the button */
+    overflow-y: hidden;
+    overflow-x: hidden;
   }
   
-  .modal-content img {
+  .card-modal-content img {
     max-width: 90vw;
     height: 90vh;
   }

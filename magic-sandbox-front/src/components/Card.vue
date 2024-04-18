@@ -223,6 +223,9 @@
         clearTimeout(this.clickTimeout);
         this.clickTimeout = null;
         event.preventDefault();
+        if(event.button === 2 ) { //right click
+          return;
+        }
         this.$store.commit('endDragging');
         let handPlayerIndex = checkIfCardInPlayerHand(this.position.x, this.position.y);
         let deckPlayerIndex = checkIfCardInPlayerDeck(this.position.x, this.position.y);

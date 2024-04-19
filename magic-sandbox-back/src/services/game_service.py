@@ -202,3 +202,11 @@ class GameService:
         player.remove_background()
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " removed a background"}
+    
+    async def reveal_deck_first_card(self, roomId: str, playerId: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.deck.toggle_first_card_visibility()
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " reveal the first card of the deck"}
+    

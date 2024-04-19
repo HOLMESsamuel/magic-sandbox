@@ -7,7 +7,6 @@
       </div>
     </div>
     <div v-if="showMenu" class="menu" :style="customMenuStyle" @contextmenu.prevent="this.showMenu = false">
-      <!-- Custom menu content here -->
       <ul>
         <li @click="flipCard">Flip</li>
         <li @click="openMoveToDeckModal">Move to deck</li>
@@ -223,6 +222,9 @@
         clearTimeout(this.clickTimeout);
         this.clickTimeout = null;
         event.preventDefault();
+        if(event.button === 2 ) { //right click
+          return;
+        }
         this.$store.commit('endDragging');
         let handPlayerIndex = checkIfCardInPlayerHand(this.position.x, this.position.y);
         let deckPlayerIndex = checkIfCardInPlayerDeck(this.position.x, this.position.y);
@@ -444,7 +446,7 @@
   border: 1px solid #ccc;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  z-index: 1000; /* Ensure the menu appears above other content */
+  z-index: 100000; /* Ensure the menu appears above other content */
 }
 
 .menu ul {

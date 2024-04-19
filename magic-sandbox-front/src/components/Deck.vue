@@ -1,5 +1,5 @@
 <template>
-  <div :style="deckStyle" class="deck-container">
+  <div :style="deckStyle" class="deck-container" @contextmenu.prevent="showCustomMenu($event)">
     <div v-if="!isDeckLoaded" class="add-deck-container">
       <div v-if="pIndex==userIndex">
         <input type="text" v-model="deckLink" placeholder="Enter link">
@@ -7,9 +7,18 @@
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
     </div>
-    <div class="deck-loaded" v-if="isDeckLoaded" @click="if (this.$store.state.soundOn === true) {play()}; drawCard();">
+    <div class="deck-loaded" v-if="isDeckLoaded && !firstCardRevealed" @click="if (this.$store.state.soundOn === true) {play()}; drawCard();">
     </div>
-</div>
+    <div class="deck-loaded" v-if="isDeckLoaded && firstCardRevealed" @click="if (this.$store.state.soundOn === true) {play()}; drawCard();">
+      <img :src="cards[0].image" :alt="cards[0].name">
+    </div>
+  </div>
+  <div v-if="showMenu" class="menu" :style="customMenuStyle" @contextmenu.prevent="this.showMenu = false">
+    <ul>
+      <li v-if="!firstCardRevealed" @click="toggleRevealFirstCard(), this.showMenu = false">Reveal first card</li>
+      <li v-if="firstCardRevealed" @click="toggleRevealFirstCard(), this.showMenu = false">Hide first card</li>
+    </ul>
+  </div>
   
 </template>
 
@@ -31,13 +40,20 @@
       roomId: String,
       pIndex: Number, //index of the player
       userIndex: Number, //index of this frontend user
-      cards: Array
+      cards: Array,
+      firstCardRevealed: Boolean,
+      scale: Number,
+      offsetX: Number,
+      offsetY: Number,
+      reverseMovement: Boolean
     },
     data() {
       return {
         deckLink: '',
         isLoading: false,
-        errorMessage: ''
+        errorMessage: '',
+        showMenu: false,
+        menuPosition: { x: 0, y: 0 }
       };
     },
     computed: {
@@ -69,6 +85,20 @@
               top: "900px"
             };
         }  
+      },
+      customMenuStyle() {
+        let transformStyles = '';
+
+        // Add 180 degrees rotation based on player index
+        if (this.pIndex === 1 || this.pIndex === 2) {
+          transformStyles += 'rotate(180deg) ';
+        }
+
+        return {
+          transform: transformStyles,
+          top: this.menuPosition.y + 'px',
+          left: this.menuPosition.x + 'px'
+        };
       }
     },
     methods: {
@@ -94,9 +124,6 @@
           this.isLoading = false;
         }
       },
-      async drawCommander() {
-
-      },
       async drawCard() {
         if(this.pIndex == this.userIndex) {
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -106,6 +133,28 @@
           } catch (error) {
             console.log(error);
           }
+        }
+      },
+      async toggleRevealFirstCard() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/deck/reveal', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      showCustomMenu(event) {
+        if(this.pIndex === this.userIndex) {// only the card owner can use right click
+          this.showMenu = !this.showMenu;
+          const mouseX = (event.clientX - this.offsetX) / this.scale;
+          const mouseY = (event.clientY - this.offsetY) / this.scale;
+          if(this.reverseMovement) {
+              this.menuPosition = { x: -mouseX + window.innerWidth, y: -mouseY};
+          } else {
+              this.menuPosition = { x: mouseX, y: mouseY};
+          }
+          event.preventDefault();
         }
       }
     },
@@ -164,6 +213,12 @@
   height: 100%; 
   width: 100%; 
   box-sizing: border-box; 
+}
+
+.deck-loaded img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .deck-loaded button {

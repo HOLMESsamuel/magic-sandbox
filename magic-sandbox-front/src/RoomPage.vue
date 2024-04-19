@@ -38,7 +38,12 @@
               :roomId="roomId"
               :pIndex="pIndex"
               :userIndex="userIndex"
-              :cards="player.deck ? player.deck.cards : []">
+              :cards="player.deck ? player.deck.cards : []"
+              :firstCardRevealed="player.deck.first_card_revealed === true"
+              :scale="scale"
+              :offsetX="offsetX"
+              :offsetY="offsetY"
+              :reverseMovement="isReverseMovement">
             </deck>
             <counter
               :key="`${player.name}-${player.score}`"

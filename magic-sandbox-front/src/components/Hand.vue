@@ -1,6 +1,7 @@
 <template>
     <div class="hand-container" :style="handStyle">
-      <div v-if="pIndex == userIndex" v-for="(card, index) in cards" :key="index" class="hand-card">
+      <div v-if="pIndex == userIndex" v-for="(card, index) in cards" :key="index" class="hand-card" @mouseover="hoverCard(index)"
+      @mouseleave="unhoverCard(index)" @click="showCard(card.image)" :style="conditionalCardStyle(index, card.id)">
         <Card :key="index"
           :imageSrc="card.image"
           :name="card.name"
@@ -40,6 +41,11 @@
     components: {
       Card
     },
+    data() {
+      return {
+        hoveredCardIndex: null
+      };
+    },
     props: {
       roomId: String,
       cards: Array,
@@ -76,7 +82,7 @@
         return transformStyle;
       },
       handStyle() {
-        const zIndex = this.isCardFromHandMoving ? this.maxZIndex + 1 : 0;
+        const zIndex = this.isCardFromHandMoving ? this.maxZIndex - 1 : this.maxZIndex;
         switch (this.pIndex) {
           case 0:
             return {
@@ -106,6 +112,30 @@
       },
     },
     methods: {
+      hoverCard(index) {
+        this.hoveredCardIndex = index;
+      },
+      unhoverCard(index) {
+        if (this.hoveredCardIndex === index) {
+          this.hoveredCardIndex = null;
+        }
+      },
+      getCardStyle(index) {
+        if (this.hoveredCardIndex === index) {
+          return {
+            transform: 'scale(2.5)',
+            'z-index': 100,
+            transition: 'transform 0.2s ease-in-out',
+          };
+        }
+        return;
+      },
+      conditionalCardStyle(index, cardId) {
+        if (this.$store.state.currentlyDraggingId !== cardId) {
+          return this.getCardStyle(index);
+        }
+        return;
+      },
       async handleCardDrop(position, cardId) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
@@ -119,6 +149,7 @@
         this.$emit('open-move-to-deck-modal', event);
       },
       showCard(imageSrc) {
+        console.log(imageSrc);
         this.$emit('show-card', imageSrc);
       },
       moveFromHandToHand(event) {
@@ -154,6 +185,7 @@
     width: 200px;
     height: 280px;
     cursor: pointer;
+    transform-origin: bottom center;
   }
 
   .hand-card img {

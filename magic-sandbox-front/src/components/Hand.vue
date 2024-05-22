@@ -121,11 +121,13 @@
         }
       },
       getCardStyle(index) {
+        let expandOrigin = this.reverseMovement ? "top" : "bottom";
         if (this.hoveredCardIndex === index) {
           return {
             transform: 'scale(2.5)',
             'z-index': 100,
             transition: 'transform 0.2s ease-in-out',
+            'transform-origin': expandOrigin + ' center'
           };
         }
         return;
@@ -185,7 +187,6 @@
     width: 200px;
     height: 280px;
     cursor: pointer;
-    transform-origin: bottom center;
   }
 
   .hand-card img {

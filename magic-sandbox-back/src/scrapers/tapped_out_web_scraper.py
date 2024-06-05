@@ -1,3 +1,4 @@
+from typing import List
 from bs4 import BeautifulSoup
 import requests
 import uuid
@@ -42,6 +43,8 @@ class TappedOutWebScraper(Scraper):
                 # Find the first 'span' with class 'card' for the main card details
                 card_span = li.find('span', class_='card')
                 if card_span:
+                    card_span_classes = card_span.get('class', [])
+                    card_types = self.extract_card_types(card_span_classes)
                     card_link = card_span.find('a', class_='card-link')
                     if card_link:
                         card_name = card_link['data-name']
@@ -54,7 +57,8 @@ class TappedOutWebScraper(Scraper):
                             'name': card_name,
                             'image_url': card_image,
                             'quantity': qty,
-                            'flip_image_url': DEFAULT_CARD_BACK_URL
+                            'flip_image_url': DEFAULT_CARD_BACK_URL,
+                            'types': card_types
                         }
 
                         # Attempt to find the flip side image directly within the next 'span'
@@ -74,6 +78,8 @@ class TappedOutWebScraper(Scraper):
         for div in soup.find_all('div', class_='row'):
                 card_span = div.find('span')
                 if card_span:
+                    card_span_classes = card_span.get('class', [])
+                    card_types = self.extract_card_types(card_span_classes)
                     card_link = card_span.find('a', class_='card-hover')
                     if card_link and card_link.find('img', class_='commander-img'):
                         card_name = card_link['data-name']
@@ -85,8 +91,15 @@ class TappedOutWebScraper(Scraper):
                             'image_url': card_image,
                             'quantity': 1,
                             'flip_image_url': DEFAULT_CARD_BACK_URL,
-                            'commander': True
+                            'commander': True,
+                            'types': card_types
                         })
+
+    def extract_card_types(self, card_classes: List[str]):
+        #the class list looks like card card-color-red card-color-red-cost-1 card-type-creature card-type-sorcery
+        card_types = [cls.split('card-type-')[1] for cls in card_classes if cls.startswith('card-type-')]
+        print(card_types)
+        return card_types
 
     
     def process_tapped_out_card_map_into_deck(self, card_map):
@@ -95,7 +108,7 @@ class TappedOutWebScraper(Scraper):
             for card_data in card_map:
                 # if a card has multiple occurences there is only one entry in card map but the qty is set to the number
                 for i in range(int(card_data["quantity"])):
-                    card = Card(id=str(uuid.uuid4()), name=card_data["name"], image=card_data["image_url"], flip_image=card_data['flip_image_url'])
+                    card = Card(id=str(uuid.uuid4()), name=card_data["name"], image=card_data["image_url"], flip_image=card_data['flip_image_url'], types=card_data['types'])
                     # adding commander on the top of the deck if it exists
                     if "commander" in card_data:
                         card.commander = True

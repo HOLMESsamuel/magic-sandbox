@@ -50,8 +50,9 @@ class ArchidektWebScraper(Scraper):
             card_image_divs = soup.find_all('img', id='basicCardImage')
             cards = []
             command_terms = {"Commander", "commander", "commandant", "Commandant"}
+            maybe_terms = {"Maybeboard", "maybeboard", "sideboard", "Sideboard"}
             for key, value in card_map.items():
-                if "Maybeboard" not in value["categories"]: #filter cards that are in the maybeboard
+                if not any(term in value["categories"] for term in maybe_terms): #filter cards that are in the maybeboard
                     
                     matching_divs = self.find_best_matching_image_divs(value.get('name'), card_image_divs)
                     
@@ -61,7 +62,7 @@ class ArchidektWebScraper(Scraper):
                         # If there are two imgs, it means the card has two sides and we need both srcs
                         # Adjust the Card constructor call based on your Card class' requirements
                         for i in range(value.get('qty')): 
-                            card = Card(id=str(uuid.uuid4()), name=value.get('name'), image='')  
+                            card = Card(id=str(uuid.uuid4()), name=value.get('name'), image='', types=value.get("types"))  
                             if len(img_urls) == 1:
                                 # Assuming your Card constructor can handle a single image URL
                                 card.image = img_urls[0]

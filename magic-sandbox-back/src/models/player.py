@@ -158,6 +158,18 @@ class Player(BaseModel):
         else:
             print("The board is empty, no token to delete.")
 
+    def copy_token(self, tokenId):
+        if self.board:
+            for index, token in enumerate(self.board.tokens):
+                if token.id == tokenId:
+                    copy_token = copy.deepcopy(self.board.tokens[index])
+                    copy_token.id = str(uuid.uuid4())
+                    copy_token.position['x'] = copy_token.position['x'] + 250
+                    self.board.tokens.append(copy_token)
+                    break
+        else:
+            print("The board is empty, no token to delete.")
+
     def add_background(self, file_path, width, height):
         self.background = file_path
         self.background_width = width

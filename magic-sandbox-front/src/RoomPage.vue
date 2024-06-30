@@ -115,6 +115,7 @@
     @close-token-modal="closeTokenModal"
     @create-token="createToken($event)"
     @modify-token="modifyToken($event)"
+    @copy-token="copyToken($event)"
   ></token-modal>
   <dice-modal
     :isDiceModalVisible="isDiceModalVisible"
@@ -470,6 +471,17 @@
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
           const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/token/' + token.id, token);
+          this.editTokenMode = false;
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async copyToken(id) {
+        console.log("copy token");
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/token/' + id + '/copy', {});
           this.editTokenMode = false;
           console.log(response.data);
         } catch (error) {

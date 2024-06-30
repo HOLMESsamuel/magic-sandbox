@@ -181,6 +181,13 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " token deleted"}
     
+    async def copy_token(self, playerId: str, roomId: str, id: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.copy_token(tokenId=id)
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " token copied"}
+    
     async def move_card_to_graveyard(self, playerId: str, roomId: str, cardId: str, targetPlayerId: str):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)

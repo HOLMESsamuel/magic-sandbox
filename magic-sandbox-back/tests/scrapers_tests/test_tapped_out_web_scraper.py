@@ -15,10 +15,18 @@ def test_get_deck_with_commander():
         card.name == "Silundi Vision" and card.flip_image for card in deck.cards
     )
 
-    commander = any(card.commander == True for card in deck.cards)
+    commander_exists = any(card.commander == True for card in deck.cards)
 
     assert silundi_vision_with_flip, "'Silundi vision' card with a flip image was not found in the deck."
-    assert commander
+    assert commander_exists
+
+    commander = None
+    for card in deck.cards:
+        if card.commander:
+            commander = card
+            break
+
+    assert "creature" in commander.types, "the type was not loaded correctly"
 
 def test_get_deck_without_commander():
     scraper = TappedOutWebScraper()
@@ -32,6 +40,6 @@ def test_get_deck_without_commander():
     assert len(deck.cards) == 60
     
 
-    commander = any(card.commander == True for card in deck.cards)
+    commander_exists = any(card.commander == True for card in deck.cards)
 
-    assert commander == False
+    assert commander_exists == False

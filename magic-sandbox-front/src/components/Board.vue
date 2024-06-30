@@ -22,11 +22,13 @@
         :flipped="card.flipped"
         :flipImage="card.flip_image"
         :reverseMovement="reverseMovement"
+        :copy="card.copy"
         @open-move-to-deck-modal="openMoveToDeckModal($event)"
         @update-position="updateObjectPosition(player.name, cIndex, $event, 'card')"
         @show-card="showCard($event)"
         @move-from-board-to-hand="moveFromBoardToHand($event)"
         @move-to-graveyard="moveToGraveyard($event)"
+        @copy-card="copyCard($event)"
         ></Card>
         <Token
         v-for="(token, tIndex) in player.board.tokens"
@@ -59,7 +61,7 @@
   import Token from './Token.vue';
 
   export default {
-    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard'],
+    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard', 'copy-card'],
     components: {
         Card, Token
     },
@@ -104,6 +106,9 @@
         },
         moveToGraveyard(event) {
           this.$emit('move-to-graveyard', event);
+        },
+        copyCard(cardId) {
+          this.$emit('copy-card', cardId);
         },
         openEditTokenModal(event) {
           this.$emit('open-edit-token-modal', event);

@@ -32,6 +32,7 @@
         <div class="confirm-button-container">
           <button v-if="editTokenMode === false" class="confirm-button" @click="confirm">Create</button>
           <button v-if="editTokenMode === true" class="confirm-button" @click="confirm">Modify</button>
+          <button v-if="editTokenMode === true" class="confirm-button" @click="copyToken">Copy</button>
         </div>
         <button class="close-button" @click.stop="closeModal"></button>
       </div>
@@ -40,7 +41,7 @@
   
   <script>
   export default {
-    emits: ["close-token-modal", "create-token", "modify-token"],
+    emits: ["close-token-modal", "create-token", "modify-token", "copy-token"],
     props: {
       isTokenModalVisible: Boolean,
       editTokenMode: Boolean,
@@ -71,6 +72,10 @@
         } else {
           this.$emit('create-token', {text: this.tokenText, type: this.tokenType, copy: this.copy});
         }
+        this.closeModal();
+      },
+      copyToken() {
+        this.$emit('copy-token', this.currentToken.id);
         this.closeModal();
       }
     }

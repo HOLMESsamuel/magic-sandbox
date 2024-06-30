@@ -32,6 +32,7 @@
               @move-from-board-to-hand="moveFromBoardToHand($event)"
               @open-edit-token-modal="openEditTokenModal($event)"
               @move-to-graveyard="moveToGraveyard($event)"
+              @copy-card="copyCard($event)"
             ></Board>
             <deck 
               :playerName="player.name" 
@@ -114,6 +115,7 @@
     @close-token-modal="closeTokenModal"
     @create-token="createToken($event)"
     @modify-token="modifyToken($event)"
+    @copy-token="copyToken($event)"
   ></token-modal>
   <dice-modal
     :isDiceModalVisible="isDiceModalVisible"
@@ -475,6 +477,17 @@
           console.log(error);
         }
       },
+      async copyToken(id) {
+        console.log("copy token");
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/token/' + id + '/copy', {});
+          this.editTokenMode = false;
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
       async moveCardToDeck(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
@@ -533,6 +546,15 @@
           console.log(error);
         }
       },
+      async copyCard(cardId) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + cardId + '/copy', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
       },
       beforeDestroy() {
         if (this.ws) {

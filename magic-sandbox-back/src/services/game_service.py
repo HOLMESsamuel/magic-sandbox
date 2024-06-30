@@ -129,6 +129,14 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " play " + cardId}
     
+    async def copy_card(self, playerId: str, roomId: str, cardId: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.copy_card(cardId, game_state.max_z_index)
+        game_state.max_z_index += 1
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " copy " + cardId}
+    
     async def detap_all(self, playerId: str, roomId: str):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
@@ -172,6 +180,13 @@ class GameService:
         player.modify_token(tokenId=id, text=text, type=type)
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " token deleted"}
+    
+    async def copy_token(self, playerId: str, roomId: str, id: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.copy_token(tokenId=id)
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " token copied"}
     
     async def move_card_to_graveyard(self, playerId: str, roomId: str, cardId: str, targetPlayerId: str):
         game_state : GameState = state_manager.get_group_state(roomId)

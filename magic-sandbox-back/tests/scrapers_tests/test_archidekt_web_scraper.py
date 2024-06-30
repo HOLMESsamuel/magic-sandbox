@@ -16,10 +16,18 @@ def test_archidekt_web_scraper_with_commander():
         card.name == "Treasure Map // Treasure Cove" and card.flip_image for card in deck.cards
     )
 
-    commander = any(card.commander == True for card in deck.cards)
+    commander_exists = any(card.commander == True for card in deck.cards)
 
     assert treasure_map_with_flip, "'Treasure Map' card with a flip image was not found in the deck."
-    assert commander, "No commander was found"
+    assert commander_exists, "No commander was found"
+
+    commander = None
+    for card in deck.cards:
+        if card.commander:
+            commander = card
+            break
+
+    assert "Creature" in commander.types, "the type was not loaded correctly"
 
 
 def test_archidekt_web_scraper_without_commander():

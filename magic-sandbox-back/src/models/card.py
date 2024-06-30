@@ -1,3 +1,4 @@
+from typing import List
 from pydantic import BaseModel
 from ..constants import DEFAULT_CARD_BACK_URL
 
@@ -11,6 +12,8 @@ class Card(BaseModel):
     flip_image : str = DEFAULT_CARD_BACK_URL
     z_index : int = 2
     commander : bool  = False
+    types : List[str] = []
+    copy: bool = False
 
     def tap(self):
         self.tapped = True

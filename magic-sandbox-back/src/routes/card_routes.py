@@ -24,3 +24,8 @@ async def flip_card(playerId: str, roomId: str, cardId: str):
 async def play_card(playerId: str, roomId: str, cardId: str, position: dict):
     response = await game_service.play_card(playerId, roomId, cardId, position)
     return response
+
+@router.put("/room/{roomId}/player/{playerId}/card/{cardId}/copy")
+async def copy_card(playerId: str, roomId: str, cardId: str):
+    response = await game_service.copy_card(playerId, roomId, cardId)
+    return response

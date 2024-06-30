@@ -129,6 +129,14 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " play " + cardId}
     
+    async def copy_card(self, playerId: str, roomId: str, cardId: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.copy_card(cardId, game_state.max_z_index)
+        game_state.max_z_index += 1
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " copy " + cardId}
+    
     async def detap_all(self, playerId: str, roomId: str):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)

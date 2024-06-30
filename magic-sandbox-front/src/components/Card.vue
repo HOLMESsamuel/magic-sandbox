@@ -1,5 +1,6 @@
 <template>
     <div class="card" @click.stop="handleCardClick" :style="cardStyle" @dblclick.stop="handleCardDoubleClick()" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag" @contextmenu.prevent="showCustomMenu($event)">
+      <div v-if="this.copy" class="text-overlay">Copy</div>
       <img :src="flipped ? flipImage : imageSrc" :alt="name">
       <!-- Hover Buttons -->
       <div v-if="!inHand && hover" class="hover-buttons">
@@ -10,6 +11,7 @@
       <ul>
         <li @click="flipCard">Flip</li>
         <li @click="openMoveToDeckModal">Move to deck</li>
+        <li v-if="!this.inHand" @click="copyCard">Copy</li>
         <li v-if="!this.inHand" @click="moveToHand(this.userIndex)">Move to hand</li>
       </ul>
     </div>
@@ -21,7 +23,7 @@
   import {checkIfCardInPlayerDeck, checkIfCardInPlayerGraveyard, checkIfCardInPlayerHand} from '../utils/utils'
 
   export default {
-    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard'],
+    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard', 'copy-card'],
     props: {
       imageSrc: String,
       initialPosition: {
@@ -46,7 +48,8 @@
       zIndex: Number,
       maxZIndex: Number,
       flipped: Boolean,
-      flipImage: String
+      flipImage: String,
+      copy: Boolean
 
     },
     data() {
@@ -129,7 +132,7 @@
           top: this.menuPosition.y + 'px',
           left: this.menuPosition.x + 'px'
         };
-      },
+    },
       handX() {
         switch (this.pIndex) {
           case 0:
@@ -294,6 +297,10 @@
       },
       openMoveToDeckModal() {
         this.$emit('open-move-to-deck-modal', this.id);
+      },
+      copyCard() {
+        this.showMenu = !this.showMenu;
+        this.$emit('copy-card', this.id);
       },
       moveToHand(handPlayerIndex) {
         this.$emit('move-from-board-to-hand', { cardId: this.id, targetPlayerIndex: handPlayerIndex });
@@ -468,6 +475,16 @@
   padding: 20px;
   background-color: #eee;
   border: 1px solid #ddd;
+}
+
+.text-overlay {
+  position: absolute;
+  top: 40%;  /* Centré verticalement */
+  left: 50%; /* Centré horizontalement */
+  transform: translate(-50%, -50%); /* Ajuste le centrage précis */
+  color: rgb(190, 0, 0); /* Couleur du texte */
+  font-size: 60px; /* Taille du texte */
+  z-index: 10; /* S'assure que le texte est au-dessus de l'image */
 }
 </style>
 

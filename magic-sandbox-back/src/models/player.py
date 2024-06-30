@@ -6,6 +6,7 @@ from .card import Card
 from .token import Token
 from .graveyard import Graveyard
 from pydantic import BaseModel, Field
+import copy
 
 class Player(BaseModel):
     name : str
@@ -78,6 +79,17 @@ class Player(BaseModel):
                 removed_card.position = position
                 removed_card.z_index = max_z_index
                 self.board.cards.append(removed_card)
+                break
+
+    def copy_card(self, cardId, max_z_index):
+        for index, card in enumerate(self.board.cards):
+            if card.id == cardId:
+                copied_card : Card = copy.deepcopy(self.board.cards[index])
+                copied_card.id = str(uuid.uuid4())
+                copied_card.position['x'] = copied_card.position['x'] + 250
+                copied_card.z_index = max_z_index
+                copied_card.copy = True
+                self.board.cards.append(copied_card)
                 break
 
     def mulligan(self):

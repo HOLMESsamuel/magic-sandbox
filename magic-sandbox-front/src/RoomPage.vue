@@ -32,6 +32,7 @@
               @move-from-board-to-hand="moveFromBoardToHand($event)"
               @open-edit-token-modal="openEditTokenModal($event)"
               @move-to-graveyard="moveToGraveyard($event)"
+              @copy-card="copyCard($event)"
             ></Board>
             <deck 
               :playerName="player.name" 
@@ -533,6 +534,15 @@
           console.log(error);
         }
       },
+      async copyCard(cardId) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + cardId + '/copy', {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
       },
       beforeDestroy() {
         if (this.ws) {

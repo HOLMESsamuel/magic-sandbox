@@ -98,7 +98,6 @@ class TappedOutWebScraper(Scraper):
     def extract_card_types(self, card_classes: List[str]):
         #the class list looks like card card-color-red card-color-red-cost-1 card-type-creature card-type-sorcery
         card_types = [cls.split('card-type-')[1] for cls in card_classes if cls.startswith('card-type-')]
-        print(card_types)
         return card_types
 
     
@@ -113,7 +112,6 @@ class TappedOutWebScraper(Scraper):
                     if "commander" in card_data:
                         card.commander = True
                         cards.insert(0,card)
-                        print("commander found")
                     else:    
                         cards.append(card)
             deck = Deck(cards=cards)

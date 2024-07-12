@@ -1,7 +1,7 @@
 <template>
     <div class="hand-container" :style="handStyle">
       <div v-if="pIndex == userIndex" v-for="(card, index) in cards" :key="index" class="hand-card" @mouseover="hoverCard(index)"
-      @mouseleave="unhoverCard(index)" @click="showCard(card.image)" :style="conditionalCardStyle(index, card.id)">
+      @mouseleave="unhoverCard(index)" @click.stop="showCard(card.image)" :style="conditionalCardStyle(index, card.id)">
         <Card :key="index"
           :imageSrc="card.image"
           :name="card.name"

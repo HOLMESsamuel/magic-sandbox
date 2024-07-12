@@ -1,4 +1,5 @@
 <template>
+  <div @mouseleave="showMenu = false">
     <div class="card" @click.stop="handleCardClick" :style="cardStyle" @dblclick.stop="handleCardDoubleClick()" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag" @contextmenu.prevent="showCustomMenu($event)">
       <div v-if="this.copy" class="text-overlay">Copy</div>
       <img :src="flipped ? flipImage : imageSrc" :alt="name">
@@ -8,13 +9,15 @@
       </div>
     </div>
     <div v-if="showMenu" class="menu" :style="customMenuStyle" @contextmenu.prevent="this.showMenu = false">
-      <ul>
-        <li @click="flipCard">Flip</li>
-        <li @click="openMoveToDeckModal">Move to deck</li>
-        <li v-if="!this.inHand" @click="copyCard">Copy</li>
-        <li v-if="!this.inHand" @click="moveToHand(this.userIndex)">Move to hand</li>
-      </ul>
+        <ul>
+          <li @click.stop="flipCard">Flip</li>
+          <li @click.stop="openMoveToDeckModal">Move to deck</li>
+          <li v-if="!this.inHand" @click.stop="copyCard">Copy</li>
+          <li v-if="!this.inHand" @click.stop="moveToHand(this.userIndex)">Move to hand</li>
+        </ul>
     </div>
+  </div>
+    
   </template>
   
   <script>
@@ -316,13 +319,13 @@
           if(this.inHand) {
             if(this.reverseMovement) {
               this.menuPosition = { 
-                x: -mouseX + window.innerWidth - this.handX - Constants.CARD_HALF_WIDTH, 
-                y: -mouseY - this.handY - Constants.CARD_HALF_HEIGHT
+                x: 0.4(-mouseX + window.innerWidth - this.handX - Constants.CARD_HALF_WIDTH), 
+                y: 0.4(-mouseY - this.handY - Constants.CARD_HALF_HEIGHT)
               };
             } else {
               this.menuPosition = { 
-                x: mouseX-this.handX-Constants.CARD_HALF_WIDTH, 
-                y: mouseY-this.handY-Constants.CARD_HALF_HEIGHT
+                x: 0.4(mouseX-this.handX-Constants.CARD_HALF_WIDTH), 
+                y: 0.4(mouseY-this.handY-Constants.CARD_HALF_HEIGHT)
               };
             }
           } else {

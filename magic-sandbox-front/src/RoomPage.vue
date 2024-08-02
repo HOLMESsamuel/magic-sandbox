@@ -1,13 +1,20 @@
 <template>
-  <button @click="openSettingsModal" class="settings-button">
+  <button @click="openSettingsModal" class="settings-button setting-button">
     <img src="./assets/gear.svg">
   </button>
-  <button @click="rotate" class="rotate-button">
+  <button @click="rotate" @keyup.{keyAlias}="" class="rotate-button setting-button">
     <img src="./assets/rotate.svg">
   </button>
-  <div class="zoom-pan-container" :style="brightnessStyle" ref="zoomPanContainer" @keydown.esc="toggleSettingsModal" @wheel="handleZoom" @mousedown.stop="startPan" @mouseup="endPan" @mousemove="pan" @mouseleave="endPan" tabindex="0">
+  <button @click="moveMode" class="move-button setting-button" :class="{ bordered: isMoveMode }">
+    <img src="./assets/move.svg">
+  </button>
+  <button @click="selectMode" class="select-button setting-button" :class="{ bordered: !isMoveMode }">
+    <img src="./assets/select.svg">
+  </button>
+  <div class="zoom-pan-container" :style="brightnessStyle" ref="zoomPanContainer" @keydown.esc="toggleSettingsModal" @wheel="handleZoom" @mousedown.stop="handleMouseDown" @mouseup="handleMouseUp" @mousemove="handleMouseMove" @mouseleave="endPan" @keydown.alt="handleKeyPress" tabindex="0">
     <div :style="zoomPanStyles">
       <div :style="containerStyle">
+        <div v-if="!isMoveMode && selecting" class="selection-box" :style="selectionBoxStyle"></div>
         <div class="axis-horizontal"></div>
         <div class="axis-vertical"></div>
         <div>
@@ -185,12 +192,18 @@
         alertMessage: "",
         firstMessageReceived: false,
         isGraveyardModalVisible: false,
-        graveyardModalPlayerIndex: null
+        graveyardModalPlayerIndex: null,
+        isMoveMode: true,
+        selectCurrentX: 0,
+        selectCurrentY: 0
       };
     },
     computed: {
       userName() {
         return sessionStorage.getItem('userName');
+      },
+      selecting() {
+        return this.$store.state.selecting;
       },
       zoomPanStyles() {
         return {
@@ -253,7 +266,19 @@
         // Assuming luminosity 50 does not change the brightness, adjust the scale accordingly.
         const brightness = (luminosity / baseLuminosity) * 100;
         return { filter: `brightness(${brightness}%)` };
-      }
+      },
+      selectionBoxStyle() {
+      const left = Math.min(this.$store.state.selectStartX, this.selectCurrentX) + 'px';
+      const top = Math.min(this.$store.state.selectStartY, this.selectCurrentY) + 'px';
+      const width = Math.abs(this.$store.state.selectStartX - this.selectCurrentX) + 'px';
+      const height = Math.abs(this.$store.state.selectStartY - this.selectCurrentY) + 'px';
+      return {
+        left,
+        top,
+        width,
+        height,
+      };
+    },
     },
     mounted() {
       this.connectWebSocket();
@@ -262,6 +287,21 @@
       Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background
     },
     methods: {
+      handleKeyPress(event) {
+        if (event.key === 'r') {
+          this.rotate();
+        } else if (event.key === 'm') {
+          this.moveMode();
+        } else if (event.key === 's') {
+          this.selectMode();
+        }
+      },
+      moveMode() {
+        this.isMoveMode = true;
+      },
+      selectMode() {
+        this.isMoveMode = false;
+      },
       computeBoardInitialPosition() { //set the initial offset to place the player's board roughly at the center of the screen
         switch (this.userIndex) {
           case 0:
@@ -286,18 +326,33 @@
             return;
         }
       },
-      startPan(event) {
-        this.panning = true;
-        this.panStartX = event.clientX - this.offsetX;
-        this.panStartY = event.clientY - this.offsetY;
+      handleMouseDown(event) {
+        if(this.isMoveMode) {
+          this.panning = true;
+          this.panStartX = event.clientX - this.offsetX;
+          this.panStartY = event.clientY - this.offsetY;
+        } else {
+          this.$store.commit('startSelecting', {
+            selecting : true, 
+            selectStartX: (event.clientX - this.offsetX) / this.scale,
+            selectStartY: (event.clientY - this.offsetY) / this.scale
+          });
+        }
       },
-      endPan() {
+      handleMouseUp() {
+        this.$store.commit('stopSelecting');
         this.panning = false;
+        
       },
-      pan(event) {
-        if (!this.panning) return;
-        this.offsetX = event.clientX - this.panStartX;
-        this.offsetY = event.clientY - this.panStartY;
+      handleMouseMove(event) {
+        if(this.isMoveMode) {
+          if (!this.panning) return;
+          this.offsetX = event.clientX - this.panStartX;
+          this.offsetY = event.clientY - this.panStartY;
+        } else {
+          this.selectCurrentX = (event.clientX - this.offsetX) / this.scale;
+          this.selectCurrentY = (event.clientY - this.offsetY) / this.scale;
+        }
       },
       handleZoom(event) {
         const rect = this.$refs.zoomPanContainer.getBoundingClientRect();
@@ -573,29 +628,39 @@
 }
 
 .settings-button {
-  position: fixed;
   bottom: 25px;
   right: 25px;
-  z-index: 10000;
-  background: none;
-  border: none;
-}
-
-.settings-button :hover{
-  cursor: pointer;
 }
 
 .rotate-button {
-  position: fixed;
   bottom: 25px;
   right: 60px;
-  z-index: 10000;
-  background: none;
-  border: none;
 }
 
-.rotate-button :hover {
+.move-button {
+  bottom: 25px;
+  left: 25px;
+}
+
+.select-button {
+  bottom: 25px;
+  left: 65px;
+}
+
+.setting-button :hover {
   cursor: pointer;
+}
+
+.setting-button {
+  position: fixed;
+  background: none;
+  border: none;
+  z-index: 10000;
+}
+
+.bordered {
+  border: solid black 1px;
+  border-radius: 3px;
 }
 
 .zoom-pan-container {
@@ -629,6 +694,13 @@
   width: 1px;
   background-color: black;
   left: 0px; /* Centered horizontally */
+}
+
+.selection-box {
+  position: absolute;
+  border: 2px dashed #007bff;
+  background-color: rgba(0, 123, 255, 0.2);
+  pointer-events: none;
 }
 
 /* make everything not selectionable */

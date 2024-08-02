@@ -14,7 +14,10 @@ const store = createStore({
         offset : {x : 0, y : 0},
         soundOn : true,
         luminosity : 50,
-        rotate : false
+        rotate : false,
+        selectStartX: 0,
+        selectStartY: 0,
+        selecting: false
     }
   },
   mutations: {
@@ -24,6 +27,14 @@ const store = createStore({
       state.startClientY = startClientY;
       state.startDragPosition = startDragPosition;
       state.offset = offset;
+    },
+    startSelecting (state, {selecting, selectStartX, selectStartY}) {
+      state.selecting = selecting;
+      state.selectStartX = selectStartX;
+      state.selectStartY = selectStartY;
+    },
+    stopSelecting(state) {
+      state.selecting = false;
     },
     endDragging (state) {
         state.currentlyDraggingId = null;

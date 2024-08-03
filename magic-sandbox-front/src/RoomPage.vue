@@ -268,17 +268,26 @@
         return { filter: `brightness(${brightness}%)` };
       },
       selectionBoxStyle() {
-      const left = Math.min(this.$store.state.selectStartX, this.selectCurrentX) + 'px';
-      const top = Math.min(this.$store.state.selectStartY, this.selectCurrentY) + 'px';
-      const width = Math.abs(this.$store.state.selectStartX - this.selectCurrentX) + 'px';
-      const height = Math.abs(this.$store.state.selectStartY - this.selectCurrentY) + 'px';
-      return {
-        left,
-        top,
-        width,
-        height,
-      };
-    },
+        const left = Math.min(this.$store.state.selectStartX, this.selectCurrentX) + 'px';
+        const right = left;
+        const top = Math.min(this.$store.state.selectStartY, this.selectCurrentY) + 'px';
+        const width = Math.abs(this.$store.state.selectStartX - this.selectCurrentX) + 'px';
+        const height = Math.abs(this.$store.state.selectStartY - this.selectCurrentY) + 'px';
+        if(this.isReverseMovement) {
+          return {
+            right,
+            top,
+            width,
+            height,
+          };
+        }
+        return {
+          left,
+          top,
+          width,
+          height,
+        };
+      },
     },
     mounted() {
       this.connectWebSocket();
@@ -332,11 +341,19 @@
           this.panStartX = event.clientX - this.offsetX;
           this.panStartY = event.clientY - this.offsetY;
         } else {
-          this.$store.commit('startSelecting', {
-            selecting : true, 
-            selectStartX: (event.clientX - this.offsetX) / this.scale,
-            selectStartY: (event.clientY - this.offsetY) / this.scale
-          });
+          if(this.isReverseMovement) {
+            this.$store.commit('startSelecting', {
+              selecting : true, 
+              selectStartX: (event.clientX - this.offsetX) / this.scale,
+              selectStartY: -(event.clientY - this.offsetY) / this.scale
+            });
+          } else {
+            this.$store.commit('startSelecting', {
+              selecting : true, 
+              selectStartX: (event.clientX - this.offsetX) / this.scale,
+              selectStartY: (event.clientY - this.offsetY) / this.scale
+            });
+          }
         }
       },
       handleMouseUp() {
@@ -350,8 +367,13 @@
           this.offsetX = event.clientX - this.panStartX;
           this.offsetY = event.clientY - this.panStartY;
         } else {
-          this.selectCurrentX = (event.clientX - this.offsetX) / this.scale;
-          this.selectCurrentY = (event.clientY - this.offsetY) / this.scale;
+          if(this.isReverseMovement === true) {
+            this.selectCurrentX =  (event.clientX - this.offsetX) / this.scale;
+            this.selectCurrentY =  -(event.clientY - this.offsetY) / this.scale;
+          } else {
+            this.selectCurrentX = (event.clientX - this.offsetX) / this.scale;
+            this.selectCurrentY = (event.clientY - this.offsetY) / this.scale;
+          }
         }
       },
       handleZoom(event) {

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, HTTPException
+from fastapi import APIRouter, HTTPException
 from ..services import WebScraperService
 from pydantic import BaseModel, validator
 from ..services import GameService

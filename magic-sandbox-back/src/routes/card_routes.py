@@ -1,9 +1,14 @@
-from fastapi import APIRouter
+from typing import List
+from fastapi import APIRouter, Body
+from pydantic import BaseModel
 
 from ..services.game_service import GameService
 
 router = APIRouter()
 game_service = GameService()
+
+class CardIds(BaseModel):
+    cardIds: List[str]
 
 @router.patch("/room/{roomId}/player/{playerId}/card/{cardId}/tap")
 async def tap_card(playerId: str, roomId: str, cardId: str):
@@ -15,9 +20,9 @@ async def untap_card(playerId: str, roomId: str, cardId: str):
     response = await game_service.untap_card(playerId, roomId, cardId)
     return response
 
-@router.patch("/room/{roomId}/player/{playerId}/card/{cardId}/flip")
-async def flip_card(playerId: str, roomId: str, cardId: str):
-    response = await game_service.flip_card(playerId, roomId, cardId)
+@router.patch("/room/{roomId}/player/{playerId}/card/flip")
+async def flip_cards(playerId: str, roomId: str, body: CardIds = Body(...)):
+    response = await game_service.flip_cards(playerId, roomId, body.cardIds)
     return response
 
 @router.put("/room/{roomId}/player/{playerId}/card/{cardId}/play")

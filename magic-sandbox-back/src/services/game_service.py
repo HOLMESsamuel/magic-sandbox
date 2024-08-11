@@ -1,3 +1,4 @@
+from typing import List
 from .websocket_manager import WebSocketManager
 from .state_manager import StateManager
 from ..models.game_state import *
@@ -57,10 +58,11 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " card moved from deck to hand"}
     
-    async def move_card_from_board_to_hand(self, playerId: str, roomId: str, cardId: str, targetPlayerId: str):
+    async def move_card_from_board_to_hand(self, playerId: str, roomId: str, cardIds: List[str], targetPlayerId: str):
         game_state : GameState = state_manager.get_group_state(roomId)
         target_player : Player = game_state.get_player(targetPlayerId)
-        game_state.move_card_from_board_to_hand(cardId, target_player)
+        for cardId in cardIds:
+            game_state.move_card_from_board_to_hand(cardId, target_player)
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " card moved from board to hand"}
     
@@ -100,12 +102,15 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " untap " + cardId}
     
-    async def flip_card(self, playerId: str, roomId: str, cardId: str):
+    async def flip_cards(self, playerId: str, roomId: str, cardIds: List[str]):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
-        player.get_card(cardId).flip()
+
+        for cardId in cardIds:
+            player.get_card(cardId).flip()
+
         await websocket_manager.broadcast(roomId, game_state)
-        return {"message": playerId + " room " + roomId + " flip " + cardId}
+        return {"message": playerId + " room " + roomId + " flipped cards"}
     
     async def tap_token(self, playerId: str, roomId: str, tokenId: str):
         game_state : GameState = state_manager.get_group_state(roomId)

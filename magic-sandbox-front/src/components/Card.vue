@@ -10,7 +10,7 @@
     </div>
     <div v-if="showMenu" class="menu" :style="customMenuStyle" @contextmenu.prevent="this.showMenu = false">
         <ul>
-          <li @click.stop="flipCard">Flip</li>
+          <li @click.stop="flipCards">Flip</li>
           <li @click.stop="openMoveToDeckModal">Move to deck</li>
           <li v-if="!this.inHand" @click.stop="copyCard">Copy</li>
           <li v-if="!this.inHand" @click.stop="moveToHand(this.userIndex)">Move to hand</li>
@@ -79,6 +79,9 @@
       cardOffset() {
         return this.$store.state.offset;
       },
+      isSelected() {
+        return this.$store.state.selectedCardIds.includes(this.id);
+      },
       cardStyle() {
         let transformStyles = '';
         let zIndex = 2;
@@ -86,6 +89,10 @@
 
         if(this.imageSrc === '') {
           border = "solid black 1px";
+        }
+
+        if(this.isSelected) {
+          border = "solid red 6px";
         }
 
         if(this.zIndex) {
@@ -396,14 +403,21 @@
           console.log(error);
         }
       },
-      async flipCard() {
+      async flipCards() {
         this.showMenu = false;
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
-        try{
-          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/flip', {});
-          console.log(response.data);
+        let cardIds = [this.id]
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.length > 0) {
+          cardIds = this.$store.state.selectedCardIds
+        }
+        try {
+            const response = await axios.patch(
+                `${backendUrl}room/${this.roomId}/player/${this.player}/card/flip`, 
+                { cardIds: cardIds }
+            );
+            console.log(response.data);
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
       }
     }

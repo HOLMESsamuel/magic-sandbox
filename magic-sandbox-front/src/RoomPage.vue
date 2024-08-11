@@ -341,6 +341,9 @@
           this.panStartX = event.clientX - this.offsetX;
           this.panStartY = event.clientY - this.offsetY;
         } else {
+          if(event.button === 2) {
+            return;
+          }
           if(this.isReverseMovement) {
             this.$store.commit('startSelecting', {
               selecting : true, 
@@ -356,10 +359,43 @@
           }
         }
       },
-      handleMouseUp() {
-        this.$store.commit('stopSelecting');
-        this.panning = false;
-        
+      handleMouseUp(event) {
+        if(event.button === 2) {
+          return;
+        }
+        if(this.isMoveMode) {
+          this.panning = false;
+        } else {
+          if(Math.abs(this.selectCurrentX - this.$store.state.selectStartX) > 0 && Math.abs(this.selectCurrentY - this.$store.state.selectStartY) > 0 ) {
+            const playerCards = this.userPlayer.board.cards;
+            let selectedCardIds = [];
+            let top = Math.max(this.selectCurrentY, this.$store.state.selectStartY);
+            let bottom = Math.min(this.selectCurrentY, this.$store.state.selectStartY);
+            let right = Math.max(this.selectCurrentX, this.$store.state.selectStartX);
+            let left = Math.min(this.selectCurrentX, this.$store.state.selectStartX);
+            if(this.isReverseMovement) {
+              top = Math.max(this.selectCurrentY, this.$store.state.selectStartY);
+              bottom = Math.min(this.selectCurrentY, this.$store.state.selectStartY);
+              right = -(Math.min(this.selectCurrentX, this.$store.state.selectStartX) - window.innerWidth);
+              left = -(Math.max(this.selectCurrentX, this.$store.state.selectStartX) - window.innerWidth);
+              console.log(top, right, bottom, left, window.innerWidth);
+            }
+            
+            for(let i=0; i<playerCards.length; i++) {
+              let card = playerCards[i];
+              if(card.position.x > left && card.position.x < right && card.position.y > bottom && card.position.y < top) {
+                selectedCardIds.push(card.id);
+              }
+            }
+            this.$store.commit('stopSelecting', {
+                selectedCardIds: selectedCardIds
+            });
+          } else {
+            this.$store.commit('stopSelecting', {
+                selectedCardIds: this.$store.state.selectedCardIds
+            });
+          }
+        }
       },
       handleMouseMove(event) {
         if(this.isMoveMode) {
@@ -596,9 +632,14 @@
       async moveFromBoardToHand(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
+        let cardIds = [event.cardId]
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.length > 0) {
+          cardIds = this.$store.state.selectedCardIds
+        }
         try{
-          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/board/card/' + event.cardId + '/hand/' + targetPlayerName, {});
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/board/card/hand/' + targetPlayerName, {cardIds : cardIds});
           console.log(response.data);
+          this.$store.commit('resetSelectedCards', {});
         } catch (error) {
           console.log(error);
         }
@@ -723,6 +764,7 @@
   border: 2px dashed #007bff;
   background-color: rgba(0, 123, 255, 0.2);
   pointer-events: none;
+  z-index: 9999999999;
 }
 
 /* make everything not selectionable */

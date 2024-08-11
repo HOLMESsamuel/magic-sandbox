@@ -16,7 +16,7 @@ class Scraper(ABC):
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
-        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager(driver_version="2.26", cache_manager=DriverCacheManager(valid_range=0)).install()), options=options)
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager(cache_manager=DriverCacheManager(valid_range=0)).install()), options=options)
 
     @abstractmethod
     def get_deck(self, url: str):

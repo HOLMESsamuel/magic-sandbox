@@ -22,7 +22,7 @@
         :flipped="card.flipped"
         :flipImage="card.flip_image"
         :reverseMovement="reverseMovement"
-        :copy="card.copy"
+        :copy="card.is_copy"
         @open-move-to-deck-modal="openMoveToDeckModal($event)"
         @update-position="updateObjectPosition(player.name, cIndex, $event, 'card')"
         @show-card="showCard($event)"

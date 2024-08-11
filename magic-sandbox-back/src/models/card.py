@@ -13,7 +13,7 @@ class Card(BaseModel):
     z_index : int = 2
     commander : bool  = False
     types : List[str] = []
-    copy: bool = False
+    is_copy: bool = False
 
     def tap(self):
         self.tapped = True

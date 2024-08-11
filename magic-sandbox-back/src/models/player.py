@@ -88,7 +88,7 @@ class Player(BaseModel):
                 copied_card.id = str(uuid.uuid4())
                 copied_card.position['x'] = copied_card.position['x'] + 250
                 copied_card.z_index = max_z_index
-                copied_card.copy = True
+                copied_card.is_copy = True
                 self.board.cards.append(copied_card)
                 break
 

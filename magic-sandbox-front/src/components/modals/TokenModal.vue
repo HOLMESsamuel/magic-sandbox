@@ -70,7 +70,7 @@
         if(this.editTokenMode === true) {
           this.$emit('modify-token', {text: this.tokenText, type: this.tokenType, id: this.currentToken.id, copy: this.copy});
         } else {
-          this.$emit('create-token', {text: this.tokenText, type: this.tokenType, copy: this.copy});
+          this.$emit('create-token', {text: this.tokenText, type: this.tokenType, copy_number: this.copy});
         }
         this.closeModal();
       },

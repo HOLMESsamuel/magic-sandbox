@@ -6,14 +6,14 @@ from ..services.game_service import GameService
 class TokenData(BaseModel):
     text: str
     type: str
-    copy: int
+    copy_number: int
 
 router = APIRouter()
 game_service = GameService()
 
 @router.post("/room/{roomId}/player/{playerId}/token")
 async def create_token(playerId: str, roomId: str, token_data: TokenData = Body(...)):
-    response = await game_service.create_token(playerId, roomId, token_data.text, token_data.type, token_data.copy)
+    response = await game_service.create_token(playerId, roomId, token_data.text, token_data.type, token_data.copy_number)
     return response
 
 @router.delete("/room/{roomId}/player/{playerId}/token/{id}")

@@ -10,14 +10,14 @@ game_service = GameService()
 class CardIds(BaseModel):
     cardIds: List[str]
 
-@router.patch("/room/{roomId}/player/{playerId}/card/{cardId}/tap")
-async def tap_card(playerId: str, roomId: str, cardId: str):
-    response = await game_service.tap_card(playerId, roomId, cardId)
+@router.patch("/room/{roomId}/player/{playerId}/card/tap")
+async def tap_cards(playerId: str, roomId: str, body: CardIds = Body(...)):
+    response = await game_service.tap_cards(playerId, roomId, body.cardIds)
     return response
 
-@router.patch("/room/{roomId}/player/{playerId}/card/{cardId}/untap")
-async def untap_card(playerId: str, roomId: str, cardId: str):
-    response = await game_service.untap_card(playerId, roomId, cardId)
+@router.patch("/room/{roomId}/player/{playerId}/card/untap")
+async def untap_cards(playerId: str, roomId: str, body: CardIds = Body(...)):
+    response = await game_service.untap_cards(playerId, roomId, body.cardIds)
     return response
 
 @router.patch("/room/{roomId}/player/{playerId}/card/flip")

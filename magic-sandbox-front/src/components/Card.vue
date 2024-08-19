@@ -13,6 +13,8 @@
           <li @click.stop="flipCards">Flip</li>
           <li @click.stop="openMoveToDeckModal">Move to deck</li>
           <li v-if="!this.inHand" @click.stop="copyCard">Copy</li>
+          <li v-if="!this.inHand && this.tapped === false" @click.stop="tap">Tap</li>
+          <li v-if="!this.inHand && this.tapped === true" @click.stop="untap">Untap</li>
           <li v-if="!this.inHand" @click.stop="moveToHand(this.userIndex)">Move to hand</li>
         </ul>
     </div>
@@ -387,8 +389,9 @@
       },
       async tap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        let cardIds = this.getSelectedCardIds();
         try{
-          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/tap', {});
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/tap', { cardIds: cardIds });
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -396,8 +399,9 @@
       },
       async untap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        let cardIds = this.getSelectedCardIds();
         try{
-          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/untap', {});
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/untap', { cardIds: cardIds });
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -406,10 +410,7 @@
       async flipCards() {
         this.showMenu = false;
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
-        let cardIds = [this.id]
-        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.length > 0) {
-          cardIds = this.$store.state.selectedCardIds
-        }
+        let cardIds = this.getSelectedCardIds();
         try {
             const response = await axios.patch(
                 `${backendUrl}room/${this.roomId}/player/${this.player}/card/flip`, 
@@ -419,6 +420,13 @@
         } catch (error) {
             console.log(error);
         }
+      },
+      getSelectedCardIds() {
+        let cardIds = [this.id]
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.length > 0) {
+          cardIds = this.$store.state.selectedCardIds
+        }
+        return cardIds;
       }
     }
   };

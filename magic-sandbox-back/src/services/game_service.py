@@ -88,19 +88,21 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " has " + str(score)}
     
-    async def tap_card(self, playerId: str, roomId: str, cardId: str):
+    async def tap_cards(self, playerId: str, roomId: str, cardIds: List[str]):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
-        player.board.get_card(cardId).tap()
+        for cardId in cardIds:
+            player.board.get_card(cardId).tap()
         await websocket_manager.broadcast(roomId, game_state)
-        return {"message": playerId + " room " + roomId + " tap " + cardId}
+        return {"message": playerId + " room " + roomId + " tap cards"}
     
-    async def untap_card(self, playerId: str, roomId: str, cardId: str):
+    async def untap_cards(self, playerId: str, roomId: str, cardIds: List[str]):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
-        player.board.get_card(cardId).untap()
+        for cardId in cardIds:
+            player.board.get_card(cardId).untap()
         await websocket_manager.broadcast(roomId, game_state)
-        return {"message": playerId + " room " + roomId + " untap " + cardId}
+        return {"message": playerId + " room " + roomId + " untap cards"}
     
     async def flip_cards(self, playerId: str, roomId: str, cardIds: List[str]):
         game_state : GameState = state_manager.get_group_state(roomId)

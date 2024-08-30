@@ -337,6 +337,9 @@
       },
       handleMouseDown(event) {
         if(this.isMoveMode) {
+          if(event.button === 2) {
+            return;
+          }
           this.panning = true;
           this.panStartX = event.clientX - this.offsetX;
           this.panStartY = event.clientY - this.offsetY;
@@ -368,7 +371,9 @@
         } else {
           if(Math.abs(this.selectCurrentX - this.$store.state.selectStartX) > 0 && Math.abs(this.selectCurrentY - this.$store.state.selectStartY) > 0 ) {
             const playerCards = this.userPlayer.board.cards;
+            const playerTokens = this.userPlayer.board.tokens;
             let selectedCardIds = [];
+            let selectedTokenIds = [];
             let top = Math.max(this.selectCurrentY, this.$store.state.selectStartY);
             let bottom = Math.min(this.selectCurrentY, this.$store.state.selectStartY);
             let right = Math.max(this.selectCurrentX, this.$store.state.selectStartX);
@@ -387,12 +392,20 @@
                 selectedCardIds.push(card.id);
               }
             }
+            for(let i=0; i<playerTokens.length; i++) {
+              let token = playerTokens[i];
+              if(token.position.x > left && token.position.x < right && token.position.y > bottom && token.position.y < top) {
+                selectedTokenIds.push(token.id);
+              }
+            }
             this.$store.commit('stopSelecting', {
-                selectedCardIds: selectedCardIds
+                selectedCardIds: selectedCardIds,
+                selectedTokenIds: selectedTokenIds
             });
           } else {
             this.$store.commit('stopSelecting', {
-                selectedCardIds: this.$store.state.selectedCardIds
+                selectedCardIds: this.$store.state.selectedCardIds,
+                selectedTokenIds: this.$store.state.selectedTokenIds
             });
           }
         }

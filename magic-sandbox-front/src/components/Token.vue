@@ -49,6 +49,9 @@
       document.addEventListener('mousemove', this.drag);
     },
     computed: {
+      isSelected() {
+        return this.$store.state.selectedTokenIds.includes(this.id);
+      },
       isTokenDragging() {
         return this.$store.state.currentlyDraggingId === this.id;
       },
@@ -61,6 +64,7 @@
       tokenStyle() {
         let transformStyles = '';
         let zIndex = 2;
+        let border = "black solid 2px";
 
         if(this.zIndex) {
           zIndex = this.zIndex;
@@ -75,6 +79,10 @@
           transformStyles += 'rotate(90deg) ';
         }
 
+        if(this.isSelected) {
+          border = "solid red 6px";
+        }
+
         // Add 180 degrees rotation based on player index
         if (this.pIndex === 1 || this.pIndex === 2) {
           transformStyles += 'rotate(180deg) ';
@@ -86,7 +94,8 @@
           position: 'fixed',
           cursor: 'pointer',
           transform: transformStyles,
-          'z-index': zIndex
+          'z-index': zIndex,
+          'border': border
         };
       },
       tokenShape() {
@@ -212,7 +221,6 @@
   cursor: pointer;
   font-size: 2em;
   text-align: center;
-  border: black solid 2px;
 }
 
 .hover-buttons {

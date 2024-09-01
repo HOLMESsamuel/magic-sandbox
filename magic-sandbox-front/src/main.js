@@ -18,7 +18,8 @@ const store = createStore({
         selectStartX: 0,
         selectStartY: 0,
         selecting: false,
-        selectedCardIds: []
+        selectedCardIds: [],
+        selectedTokenIds: []
     }
   },
   mutations: {
@@ -34,12 +35,14 @@ const store = createStore({
       state.selectStartX = selectStartX;
       state.selectStartY = selectStartY;
     },
-    stopSelecting(state, {selectedCardIds}) {
+    stopSelecting(state, {selectedCardIds, selectedTokenIds}) {
       state.selecting = false;
       state.selectedCardIds = selectedCardIds;
+      state.selectedTokenIds = selectedTokenIds;
     },
     resetSelectedCards(state) {
       state.selectedCardIds = [];
+      state.selectedTokenIds = [];
     },
     endDragging (state) {
         state.currentlyDraggingId = null;

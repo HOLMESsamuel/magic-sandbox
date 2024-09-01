@@ -64,14 +64,15 @@ class ArchidektWebScraper(Scraper):
                         for i in range(value.get('qty')): 
                             card = Card(id=str(uuid.uuid4()), name=value.get('name'), image='', types=value.get("types"))  
                             if len(img_urls) == 1:
-                                # Assuming your Card constructor can handle a single image URL
                                 card.image = img_urls[0]
                             if len(img_urls) == 2:
-                                # Assuming your Card constructor can handle two image URLs for two-sided cards
                                 card.flip_image = img_urls[1]
+                            #for basic lands if there are multiples differents images it is not a double side card
+                            if len(img_urls) > 2:
+                                card.image = img_urls[0]
                             # adding commander if it exists
                             if any(term in value["categories"] for term in command_terms):
-                                card.commander = True      
+                                card.commander = True
                             cards.append(card)
             deck = Deck(cards=cards)
             return deck
@@ -106,5 +107,4 @@ class ArchidektWebScraper(Scraper):
                 best_matches = [div]  # Reset the best_matches list with the new best match
             elif score == max_score and score != 0:
                 best_matches.append(div)  # Append to best_matches only if score equals max_score and is not zero
-
         return best_matches

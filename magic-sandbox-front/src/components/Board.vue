@@ -24,7 +24,7 @@
         :reverseMovement="reverseMovement"
         :copy="card.is_copy"
         @open-move-to-deck-modal="openMoveToDeckModal($event)"
-        @update-position="updateObjectPosition(player.name, cIndex, $event, 'card')"
+        @update-position="updateObjectPosition(player.name, card.id, $event, 'card')"
         @show-card="showCard($event)"
         @move-from-board-to-hand="moveFromBoardToHand($event)"
         @move-to-graveyard="moveToGraveyard($event)"
@@ -48,7 +48,7 @@
         :zIndex="token.z_index"
         :maxZIndex="maxZIndex"
         :reverseMovement="reverseMovement"
-        @update-token-position="updateObjectPosition(player.name, tIndex, $event, 'token')"
+        @update-token-position="updateObjectPosition(player.name, token.id, $event, 'token')"
         @open-edit-token-modal="openEditTokenModal($event)"
         ></Token>
       </div>
@@ -95,8 +95,8 @@
         openMoveToDeckModal(cardId) {
             this.$emit('open-move-to-deck-modal', cardId);
         },
-        updateObjectPosition(playerName, cIndex, position, type) {
-          this.$emit('update-position', {playerName: playerName, index: cIndex, position: position, type: type});
+        updateObjectPosition(playerName, id, position, type) {
+          this.$emit('update-position', {playerName: playerName, id: id, position: position, type: type});
         },
         showCard(event) {
           this.$emit('show-card', event);

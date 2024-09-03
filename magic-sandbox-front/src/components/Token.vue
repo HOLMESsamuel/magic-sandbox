@@ -1,5 +1,5 @@
 <template>
-    <div class="token" :style="[tokenStyle, tokenShape, tokenColor]" @click.stop="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag">
+    <div class="token" :style="[tokenStyle, tokenShape, tokenColor]" @click.stop="toogleTap" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup.stop="endDrag">
       <p>{{ text }}</p>  
       <div v-if="hover" class="hover-buttons">
         <button class="token-button" @click.stop="modifyToken">✏️</button>
@@ -10,6 +10,7 @@
   
   <script>
   import axios from 'axios';
+  import { eventBus } from '../eventBus';
 
   export default {
     emits: ['update-token-position', 'open-edit-token-modal'],
@@ -47,6 +48,10 @@
     },
     mounted() {
       document.addEventListener('mousemove', this.drag);
+      eventBus.on('moveCard', this.onMoveCard);
+    },
+    beforeUnmount() {
+      eventBus.off('moveCard', this.onMoveCard);
     },
     computed: {
       isSelected() {
@@ -161,9 +166,20 @@
           newPositionY = - newPositionY + 2 * this.startDragTokenPosition.y;
         }
 
-        // Update the card's position
-        this.position.x = newPositionX;
-        this.position.y = newPositionY;
+        let deltax = this.position.x - newPositionX;
+        let deltay = this.position.y - newPositionY;
+
+        if(this.$store.state.selectedTokenIds.includes(this.id)) {
+            eventBus.emit('moveCard', {
+              id: this.id,
+              deltax: deltax,
+              deltay: deltay,
+            });
+        } else {
+          // Update the card's position
+          this.position.x = newPositionX;
+          this.position.y = newPositionY;
+        }
       },
       endDrag() {
         this.$store.commit('endDragging');
@@ -209,6 +225,12 @@
       modifyToken() {
         this.$emit('open-edit-token-modal', { text: this.text, type: this.type, id: this.id });
         return;
+      },
+      onMoveCard(payload) {
+        if (this.$store.state.selectedTokenIds.includes(this.id)) {
+          this.position.x -= payload.deltax;
+          this.position.y -= payload.deltay;
+        }
       }
     }
   };

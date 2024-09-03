@@ -492,15 +492,41 @@
 
       },
       updateObjectPosition(event) {
+        //recuperer les cartes et token selectionnés et update toutes les positions avec la différence entre position de départ et d'arrivée
         const player = this.state.players.find(p => p.name === event.playerName);
         this.state.max_z_index += 1;
         const maxZIndex = this.state.max_z_index
+        let deltax = 0;
+        let deltay = 0;
         if(event.type === "card") {
-          player.board.cards[event.index].position = event.position;
-          player.board.cards[event.index].z_index = maxZIndex;
+          const card = player.board.cards.find(c => c.id === event.id);
+          deltax = card.position.x - event.position.x;
+          deltay = card.position.y - event.position.y;
+          console.log(deltax);
+          card.position = event.position;
+          card.z_index = maxZIndex;
         } else if (event.type === "token") {
-          player.board.tokens[event.index].position = event.position;
-          player.board.tokens[event.index].z_index = maxZIndex;
+          const token = player.board.tokens.find(t => t.id === event.id);
+          deltax = token.position.x - event.position.x;
+          deltay = token.position.y - event.position.y;
+          token.position = event.position;
+          token.z_index = maxZIndex;
+        }
+        for(let i=0; i<this.$store.state.selectedCardIds.length; i++) {
+          let card = player.board.cards.find(c => c.id === this.$store.state.selectedCardIds[i] && c.id !== event.id);
+          if(card) {
+            card.position.x -= deltax;
+            card.position.y -= deltay;
+            card.z_index = maxZIndex;
+          }
+        }
+        for(let i=0; i<this.$store.state.selectedTokenIds.length; i++) {
+          let token = player.board.tokens.find(t => t.id === this.$store.state.selectedTokenIds[i] && t.id !== event.id);
+          if(token) {
+            token.position.x -= deltax;
+            token.position.y -= deltay;
+            token.z_index = maxZIndex;
+          }
         }
         this.sendPosition();
       },
@@ -646,7 +672,7 @@
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
         let cardIds = [event.cardId]
-        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.length > 0) {
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.includes(event.cardId)) {
           cardIds = this.$store.state.selectedCardIds
         }
         try{

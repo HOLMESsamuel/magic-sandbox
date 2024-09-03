@@ -1,6 +1,6 @@
 <template>
   <div @mouseleave="showMenu = false">
-    <div class="card" @click.stop="handleCardClick" :style="cardStyle" @dblclick.stop="handleCardDoubleClick()" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup="endDrag" @contextmenu.prevent="showCustomMenu($event)">
+    <div class="card" @click.stop="handleCardClick" :style="cardStyle" @dblclick.stop="handleCardDoubleClick()" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup.stop="endDrag" @contextmenu.prevent="showCustomMenu($event)">
       <div v-if="this.copy" class="text-overlay">Copy</div>
       <img :src="flipped ? flipImage : imageSrc" :alt="name">
       <!-- Hover Buttons -->
@@ -26,6 +26,7 @@
   import axios from 'axios';
   import * as Constants from '../constants'
   import {checkIfCardInPlayerDeck, checkIfCardInPlayerGraveyard, checkIfCardInPlayerHand} from '../utils/utils'
+  import { eventBus } from '../eventBus';
 
   export default {
     emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard', 'copy-card'],
@@ -69,8 +70,12 @@
       };
     },
     mounted() {
-    document.addEventListener('mousemove', this.drag);
-  },
+      document.addEventListener('mousemove', this.drag);
+      eventBus.on('moveCard', this.onMoveCard);
+    },
+    beforeUnmount() {
+      eventBus.off('moveCard', this.onMoveCard);
+    },
     computed: {
       isDragging() {
         return this.$store.state.currentlyDraggingId === this.id;
@@ -227,9 +232,20 @@
             newPositionY = - newPositionY + 2 * this.startDragPosition.y;
           }
 
-          // Update the card's position
-          this.position.x = newPositionX;
-          this.position.y = newPositionY;
+          let deltax = this.position.x - newPositionX;
+          let deltay = this.position.y - newPositionY;
+
+          if(this.$store.state.selectedCardIds.includes(this.id)) {
+            eventBus.emit('moveCard', {
+              id: this.id,
+              deltax: deltax,
+              deltay: deltay,
+            });
+          } else {
+            // Update the card's position
+            this.position.x = newPositionX;
+            this.position.y = newPositionY;
+          }
           return;
         }
       },
@@ -278,6 +294,12 @@
         if(this.isMovingBoardToBoard()) {
           this.$emit('update-position', { x: this.position.x, y: this.position.y });
           return;
+        }
+      },
+      onMoveCard(payload) {
+        if (this.$store.state.selectedCardIds.includes(this.id)) {
+          this.position.x -= payload.deltax;
+          this.position.y -= payload.deltay;
         }
       },
       isReturningToSameHand(handPlayerIndex) {
@@ -423,7 +445,7 @@
       },
       getSelectedCardIds() {
         let cardIds = [this.id]
-        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.length > 0) {
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.includes(this.id)) {
           cardIds = this.$store.state.selectedCardIds
         }
         return cardIds;

@@ -6,6 +6,8 @@ layout: default
 ---
 # Magic sandbox
 
+[How to play ?](./how-to-play.html).
+
 ## Technical Stack
 
 -   Backend: FastAPI - A modern, fast web framework for building APIs with Python.

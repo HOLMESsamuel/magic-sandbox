@@ -1,11 +1,13 @@
+import pytest
 from src.scrapers.tapped_out_web_scraper import TappedOutWebScraper
 
-def test_get_deck_with_commander():
+@pytest.mark.asyncio
+async def test_get_deck_with_commander():
     scraper = TappedOutWebScraper()
 
     url = "https://tappedout.net/mtg-decks/17-05-20-Dfx-kalamax-the-stormsire/"
 
-    deck = scraper.get_deck(url)
+    deck = await scraper.get_deck(url)
     scraper.close_driver()
 
     assert deck is not None
@@ -28,12 +30,13 @@ def test_get_deck_with_commander():
 
     assert "creature" in commander.types, "the type was not loaded correctly"
 
-def test_get_deck_without_commander():
+@pytest.mark.asyncio
+async def test_get_deck_without_commander():
     scraper = TappedOutWebScraper()
 
     url = "https://tappedout.net/mtg-decks/mono-green-toxic-2/"
 
-    deck = scraper.get_deck(url)
+    deck = await scraper.get_deck(url)
     scraper.close_driver()
 
     assert deck is not None

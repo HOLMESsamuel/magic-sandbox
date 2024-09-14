@@ -72,7 +72,7 @@ jobs:
         npm run build
 
     - name: Upload Build Artifacts #allow to use it on a different job
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: frontend-build
         path: magic-sandbox-front/dist/

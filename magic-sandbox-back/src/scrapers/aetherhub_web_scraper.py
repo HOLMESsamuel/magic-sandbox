@@ -8,7 +8,7 @@ from ..constants import DEFAULT_CARD_BACK_URL
 
 class AetherhubWebScraper(Scraper):
 
-    def get_deck(self, url: str):
+    async def get_deck(self, url: str):
         card_map_data = self.get_aetherhub_data(url)
         return self.process_aetherhub_card_map_into_deck(card_map_data)
 

@@ -1,4 +1,6 @@
+from concurrent.futures import ThreadPoolExecutor
 import uuid
+import asyncio
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -8,19 +10,29 @@ from .scraper import Scraper
 from ..models.card import Card
 from ..models.deck import Deck
 
+executor = ThreadPoolExecutor()
+
 class ArchidektWebScraper(Scraper):
 
-    def get_deck(self, url: str):
-        card_map_data, soup = self.get_archidekt_data(url)
-        return self.process_archidekt_card_map_into_deck(card_map_data, soup)
+    async def get_deck(self, url: str):
+        loop = asyncio.get_event_loop()
+        try:
+            card_map_data, soup = await loop.run_in_executor(executor, self.get_archidekt_data, url)
+            return self.process_archidekt_card_map_into_deck(card_map_data, soup)
+        except Exception as e:
+            print(f"Error: {e}")
 
     def get_dynamic_content(self, url):
-        self.driver.get(url)
-        time.sleep(3)  # Wait for the page to load.
+        try:
+            self.driver.get(url)
+            time.sleep(2)  # Wait for the page to load.
 
-        # Get the page source and parse it with BeautifulSoup
-        soup = BeautifulSoup(self.driver.page_source, 'html.parser')
-        return soup
+            # Get the page source and parse it with BeautifulSoup
+            soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+            return soup
+        except Exception as e:
+            print(f"Error: {e}")
+
 
     def get_archidekt_data(self, url: str):
         try:
@@ -41,7 +53,7 @@ class ArchidektWebScraper(Scraper):
             # Navigate to the desired data
             card_map = json_data.get('props', {}).get('pageProps', {}).get('redux', {}).get('deck', {}).get('cardMap', {})
             return card_map, soup
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             print(f"Error: {e}")
 
 

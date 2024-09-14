@@ -9,7 +9,7 @@ from ..constants import DEFAULT_CARD_BACK_URL
 
 class TappedOutWebScraper(Scraper):
 
-    def get_deck(self, url: str):
+    async def get_deck(self, url: str):
         card_map_data = self.get_tapped_out_data(url)
         return self.process_tapped_out_card_map_into_deck(card_map_data)
 

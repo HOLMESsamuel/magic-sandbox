@@ -1,3 +1,4 @@
+import asyncio
 from fastapi import APIRouter, HTTPException
 from ..services import WebScraperService
 from pydantic import BaseModel, validator
@@ -21,17 +22,14 @@ async def scrap_deck(playerId: str, roomId: str, deck_input: DeckInput):
     try:
         web_scraper = web_scraper_service.get_scraper(deck_input.url)
         print("web scraper initialized")
-        #multithread does not seem to work on container, or the ram is not sufficient
-        #deck = await asyncio.to_thread(web_scraper.get_deck, deck_input.url)
-        deck = web_scraper.get_deck(deck_input.url)
+        get_deck_task = asyncio.create_task(web_scraper.get_deck(deck_input.url))
+        deck = await get_deck_task
         response = await game_service.add_deck(playerId, roomId, deck)
         return response
     except ValueError as ve:
         raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
         raise HTTPException(status_code=500, detail="An error occurred while processing the request.")
-    finally:
-        web_scraper.close_driver()
 
 @router.put("/room/{roomId}/player/{playerId}/deck/mill")
 async def mill_deck(playerId: str, roomId: str):

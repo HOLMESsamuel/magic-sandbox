@@ -9,18 +9,26 @@ from webdriver_manager.core.driver_cache import DriverCacheManager
 
 class Scraper(ABC):
 
+    driver = None
+
     def __init__(self):
-        print("initializing web scraper")
-        # Set up the Selenium WebDriver
-        options = Options()
-        options.add_argument('--headless')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager(cache_manager=DriverCacheManager(valid_range=0)).install()), options=options)
+        if not Scraper.driver:
+            print("Initializing WebDriver for the first time")
+            options = Options()
+            options.add_argument('--headless')
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-dev-shm-usage')
+            Scraper.driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()), options=options
+            )
+        self.driver = Scraper.driver
 
     @abstractmethod
-    def get_deck(self, url: str):
+    async def get_deck(self, url: str):
         pass
 
     def close_driver(self):
-        self.driver.quit()
+        if Scraper.driver:
+            Scraper.driver.quit()
+            Scraper.driver = None
+            print("WebDriver closed")

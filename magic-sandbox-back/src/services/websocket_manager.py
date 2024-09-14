@@ -1,5 +1,8 @@
 import logging;
+import asyncio;
 from ..models.game_state import GameState
+
+lock = asyncio.Lock()
 
 class WebSocketManager:
     _instance = None
@@ -11,12 +14,13 @@ class WebSocketManager:
         return cls._instance
 
     async def broadcast(self, group_id: str, state : GameState):
-        for client in self.connected_groups.get(group_id, []):
-            try:
-                await client.send_json(state.model_dump_json())
-            except Exception as e:
-                logging.error(f"Error sending state to client: {e}", exc_info=True)
-                pass
+        async with lock:
+            for client in self.connected_groups.get(group_id, []):
+                try:
+                    await client.send_json(state.model_dump_json())
+                except Exception as e:
+                    logging.error(f"Error sending state to client: {e}", exc_info=True)
+                    pass
 
 
     def add_connection(self, group_id: str, websocket):

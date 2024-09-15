@@ -1,8 +1,12 @@
+from contextlib import asynccontextmanager
 import os
 import shutil
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+import asyncio
+import logging
+from fastapi import Depends, FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from pydantic import validator
 from src.services.websocket_manager import WebSocketManager
 from src.services.state_manager import StateManager
 from src.models.game_state import *
@@ -14,7 +18,42 @@ from src.routes.hand_routes import router as hand_router
 from src.routes.graveyard_routes import router as graveyard_router
 from src.routes.player_routes import router as player_router
 
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium import webdriver
+
+from src.services import WebScraperService
+from src.services import GameService
+
+driver = None
+
+
 app = FastAPI()
+
+
+@app.on_event("startup")
+def startup_event():
+    global driver
+    logging.info("load the webdriver before start up")
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    logging.info("webdriver loaded")
+
+@app.on_event("shutdown")
+def shutdown_event():
+    global driver
+    driver.quit()
+
+def get_driver():
+    global driver
+    if driver is None:
+        raise HTTPException(status_code=500, detail="WebDriver not initialized")
+    return driver
+
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
@@ -44,6 +83,31 @@ mount_empty_uploads_folder("uploads")
 
 state_manager = StateManager()
 websocket_manager = WebSocketManager()
+web_scraper_service = WebScraperService()
+game_service = GameService()
+
+class DeckInput(BaseModel):
+    url: str
+
+    @validator('url')
+    def url_must_not_be_empty(cls, v):
+        if not v:
+            raise ValueError('URL must not be empty')
+        return v
+
+@app.post("/room/{roomId}/player/{playerId}/deck")
+async def scrap_deck(playerId: str, roomId: str, deck_input: DeckInput, driver: webdriver.Chrome = Depends(get_driver)):
+    try:
+        web_scraper = web_scraper_service.get_scraper(deck_input.url, driver)
+        get_deck_task = asyncio.create_task(web_scraper.get_deck(deck_input.url))
+        deck = await get_deck_task
+        response = await game_service.add_deck(playerId, roomId, deck)
+        return response
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="An error occurred while processing the request.")
 
 
 @app.websocket("/ws/{group_id}/{name}")

@@ -1,35 +1,10 @@
-import asyncio
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from ..services import WebScraperService
-from pydantic import BaseModel, validator
 from ..services import GameService
 
 router = APIRouter()
 game_service = GameService()
 web_scraper_service = WebScraperService()
-
-class DeckInput(BaseModel):
-    url: str
-
-    @validator('url')
-    def url_must_not_be_empty(cls, v):
-        if not v:
-            raise ValueError('URL must not be empty')
-        return v
-    
-@router.post("/room/{roomId}/player/{playerId}/deck")
-async def scrap_deck(playerId: str, roomId: str, deck_input: DeckInput):
-    try:
-        web_scraper = web_scraper_service.get_scraper(deck_input.url)
-        print("web scraper initialized")
-        get_deck_task = asyncio.create_task(web_scraper.get_deck(deck_input.url))
-        deck = await get_deck_task
-        response = await game_service.add_deck(playerId, roomId, deck)
-        return response
-    except ValueError as ve:
-        raise HTTPException(status_code=400, detail=str(ve))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="An error occurred while processing the request.")
 
 @router.put("/room/{roomId}/player/{playerId}/deck/mill")
 async def mill_deck(playerId: str, roomId: str):

@@ -10,9 +10,10 @@ from src.scrapers import ArchidektWebScraper, TappedOutWebScraper, AetherhubWebS
 ])
 def test_get_scraper(url, expected):
     service = WebScraperService()
+    driver=None
     if expected is ValueError:
         with pytest.raises(ValueError):
-            service.get_scraper(url)
+            service.get_scraper(url, driver)
     else:
-        scraper = service.get_scraper(url)
+        scraper = service.get_scraper(url, driver)
         assert isinstance(scraper, expected), f"Expected {expected} for URL '{url}'"

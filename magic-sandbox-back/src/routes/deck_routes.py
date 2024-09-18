@@ -1,10 +1,15 @@
-from fastapi import APIRouter
+from typing import List
+from fastapi import APIRouter, Body
+from pydantic import BaseModel
 from ..services import WebScraperService
 from ..services import GameService
 
 router = APIRouter()
 game_service = GameService()
 web_scraper_service = WebScraperService()
+
+class CardIds(BaseModel):
+    cardIds: List[str]
 
 @router.put("/room/{roomId}/player/{playerId}/deck/mill")
 async def mill_deck(playerId: str, roomId: str):
@@ -31,7 +36,7 @@ async def reveal_deck_first_card(playerId: str, roomId: str):
     response = await game_service.reveal_deck_first_card(roomId, playerId)
     return response
 
-@router.put("/room/{roomId}/player/{playerId}/card/{cardId}/deck/{cardPosition}")
-async def move_card_to_deck(playerId: str, roomId: str, cardId: str, cardPosition: int):
-    response = await game_service.move_card_to_deck(playerId, roomId, cardId, cardPosition)
+@router.put("/room/{roomId}/player/{playerId}/deck/{cardPosition}")
+async def move_card_to_deck(playerId: str, roomId: str, cardPosition: int, body: CardIds = Body(...)):
+    response = await game_service.move_card_to_deck(playerId, roomId, body.cardIds, cardPosition)
     return response

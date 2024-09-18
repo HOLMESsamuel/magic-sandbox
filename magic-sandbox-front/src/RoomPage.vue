@@ -641,9 +641,14 @@
       },
       async moveCardToDeck(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        let cardIds = [event.cardId]
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.includes(event.cardId)) {
+          cardIds = this.$store.state.selectedCardIds
+        }
         try{
-          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + event.cardId + '/deck/' + event.cardPosition, {});
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/deck/' + event.cardPosition, { cardIds : cardIds });
           console.log(response.data);
+          this.$store.state.selectedCardIds = [];
         } catch (error) {
           console.log(error);
         }
@@ -708,6 +713,7 @@
         try{
           const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/graveyard/' + targetPlayerName, {cardIds : cardIds, tokenIds : tokenIds});
           console.log(response.data);
+          this.$store.state.selectedCardIds = [];
         } catch (error) {
           console.log(error);
         }

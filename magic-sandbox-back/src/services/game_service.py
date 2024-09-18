@@ -158,10 +158,11 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " mulligan"}
     
-    async def move_card_to_deck(self, playerId: str, roomId: str, cardId: str, cardPosition: int):
+    async def move_card_to_deck(self, playerId: str, roomId: str, cardIds: List[str], cardPosition: int):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
-        player.move_card_to_deck(cardId, cardPosition)
+        for cardId in cardIds:
+            player.move_card_to_deck(cardId, cardPosition)
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " card " + cardId + " moved to deck on position " + str(cardPosition)}
     

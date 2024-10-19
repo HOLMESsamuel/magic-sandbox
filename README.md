@@ -26,13 +26,18 @@ With this project, I aim to create a platform to load decks and enable playing w
 
 ```
 npm install
-npm run build
+npm run build:test
 ```
 
 4. Start the Containers: Use Docker Compose to build and start the services.
 
 ```
 docker-compose up --build
+```
+5. You can expose the app publically with ngrok 
+
+```
+ngrok http 5000
 ```
 
 ## How to start backend locally

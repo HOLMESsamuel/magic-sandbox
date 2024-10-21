@@ -6,7 +6,7 @@ layout: default
 ---
 # Magic sandbox
 
-[How to play ?](./how-to-play.html).
+[How to play ?](./how-to-play.html)
 
 ## Technical Stack
 
@@ -17,12 +17,16 @@ layout: default
 -   Orchestration: Docker Compose - Used for defining and running multi-container Docker applications.
 -   Selenium: Python library to automate web browsing, allow to load web content.
 -   Webscraping: Beautiful Soup is a Python package for parsing HTML and XML documents. It creates a parse tree for parsed pages that can be used to extract data from HTML.
+-   Jekyll: Generate and serve documentation with markdown file.
+  
 
-## Prerequisites
+## Run locally
+
+### Prerequisites
 
 -   Docker: Ensure Docker and Docker Compose are installed on your system. For installation instructions, visit Docker's official documentation.
 
-## How to Launch with docker
+### How to Launch with docker
 
 1. Clone the Repository: Clone this repository to your local machine.
 
@@ -32,7 +36,7 @@ layout: default
 
 ```
 npm install
-npm run build
+npm run build:test
 ```
 
 4. Start the Containers: Use Docker Compose to build and start the services.
@@ -41,7 +45,13 @@ npm run build
 docker-compose up --build
 ```
 
-## How to start backend locally
+5. You can expose the app publically with ngrok 
+
+```
+ngrok http 5000
+```
+
+### How to start backend
 
 1. Go to back folder
 2. Create a venv if not created already (python -m venv .venv for linux, python -m venv venv for windows)
@@ -56,13 +66,18 @@ pip install --no-cache-dir -r requirements.txt
 uvicorn main:app --reload
 ```
 
-## How to start frontend locally
+### How to start frontend locally
 
 1. Go to front folder
 2. run npm install
 3. run npm run dev
 
-## Accessing the Application
+#### Accessing the Application
 
-- Frontend: Once the services are up and running, access the frontend application at http://localhost:5000.
+- Frontend: Once the services are up and running, access the frontend application at http://localhost:5000. The frontend acts as a reverse proxy and pass requests containing /api to the backend but for test purposes you can still access the backend directly.
 - Backend API: The FastAPI backend can be accessed at http://localhost:8000. The API documentation provided by FastAPI can be accessed at http://localhost:8000/docs.
+
+## Documentation
+
+The documentation is a github page, it is generated and serve with Jekyll, on each push to master the documentation is built with a github action workflow that is automatically added by github. It is also automatically served on [https://holmessamuel.github.io/magic-sandbox/=](https://holmessamuel.github.io/magic-sandbox/)
+ 

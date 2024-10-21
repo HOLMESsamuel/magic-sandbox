@@ -2,6 +2,10 @@
 
 With this project, I aim to create a platform to load decks and enable playing with them in a tabletop simulation with friends. The platform does not implement game rules but allows players to move cards around, mimicking the real-life experience. This project will be self-hosted and for personal usage only.
 
+## Documentation
+
+https://holmessamuel.github.io/magic-sandbox/
+
 ## Technical Stack
 
 -   Backend: FastAPI - A modern, fast web framework for building APIs with Python.

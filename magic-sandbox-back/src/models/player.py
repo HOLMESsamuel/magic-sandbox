@@ -10,7 +10,7 @@ import copy
 
 class Player(BaseModel):
     name : str
-    score: int = 20
+    score: int = 40
     index: int = 0
     hand: Hand = Field(default_factory=Hand)
     deck: Deck = Field(default_factory=Deck)

@@ -39,6 +39,7 @@
               @move-from-board-to-hand="moveFromBoardToHand($event)"
               @open-edit-token-modal="openEditTokenModal($event)"
               @move-to-graveyard="moveToGraveyard($event)"
+              @move-to-exile="moveToExile($event)"
               @copy-card="copyCard($event)"
             ></Board>
             <deck 
@@ -73,6 +74,14 @@
               :cards="player.graveyard.cards"
               @open-graveyard-modal="openGraveyardModal($event)"
             ></graveyard>
+            <exile
+              :playerName="player.name" 
+              :roomId="roomId"
+              :pIndex="pIndex"
+              :userIndex="userIndex"
+              :cards="player.exile.cards"
+              @open-exile-modal="openExileModal($event)"
+            ></exile>
             <hand
               :pIndex="pIndex"
               :cards="player.hand.cards"
@@ -142,6 +151,12 @@
     @close-graveyard-modal="closeGraveyardModal()"
     @add-card-to-hand="moveFromGraveyardToHand($event)"
   ></graveyard-modal>
+  <exile-modal
+    :isExileModalVisible="isExileModalVisible"
+    :cards="exileModalCards()"
+    @close-exile-modal="closeExileModal()"
+    @add-card-to-hand="moveFromExileToHand($event)"
+  ></exile-modal>
 </template>
   
   <script>
@@ -152,11 +167,13 @@
   import Hand from './components/Hand.vue'
   import Token from './components/Token.vue'
   import Graveyard from './components/Graveyard.vue';
+  import Exile from './components/Exile.vue';
   import Background from './components/Background.vue';
   import CardModal from './components/modals/CardModal.vue';
   import DeckModal from './components/modals/DeckModal.vue';
   import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
   import GraveyardModal from './components/modals/GraveyardModal.vue';
+  import ExileModal from './components/modals/ExileModal.vue';
   import TokenModal from './components/modals/TokenModal.vue';
   import SettingsModal from './components/modals/SettingsModal.vue';
   import DiceModal from './components/modals/DiceModal.vue';
@@ -192,7 +209,9 @@
         alertMessage: "",
         firstMessageReceived: false,
         isGraveyardModalVisible: false,
+        isExileModalVisible: false,
         graveyardModalPlayerIndex: null,
+        exileModalPlayerIndex: null,
         isMoveMode: true,
         selectCurrentX: 0,
         selectCurrentY: 0
@@ -293,7 +312,7 @@
       this.connectWebSocket();
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, Exile, ExileModal
     },
     methods: {
       handleKeyPress(event) {
@@ -541,6 +560,12 @@
         }
         return [];
       },
+      exileModalCards() {
+        if (this.exileModalPlayerIndex !== null) {
+          return this.state.players[this.exileModalPlayerIndex].exile.cards;
+        }
+        return [];
+      },
       showCard(event) {
         this.modalImageSrc = event.image;
         this.modalFlipImageSrc = event.flipImage;
@@ -575,9 +600,17 @@
         this.isGraveyardModalVisible= true;
         this.graveyardModalPlayerIndex = pIndex;
       },
+      openExileModal(pIndex) {
+        this.isExileModalVisible= true;
+        this.exileModalPlayerIndex = pIndex;
+      },
       closeGraveyardModal() {
         this.isGraveyardModalVisible = false;
         this.graveyardModalPlayerIndex = null;
+      },
+      closeExileModal() {
+        this.isExileModalVisible = false;
+        this.exileModalPlayerIndex = null;
       },
       closeCardModal() {
         this.isCardModalVisible = false;
@@ -668,6 +701,16 @@
           console.log(error);
         }
       },
+      async moveFromExileToHand(cardId) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const targetPlayerName = this.state.players[this.exileModalPlayerIndex].name;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ targetPlayerName + '/exile/card/' + cardId + '/hand/' + this.userName, {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
       async moveFromBoardToHand(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
@@ -698,6 +741,16 @@
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
         try{
           const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + event.cardId + '/graveyard/' + targetPlayerName, {});
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async moveToExile(event) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
+        try{
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + event.cardId + '/exile/' + targetPlayerName, {});
           console.log(response.data);
         } catch (error) {
           console.log(error);

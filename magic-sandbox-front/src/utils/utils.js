@@ -34,13 +34,22 @@ export const checkIfCardInPlayerDeck = (x, y) => {
 
 export const checkIfCardInPlayerGraveyard = (x, y) => {
   const playersGraveyardAreas = getPlayersGraveyardAreas();
+  return checkIfCardInArea(x, y, playersGraveyardAreas);
+}
+
+export const checkIfCardInPlayerExile = (x, y) => {
+  const playersExileAreas = getPlayersExileAreas();
+  return checkIfCardInArea(x, y, playersExileAreas);
+}
+
+export const checkIfCardInArea = (x, y, areas) => {
   const cardCenter = {
     x: x,
     y: y
   };
 
-  for (let i = 0; i < playersGraveyardAreas.length; i++) {
-    if (isPointInsideRect(cardCenter, playersGraveyardAreas[i])) {
+  for (let i = 0; i < areas.length; i++) {
+    if (isPointInsideRect(cardCenter, areas[i])) {
       return i;
     }
   }
@@ -53,6 +62,15 @@ export const getPlayersGraveyardAreas = () => {
     { x1: Constants.PLAYER_1_GRAVEYARD_X1, y1: Constants.PLAYER_1_GRAVEYARD_Y1, x2: Constants.PLAYER_1_GRAVEYARD_X2, y2: Constants.PLAYER_1_GRAVEYARD_Y2 },
     { x1: Constants.PLAYER_2_GRAVEYARD_X1, y1: Constants.PLAYER_2_GRAVEYARD_Y1, x2: Constants.PLAYER_2_GRAVEYARD_X2, y2: Constants.PLAYER_2_GRAVEYARD_Y2 },
     { x1: Constants.PLAYER_3_GRAVEYARD_X1, y1: Constants.PLAYER_3_GRAVEYARD_Y1, x2: Constants.PLAYER_3_GRAVEYARD_X2, y2: Constants.PLAYER_3_GRAVEYARD_Y2 },
+];
+}
+
+export const getPlayersExileAreas = () => {
+  return [
+    { x1: Constants.PLAYER_0_EXILE_X1, y1: Constants.PLAYER_0_EXILE_Y1, x2: Constants.PLAYER_0_EXILE_X2, y2: Constants.PLAYER_0_EXILE_Y2 },
+    { x1: Constants.PLAYER_1_EXILE_X1, y1: Constants.PLAYER_1_EXILE_Y1, x2: Constants.PLAYER_1_EXILE_X2, y2: Constants.PLAYER_1_EXILE_Y2 },
+    { x1: Constants.PLAYER_2_EXILE_X1, y1: Constants.PLAYER_2_EXILE_Y1, x2: Constants.PLAYER_2_EXILE_X2, y2: Constants.PLAYER_2_EXILE_Y2 },
+    { x1: Constants.PLAYER_3_EXILE_X1, y1: Constants.PLAYER_3_EXILE_Y1, x2: Constants.PLAYER_3_EXILE_X2, y2: Constants.PLAYER_3_EXILE_Y2 },
 ];
 }
 

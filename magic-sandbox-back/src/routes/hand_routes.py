@@ -30,6 +30,11 @@ async def move_card_from_graveyard_to_hand(playerId: str, roomId: str, cardId: s
     response = await game_service.move_card_from_graveyard_to_hand(playerId, roomId, cardId, targetPlayerId)
     return response
 
+@router.put("/room/{roomId}/player/{playerId}/exile/card/{cardId}/hand/{targetPlayerId}")
+async def move_card_from_exile_to_hand(playerId: str, roomId: str, cardId: str, targetPlayerId: str):
+    response = await game_service.move_card_from_exile_to_hand(playerId, roomId, cardId, targetPlayerId)
+    return response
+
 @router.put("/room/{roomId}/player/{playerId}/mulligan")
 async def mulligan(playerId: str, roomId: str):
     response = await game_service.mulligan(playerId, roomId)

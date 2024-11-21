@@ -48,10 +48,21 @@ class GameState(BaseModel):
         if card:
             target_player.hand.cards.append(card)
 
+    def move_card_from_exile_to_hand(self, player : Player, cardId, target_player : Player):
+        card = player.exile.pop_card(cardId)
+        if card:
+            target_player.hand.cards.append(card)
+
     def move_card_to_graveyard(self, player : Player, cardId, target_player : Player):
         card = player.pop_card(cardId)
         card.tapped = False
         if card:
             target_player.graveyard.cards.append(card)
+
+    def move_card_to_exile(self, player : Player, cardId, target_player : Player):
+        card = player.pop_card(cardId)
+        card.tapped = False
+        if card:
+            target_player.exile.cards.append(card)
 
 

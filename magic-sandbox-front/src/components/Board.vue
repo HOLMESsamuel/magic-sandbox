@@ -28,6 +28,7 @@
         @show-card="showCard($event)"
         @move-from-board-to-hand="moveFromBoardToHand($event)"
         @move-to-graveyard="moveToGraveyard($event)"
+        @move-to-exile="moveToExile($event)"
         @copy-card="copyCard($event)"
         ></Card>
         <Token
@@ -61,7 +62,7 @@
   import Token from './Token.vue';
 
   export default {
-    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard', 'copy-card'],
+    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard', 'copy-card', 'move-to-exile'],
     components: {
         Card, Token
     },
@@ -106,6 +107,9 @@
         },
         moveToGraveyard(event) {
           this.$emit('move-to-graveyard', event);
+        },
+        moveToExile(event) {
+          this.$emit('move-to-exile', event);
         },
         copyCard(cardId) {
           this.$emit('copy-card', cardId);

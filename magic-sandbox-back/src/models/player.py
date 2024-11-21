@@ -5,6 +5,7 @@ from .board import Board
 from .card import Card
 from .token import Token
 from .graveyard import Graveyard
+from .exile import Exile
 from pydantic import BaseModel, Field
 import copy
 
@@ -16,6 +17,7 @@ class Player(BaseModel):
     deck: Deck = Field(default_factory=Deck)
     board: Board = Field(default_factory=Board)
     graveyard: Graveyard = Field(default_factory=Graveyard)
+    exile: Exile = Field(default_factory=Exile)
     background: str = ""
     background_width: int = 3000
     background_height: int = 1500
@@ -66,10 +68,11 @@ class Player(BaseModel):
             print("The deck is empty, no card to move.")        
 
     def reset(self):
-        self.score = 20
+        self.score = 40
         self.hand.reset()
         self.deck.reset()
         self.graveyard.reset()
+        self.exile.reset()
         self.board.reset()
 
     def play_card(self, cardId, position, max_z_index):

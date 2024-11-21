@@ -12,6 +12,7 @@ from src.routes.card_routes import router as card_router
 from src.routes.token_routes import router as token_router
 from src.routes.hand_routes import router as hand_router
 from src.routes.graveyard_routes import router as graveyard_router
+from src.routes.exile_routes import router as exile_router
 from src.routes.player_routes import router as player_router
 
 app = FastAPI()
@@ -32,6 +33,7 @@ app.include_router(token_router)
 app.include_router(hand_router)
 app.include_router(graveyard_router)
 app.include_router(player_router)
+app.include_router(exile_router)
 
 def mount_empty_uploads_folder(upload_folder_name: str):
     if os.path.exists(upload_folder_name):

@@ -157,6 +157,14 @@
     @close-exile-modal="closeExileModal()"
     @add-card-to-hand="moveFromExileToHand($event)"
   ></exile-modal>
+  <control-panel
+    :roomId="roomId"
+    :userIndex="userIndex"
+    :playerName=this.userName
+    @show-deck="showDeck($event)"
+    @open-token-modal="openTokenModal($event)"
+    @open-dice-modal="openDiceModal">
+  </control-panel>
 </template>
   
   <script>
@@ -169,6 +177,7 @@
   import Graveyard from './components/Graveyard.vue';
   import Exile from './components/Exile.vue';
   import Background from './components/Background.vue';
+  import ControlPanel from './components/ControlPanel.vue';
   import CardModal from './components/modals/CardModal.vue';
   import DeckModal from './components/modals/DeckModal.vue';
   import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
@@ -312,7 +321,7 @@
       this.connectWebSocket();
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, Exile, ExileModal
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, Exile, ExileModal, ControlPanel
     },
     methods: {
       handleKeyPress(event) {

@@ -809,12 +809,12 @@
 
 .move-button {
   bottom: 25px;
-  left: 25px;
+  right: 95px;
 }
 
 .select-button {
   bottom: 25px;
-  left: 65px;
+  right: 130px;
 }
 
 .setting-button :hover {

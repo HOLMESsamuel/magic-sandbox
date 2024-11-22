@@ -25,11 +25,11 @@
   <script>
   import axios from 'axios';
   import * as Constants from '../constants'
-  import {checkIfCardInPlayerDeck, checkIfCardInPlayerGraveyard, checkIfCardInPlayerHand} from '../utils/utils'
+  import {checkIfCardInPlayerDeck, checkIfCardInPlayerExile, checkIfCardInPlayerGraveyard, checkIfCardInPlayerHand} from '../utils/utils'
   import { eventBus } from '../eventBus';
 
   export default {
-    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-graveyard', 'copy-card'],
+    emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-exile', 'move-to-graveyard', 'copy-card'],
     props: {
       imageSrc: String,
       initialPosition: {
@@ -260,6 +260,7 @@
         let handPlayerIndex = checkIfCardInPlayerHand(this.position.x, this.position.y);
         let deckPlayerIndex = checkIfCardInPlayerDeck(this.position.x, this.position.y);
         let graveyardPlayerIndex = checkIfCardInPlayerGraveyard(this.position.x, this.position.y);
+        let exilePlayerIndex = checkIfCardInPlayerExile(this.position.x, this.position.y);
 
 
         if(this.isReturningToSameHand(handPlayerIndex)) {
@@ -278,6 +279,11 @@
 
         if(this.isMovingToGraveyard(graveyardPlayerIndex)){
           this.moveToGraveyard(graveyardPlayerIndex);
+          return
+        }
+
+        if(this.isMovingToExile(exilePlayerIndex)){
+          this.moveToExile(exilePlayerIndex);
           return
         }
 
@@ -320,6 +326,9 @@
       isMovingToGraveyard(graveyardPlayerIndex) {
         return graveyardPlayerIndex !== null
       },
+      isMovingToExile(exilePlayerIndex) {
+        return exilePlayerIndex !== null
+      },
       isMovingHandToBoard() {
         return this.inHand;
       },
@@ -341,6 +350,9 @@
       },
       moveToGraveyard(graveyardPlayerIndex) {
         this.$emit('move-to-graveyard', { cardId: this.id, targetPlayerIndex: graveyardPlayerIndex });
+      },
+      moveToExile(exilePlayerIndex) {
+        this.$emit('move-to-exile', { cardId: this.id, targetPlayerIndex: exilePlayerIndex });
       },
       showCustomMenu(event) {
         if(this.pIndex === this.userIndex) {// only the card owner can use right click

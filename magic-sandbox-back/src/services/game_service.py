@@ -207,11 +207,27 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " card move to graveyard"}
     
+    async def move_card_to_exile(self, playerId: str, roomId: str, cardId: str, targetPlayerId: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        target_player : Player = game_state.get_player(targetPlayerId)
+        game_state.move_card_to_exile(player, cardId, target_player)
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " card move to graveyard"}
+    
     async def move_card_from_graveyard_to_hand(self, playerId: str, roomId: str, card_id: str, targetPlayerId: str):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
         target_player : Player = game_state.get_player(targetPlayerId)
         game_state.move_card_from_graveyard_to_hand(player, card_id, target_player)
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " card moved from graveyard to hand"}
+    
+    async def move_card_from_exile_to_hand(self, playerId: str, roomId: str, card_id: str, targetPlayerId: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        target_player : Player = game_state.get_player(targetPlayerId)
+        game_state.move_card_from_exile_to_hand(player, card_id, target_player)
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " card moved from graveyard to hand"}
     

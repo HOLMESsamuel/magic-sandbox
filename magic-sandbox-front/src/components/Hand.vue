@@ -87,25 +87,25 @@
           case 0:
             return {
               left: "800px",
-              top: "1200px",
+              top: "1600px",
               'z-index': zIndex
             };
           case 1:
             return {
               left: "350px",
-              top: "-1500px",
+              top: "-1900px",
               'z-index': zIndex
             };
           case 2:
             return {
               left: "-2100px",
-              top: "-1500px",
+              top: "-1900px",
               'z-index': zIndex
             };
           case 3:
             return {
               left: "-1850px",
-              top: "1200px",
+              top: "1600px",
               'z-index': zIndex
             };
         }  

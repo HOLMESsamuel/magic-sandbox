@@ -1,17 +1,16 @@
 <template>
-    <div :style="graveyardStyle" class="graveyard-container" @mouseover="hover = true" @mouseleave="hover = false">
+    <div :style="exileStyle" class="exile-container" @mouseover="hover = true" @mouseleave="hover = false">
         <div v-if="hover" class="hover-buttons">
-            <button @click="openGraveyardModal" class="button-center">👁️</button>
+            <button @click="openExileModal" class="button-center">👁️</button>
         </div>
-        <div class="graveyard-image-container">
-            <img v-if="cards && cards.length >0" :src="cards[cards.length-1].image" draggable="false" class="last-graveyard-card">
-            <img src="../assets/graveyard.png" draggable="false" class="graveyard-image">
+        <div class="exile-image-container">
+            <img v-if="cards && cards.length >0" :src="cards[cards.length-1].image" draggable="false" class="last-exile-card">
+            <img src="../assets/ban.png" draggable="false" class="exile-image">
         </div>
     </div>
 </template>
   
   <script>
-    import axios from 'axios';
   
     export default {
       props: {
@@ -21,50 +20,50 @@
         userIndex: Number, //index of this frontend user
         cards: Array
       },
-      emits: ["open-graveyard-modal"],
+      emits: ["open-exile-modal"],
       data() {
         return {
             hover: false
         };
       },
       computed: {
-        graveyardStyle() {
+        exileStyle() {
           switch (this.pIndex) {
             case 0:
               return {
-                left: "2400px",
+                left: "2630px",
                 top: "600px"
               };
             case 1:
               return {
-                left: "50px",
+                left: "280px",
                 top: "-880px",
                 transform: "rotate(180deg)"
               };
             case 2:
               return {
-                left: "-2400px",
+                left: "-2170px",
                 top: "-880px",
                 transform: "rotate(180deg)"
               };
             case 3:
               return {
-                left: "-250px",
+                left: "-480px",
                 top: "600px"
               };
           }  
         }
       },
       methods: {
-        openGraveyardModal() {
-            this.$emit('open-graveyard-modal', this.pIndex);
+        openExileModal() {
+            this.$emit('open-exile-modal', this.pIndex);
         }
       },
     };
   </script>
   
   <style>
-  .graveyard-container {
+  .exile-container {
     position: fixed;
     height: 280px;
     width: 200px;
@@ -75,7 +74,7 @@
     box-sizing: border-box; 
   }
 
-  .graveyard-image-container img {
+  .exile-image-container img {
     width: 100%; 
     height: 100%; 
     object-fit:scale-down; 
@@ -83,12 +82,12 @@
 
   }
 
-  .last-graveyard-card {
+  .last-exile-card {
     position: relative; /* Allows the element to be positioned below the second image */
     z-index: 1;
   }
 
-  .graveyard-image{
+  .exile-image{
       position: absolute;
       top: 0;
       left: 0;

@@ -764,8 +764,19 @@
       async moveToExile(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
+
+        let cardIds = [event.cardId]
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.includes(event.cardId)) {
+          cardIds = this.$store.state.selectedCardIds
+        }
+
+        let tokenIds = []
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedTokenIds && this.$store.state.selectedCardIds.length > 0) {
+          tokenIds = this.$store.state.selectedTokenIds;
+        }
+
         try{
-          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + event.cardId + '/exile/' + targetPlayerName, {});
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/exile/' + targetPlayerName, {cardIds : cardIds, tokenIds : tokenIds});
           console.log(response.data);
         } catch (error) {
           console.log(error);

@@ -66,22 +66,22 @@ export const PLAYER_3_GRAVEYARD_Y1 = 475;
 export const PLAYER_3_GRAVEYARD_X2 = -150;
 export const PLAYER_3_GRAVEYARD_Y2 = 720;
 
-export const PLAYER_0_EXILE_X1 = 2530; 
-export const PLAYER_0_EXILE_Y1 = 475;
-export const PLAYER_0_EXILE_X2 = 2730;
-export const PLAYER_0_EXILE_Y2 = 720;
+export const PLAYER_0_EXILE_X1 = 2300; 
+export const PLAYER_0_EXILE_Y1 = 175;
+export const PLAYER_0_EXILE_X2 = 2500;
+export const PLAYER_0_EXILE_Y2 = 320;
 
-export const PLAYER_1_EXILE_X1 = 185;
-export const PLAYER_1_EXILE_Y1 = -1025;
-export const PLAYER_1_EXILE_X2 = 380;
-export const PLAYER_1_EXILE_Y2 = -735;
+export const PLAYER_1_EXILE_X1 = -45;
+export const PLAYER_1_EXILE_Y1 = -725;
+export const PLAYER_1_EXILE_X2 = 150;
+export const PLAYER_1_EXILE_Y2 = -435;
 
-export const PLAYER_2_EXILE_X1 = -2270;
-export const PLAYER_2_EXILE_Y1 = -1025;
-export const PLAYER_2_EXILE_X2 = -2070;
-export const PLAYER_2_EXILE_Y2 = -735;
+export const PLAYER_2_EXILE_X1 = -2500;
+export const PLAYER_2_EXILE_Y1 = -725;
+export const PLAYER_2_EXILE_X2 = -2300;
+export const PLAYER_2_EXILE_Y2 = -435;
 
-export const PLAYER_3_EXILE_X1 = -580;
-export const PLAYER_3_EXILE_Y1 = 475;
-export const PLAYER_3_EXILE_X2 = -380;
-export const PLAYER_3_EXILE_Y2 = 720;
+export const PLAYER_3_EXILE_X1 = -350;
+export const PLAYER_3_EXILE_Y1 = 175;
+export const PLAYER_3_EXILE_X2 = -150;
+export const PLAYER_3_EXILE_Y2 = 420;

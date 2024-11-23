@@ -31,25 +31,25 @@
           switch (this.pIndex) {
             case 0:
               return {
-                left: "2630px",
-                top: "600px"
+                left: "2400px",
+                top: "310px"
               };
             case 1:
               return {
-                left: "280px",
-                top: "-880px",
+                left: "50px",
+                top: "-590px",
                 transform: "rotate(180deg)"
               };
             case 2:
               return {
-                left: "-2170px",
-                top: "-880px",
+                left: "-2400px",
+                top: "-590px",
                 transform: "rotate(180deg)"
               };
             case 3:
               return {
-                left: "-480px",
-                top: "600px"
+                left: "-250px",
+                top: "310px"
               };
           }  
         }

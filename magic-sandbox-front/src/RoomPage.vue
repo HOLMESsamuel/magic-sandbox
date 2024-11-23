@@ -157,6 +157,14 @@
     @close-exile-modal="closeExileModal()"
     @add-card-to-hand="moveFromExileToHand($event)"
   ></exile-modal>
+  <control-panel
+    :roomId="roomId"
+    :userIndex="userIndex"
+    :playerName=this.userName
+    @show-deck="showDeck($event)"
+    @open-token-modal="openTokenModal($event)"
+    @open-dice-modal="openDiceModal">
+  </control-panel>
 </template>
   
   <script>
@@ -169,6 +177,7 @@
   import Graveyard from './components/Graveyard.vue';
   import Exile from './components/Exile.vue';
   import Background from './components/Background.vue';
+  import ControlPanel from './components/ControlPanel.vue';
   import CardModal from './components/modals/CardModal.vue';
   import DeckModal from './components/modals/DeckModal.vue';
   import MoveCardToDeckModal from './components/modals/MoveCardToDeckModal.vue';
@@ -312,7 +321,7 @@
       this.connectWebSocket();
     },
     components: {
-      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, Exile, ExileModal
+      Deck, Card, CardModal, Counter, Hand, DeckModal, MoveCardToDeckModal, TokenModal, Token, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, Exile, ExileModal, ControlPanel
     },
     methods: {
       handleKeyPress(event) {
@@ -764,8 +773,19 @@
       async moveToExile(event) {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         const targetPlayerName = this.state.players[event.targetPlayerIndex].name;
+
+        let cardIds = [event.cardId]
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedCardIds.includes(event.cardId)) {
+          cardIds = this.$store.state.selectedCardIds
+        }
+
+        let tokenIds = []
+        if(this.$store.state.selectedCardIds && this.$store.state.selectedTokenIds && this.$store.state.selectedCardIds.length > 0) {
+          tokenIds = this.$store.state.selectedTokenIds;
+        }
+
         try{
-          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/card/' + event.cardId + '/exile/' + targetPlayerName, {});
+          const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/exile/' + targetPlayerName, {cardIds : cardIds, tokenIds : tokenIds});
           console.log(response.data);
         } catch (error) {
           console.log(error);
@@ -809,12 +829,12 @@
 
 .move-button {
   bottom: 25px;
-  left: 25px;
+  right: 95px;
 }
 
 .select-button {
   bottom: 25px;
-  left: 65px;
+  right: 130px;
 }
 
 .setting-button :hover {

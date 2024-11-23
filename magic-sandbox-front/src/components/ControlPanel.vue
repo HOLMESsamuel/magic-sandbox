@@ -117,7 +117,7 @@
   border-radius: 8px;
   border: solid black;
   background-color: inherit;
-  color: black;
+  color: white;
   padding: 5px 5px;
   font-size: 2em;
   cursor: pointer;

@@ -166,6 +166,10 @@
           newPositionY = - newPositionY + 2 * this.startDragTokenPosition.y;
         }
 
+        if(this.$store.state.selectedTokenIds.length == 0) {
+          this.$emit('update-token-position', { x: newPositionX, y: newPositionY });
+        }
+
         let deltax = this.position.x - newPositionX;
         let deltay = this.position.y - newPositionY;
 

@@ -232,6 +232,10 @@
             newPositionY = - newPositionY + 2 * this.startDragPosition.y;
           }
 
+          if(this.$store.state.selectedCardIds.length == 0) {
+            this.$emit('update-position', { x: newPositionX, y: newPositionY });
+          }
+          
           let deltax = this.position.x - newPositionX;
           let deltay = this.position.y - newPositionY;
 

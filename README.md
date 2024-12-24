@@ -50,7 +50,7 @@ ngrok http 5000
 2. Create a venv if not created already (python -m venv .venv for linux, python -m venv venv for windows)
 3. Activate the venv (source .venv/bin/activate for linux, .\venv\Scripts\activate for windows)
 4. You need to have google chrome executable installed
-5. Install dependencies on the venv :
+5. Install dependencies on the venv : (there is currently some incompatibility with python version > 3.11.6)
 ```
 pip install --no-cache-dir -r requirements.txt
 ```

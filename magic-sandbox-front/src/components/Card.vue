@@ -6,6 +6,11 @@
       <!-- Hover Buttons -->
       <div v-if="!inHand && hover" class="hover-buttons">
         <button @click.stop="showCardDetail" class="button-center">👁️</button>
+        <button @click.stop="updateCounter(1)" class="button-right-top">+</button>
+        <button @click.stop="updateCounter(-1)" class="button-right-bottom">-</button>
+      </div>
+      <div v-if="!inHand && counter != 0" class="counter-container">
+        <CardCounter :count="counter" />
       </div>
     </div>
     <div v-if="showMenu" class="menu" :style="customMenuStyle" @contextmenu.prevent="this.showMenu = false">
@@ -27,8 +32,12 @@
   import * as Constants from '../constants'
   import {checkIfCardInPlayerDeck, checkIfCardInPlayerExile, checkIfCardInPlayerGraveyard, checkIfCardInPlayerHand} from '../utils/utils'
   import { eventBus } from '../eventBus';
+  import CardCounter from './CardCounter.vue';
 
   export default {
+    components: {
+      CardCounter
+    },
     emits: ['update-position', 'show-card', 'play-card', 'move-from-hand-to-hand', 'move-from-board-to-hand', 'open-move-to-deck-modal', 'move-to-exile', 'move-to-graveyard', 'copy-card'],
     props: {
       imageSrc: String,
@@ -45,6 +54,7 @@
         type: Boolean,
         default: false
       },
+      counter: Number,
       player: String,
       tapped: Boolean,
       id: String,
@@ -421,6 +431,15 @@
           }
         }
       },
+      async updateCounter(delta) {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        try{
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/counter', { counter: this.counter+delta });
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
       async tap() {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         let cardIds = this.getSelectedCardIds();
@@ -478,17 +497,15 @@
 }
 
 .hover-buttons {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
+  margin: 0 auto;
   z-index: 10; /* Ensure it's above the card image */
 }
 
 .button-center {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   background: #FFF;
   border: none;
   cursor: pointer;
@@ -499,12 +516,44 @@
   border-radius: 50%;
 }
 
-.button-center:hover {
+.button-right-top {
+  position: absolute;
+  top: 60px;
+  right: -20px;
+  background: #FFF;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  height: 40px;
+  width: 40px;
+  font-size: 2em;
+  border-radius: 50%;
+}
+
+.button-right-top:hover {
   background: #a99d9d;
 }
 
-.button-center {
-  margin: 0 auto;
+.button-right-bottom {
+  position: absolute;
+  top: 150px;
+  right: -20px;
+  background: #FFF;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  height: 40px;
+  width: 40px;
+  font-size: 2em;
+  border-radius: 50%;
+}
+
+.button-right-bottom:hover {
+  background: #a99d9d;
+}
+
+.hover-buttons:hover {
+  background: #a99d9d;
 }
 
 .menu {
@@ -544,6 +593,12 @@
   color: rgb(190, 0, 0); /* Couleur du texte */
   font-size: 60px; /* Taille du texte */
   z-index: 10; /* S'assure que le texte est au-dessus de l'image */
+}
+
+.counter-container {
+  position: absolute;
+  top: 100px;
+  right: -25px;
 }
 </style>
 

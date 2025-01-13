@@ -14,6 +14,7 @@ class Card(BaseModel):
     commander : bool  = False
     types : List[str] = []
     is_copy: bool = False
+    counter:int = 0
 
     def tap(self):
         self.tapped = True

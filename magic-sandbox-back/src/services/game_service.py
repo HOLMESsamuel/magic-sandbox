@@ -136,6 +136,13 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " play " + cardId}
     
+    async def update_card_counter(self, playerId: str, roomId: str, cardId: str, counter: int):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.update_card_counter(cardId, counter)
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " update " + cardId}
+    
     async def copy_card(self, playerId: str, roomId: str, cardId: str):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)

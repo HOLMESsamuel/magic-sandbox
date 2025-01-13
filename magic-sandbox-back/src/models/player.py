@@ -84,6 +84,12 @@ class Player(BaseModel):
                 self.board.cards.append(removed_card)
                 break
 
+    def update_card_counter(self, cardId, counter):
+        for card in self.board.cards:
+            if card.id == cardId:
+                card.counter = counter
+                break
+
     def copy_card(self, cardId, max_z_index):
         for index, card in enumerate(self.board.cards):
             if card.id == cardId:

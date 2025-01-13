@@ -9,6 +9,7 @@
         :tapped="card.tapped"
         :roomId="roomId"
         :id="card.id"
+        :counter="card.counter"
         :initialPosition="card.position"
         :player="player.name"
         :userIndex="userIndex"

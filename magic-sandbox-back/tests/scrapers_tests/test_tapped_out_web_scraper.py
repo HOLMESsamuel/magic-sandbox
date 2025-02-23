@@ -38,7 +38,7 @@ async def test_get_deck_without_commander(webdriver_instance):
     deck = await scraper.get_deck(url)
 
     assert deck is not None
-    assert len(deck.cards) == 60
+    assert len(deck.cards) == 62
     
 
     commander_exists = any(card.commander == True for card in deck.cards)

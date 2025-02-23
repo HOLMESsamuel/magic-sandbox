@@ -112,8 +112,8 @@ async def scrap_deck(playerId: str, roomId: str, deck_input: DeckInput, driver: 
         raise HTTPException(status_code=500, detail="An error occurred while processing the request.")
 
 
-@app.websocket("/ws/{group_id}/{name}")
-async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str):
+@app.websocket("/ws/{type}/{group_id}/{name}")
+async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str, type: str):
     await websocket.accept()
 
     websocket_manager.add_connection(group_id, websocket)
@@ -124,6 +124,11 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str):
         game_state = GameState()
 
     game_state.add_player_if_not_exist(name)
+
+    if type == "sr":
+        game_state.river_cards = [Card(name="Builder Bot", id="123", image="123"),Card(name="Builder Bot", id="123", image="123"),Card(name="Builder Bot", id="123", image="123"),Card(name="Builder Bot", id="123", image="123"),Card(name="Builder Bot", id="123", image="123")]
+        player : Player = game_state.get_player(name)
+        player.deck.initialize_sr_deck()
 
     state_manager.update_group_state(group_id, game_state)
 

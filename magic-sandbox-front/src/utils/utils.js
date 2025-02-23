@@ -102,3 +102,11 @@ export const isPointInsideRect = (point, rect) => {
       point.y >= rect.y1 && point.y <= rect.y2
     );
 }
+
+export function getLocalCardImageUrl(path, cardName, extension) {
+  return new URL(`${path}${cardName}.${extension}`, import.meta.url).href;
+}
+
+export function getLocalCardImageUrlCompletePath(completePath) {
+  return new URL(`${completePath}`, import.meta.url).href;
+}

@@ -1,10 +1,12 @@
 from .player import Player
+from .card import Card
 from pydantic import BaseModel
 
 class GameState(BaseModel):
     players : list[Player] = []
     max_z_index : int = 1
     alert_message : str = ""
+    river_cards : list[Card] = []
 
     def remove_player(self, player_id):
         for player in self.players:

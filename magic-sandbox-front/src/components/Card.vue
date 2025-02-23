@@ -1,13 +1,13 @@
 <template>
   <div @mouseleave="showMenu = false">
-    <div class="card" @click.stop="handleCardClick" :style="cardStyle" @dblclick.stop="handleCardDoubleClick()" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup.stop="endDrag" @contextmenu.prevent="showCustomMenu($event)">
+    <div class="card" @click.stop="handleCardClick" :style="cardStyle" @dblclick.stop="handleCardDoubleClick" @mousedown.stop="startDrag" @mouseover="hover = true" @mouseleave="hover = false" @mouseup.stop="endDrag" @contextmenu.prevent="showCustomMenu($event)">
       <div v-if="this.copy" class="text-overlay">Copy</div>
-      <img :src="flipped ? flipImage : imageSrc" :alt="name">
+      <img :src="getCardImageSource" :alt="name">
       <!-- Hover Buttons -->
       <div v-if="!inHand && hover" class="hover-buttons">
-        <button @click.stop="showCardDetail" class="button-center">👁️</button>
-        <button @click.stop="updateCounter(1)" class="button-right-top">+</button>
-        <button @click.stop="updateCounter(-1)" class="button-right-bottom">-</button>
+        <button @click.native.stop="showCardDetail" class="button-center">👁️</button>
+        <button @click.native.stop="updateCounter(1)" class="button-right-top">+</button>
+        <button @click.native.stop="updateCounter(-1)" class="button-right-bottom">-</button>
       </div>
       <div v-if="!inHand && counter != 0" class="counter-container">
         <CardCounter :count="counter" />
@@ -33,6 +33,7 @@
   import {checkIfCardInPlayerDeck, checkIfCardInPlayerExile, checkIfCardInPlayerGraveyard, checkIfCardInPlayerHand} from '../utils/utils'
   import { eventBus } from '../eventBus';
   import CardCounter from './CardCounter.vue';
+  import { getLocalCardImageUrl } from '../utils/utils';
 
   export default {
     components: {
@@ -89,6 +90,17 @@
     computed: {
       isDragging() {
         return this.$store.state.currentlyDraggingId === this.id;
+      },
+      getCardImageSource() {
+        if (this.imageSrc === "local") {
+          return getLocalCardImageUrl('../assets/sr/cards/', this.name, 'webp')
+        } else {
+          if(this.flipped){
+            return this.flipImage
+          } else {
+            return this.imageSrc
+          }
+        }
       },
       startDragPosition() {
         return this.$store.state.startDragPosition;
@@ -432,6 +444,7 @@
         }
       },
       async updateCounter(delta) {
+        clearTimeout(this.clickTimeout);
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         try{
           const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/' + this.id + '/counter', { counter: this.counter+delta });

@@ -7,7 +7,7 @@
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
     </div>
-    <div class="deck-loaded" v-if="isDeckLoaded && !firstCardRevealed" @click="if (this.$store.state.soundOn === true) {play()}; drawCard();">
+    <div class="deck-loaded" v-if="isDeckLoaded && !firstCardRevealed" @click="if (this.$store.state.soundOn === true) {play()}; drawCard();" :style="backgroundStyle">
     </div>
     <div class="deck-loaded" v-if="isDeckLoaded && firstCardRevealed" @click="if (this.$store.state.soundOn === true) {play()}; drawCard();">
       <img :src="cards[0].image" :alt="cards[0].name">
@@ -26,6 +26,7 @@
   import axios from 'axios';
   import { useSound } from '@vueuse/sound';
   import drawSound from '../assets/draw.mp3'
+  import { getLocalCardImageUrlCompletePath } from '../utils/utils';
 
   export default {
     setup() {
@@ -45,7 +46,8 @@
       scale: Number,
       offsetX: Number,
       offsetY: Number,
-      reverseMovement: Boolean
+      reverseMovement: Boolean,
+      backgroundImage: String
     },
     data() {
       return {
@@ -98,6 +100,13 @@
           transform: transformStyles,
           top: this.menuPosition.y + 'px',
           left: this.menuPosition.x + 'px'
+        };
+      },
+      backgroundStyle() {
+        let url = getLocalCardImageUrlCompletePath(this.backgroundImage);
+        return {
+          backgroundImage: `url(${url})`,
+          backgroundSize: 'contain'
         };
       }
     },
@@ -206,8 +215,6 @@
 }
 
 .deck-loaded {
-  background: url(../assets/card_back.webp);
-  background-size: contain;
   padding: 10px;
   border-radius: 5px;
   height: 100%; 

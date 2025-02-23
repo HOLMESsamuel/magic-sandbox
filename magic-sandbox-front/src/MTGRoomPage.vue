@@ -52,7 +52,8 @@
               :scale="scale"
               :offsetX="offsetX"
               :offsetY="offsetY"
-              :reverseMovement="isReverseMovement">
+              :reverseMovement="isReverseMovement"
+              :backgroundImage="'../assets/magic/card_back.webp'">
             </deck>
             <counter
               :key="`${player.name}-${player.score}`"
@@ -477,7 +478,7 @@
       },
       connectWebSocket() {
         const wsBackendUrl = import.meta.env.VITE_WS_BACKEND_URL;
-        this.ws = new WebSocket(`${wsBackendUrl}${this.roomId}/${this.userName}`);
+        this.ws = new WebSocket(`${wsBackendUrl}mtg/${this.roomId}/${this.userName}`);
   
         this.ws.onopen = () => {
           console.log("WebSocket connected");

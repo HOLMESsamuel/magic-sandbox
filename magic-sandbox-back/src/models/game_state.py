@@ -1,12 +1,18 @@
 from .player import Player
 from .card import Card
 from pydantic import BaseModel
+import json
+import uuid
+import random
+import os
 
 class GameState(BaseModel):
     players : list[Player] = []
     max_z_index : int = 1
     alert_message : str = ""
     river_cards : list[Card] = []
+    pool : list[Card] = []
+    type : str = "magic"
 
     def remove_player(self, player_id):
         for player in self.players:
@@ -66,5 +72,17 @@ class GameState(BaseModel):
         card.tapped = False
         if card:
             target_player.exile.cards.append(card)
+
+    def initialize_sr_game(self):
+        json_file = os.path.join(os.path.dirname(__file__), "cards.json")
+        with open(json_file, "r") as f:
+            data = json.load(f)
+
+            for card in data.get("cards", []):
+                self.pool.append(Card(id=str(uuid.uuid4()), image="local", name=card['name']))
+            
+            random.shuffle(self.pool)
+            for i in range(5):
+                self.river_cards.append(self.pool.pop(0))
 
 

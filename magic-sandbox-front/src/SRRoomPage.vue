@@ -18,15 +18,12 @@
           <div class="axis-horizontal"></div>
           <div class="axis-vertical"></div>
           <river
-            :roomId="roomId"
-            :player="player"
-            :userIndex="userIndex"
-            :pIndex="pIndex"
             :scale="scale"
             :offsetX="offsetX"
             :offsetY="offsetY"
             :maxZIndex="state.max_z_index"
             :cards="state.river_cards"
+            @take-card="takeCardFromRiver($event)"
           ></river>
           <div>
             <div v-for="(player, pIndex) in state.players">
@@ -616,6 +613,15 @@
           } catch (error) {
             console.log(error);
           }
+        },
+        async takeCardFromRiver(cardId) {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
+            try{
+                const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/river/card/'+  cardId + '/player/' + this.userName, {});
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
         },
         async moveFromHandToHand(event) {
           const backendUrl = import.meta.env.VITE_BACKEND_URL;

@@ -262,3 +262,14 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " reveal the first card of the deck"}
     
+    async def move_card_from_river_to_graveyard(self, roomId: str, playerId: str, cardId: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        for index, card in enumerate(game_state.river_cards):
+            if card.id == cardId:
+                new_card = game_state.river_cards.pop(index)
+                player.graveyard.cards.append(new_card)
+                game_state.river_cards.append(game_state.pool.pop(0))
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " took " + cardId + " from river"}
+    

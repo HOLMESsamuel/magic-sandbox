@@ -18,6 +18,7 @@ from src.routes.hand_routes import router as hand_router
 from src.routes.graveyard_routes import router as graveyard_router
 from src.routes.exile_routes import router as exile_router
 from src.routes.player_routes import router as player_router
+from src.routes.river_routes import router as river_router
 
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -73,6 +74,7 @@ app.include_router(hand_router)
 app.include_router(graveyard_router)
 app.include_router(player_router)
 app.include_router(exile_router)
+app.include_router(river_router)
 
 def mount_empty_uploads_folder(upload_folder_name: str):
     if os.path.exists(upload_folder_name):
@@ -121,12 +123,15 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str, typ
     game_state = state_manager.get_group_state(group_id)
 
     if game_state is None:
-        game_state = GameState()
+        if type == "sr":
+            game_state = GameState(type='sr')
+            game_state.initialize_sr_game()
+        else:
+            game_state = GameState()
 
     game_state.add_player_if_not_exist(name)
 
     if type == "sr":
-        game_state.river_cards = [Card(name="Builder Bot", id="123", image="123"),Card(name="Builder Bot", id="123", image="123"),Card(name="Builder Bot", id="123", image="123"),Card(name="Builder Bot", id="123", image="123"),Card(name="Builder Bot", id="123", image="123")]
         player : Player = game_state.get_player(name)
         player.deck.initialize_sr_deck()
 

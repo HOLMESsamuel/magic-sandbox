@@ -3,6 +3,7 @@
       <div class="river">
         <div v-for="(card, index) in cards" :key="index" class="river-card">
           <img :src="getCardImage(card.name)" :alt="card.name" />
+          <button class="take-card-button" @click="takeCard(card)">Take</button>
         </div>
       </div>
     </div>
@@ -18,9 +19,14 @@
         required: true
       }
     },
+    emits: ['take-card'],
     methods: {
       getCardImage(cardName) {
         return getLocalCardImageUrl('../assets/sr/cards/', cardName, 'webp');
+      },
+      takeCard(card) {
+        this.$emit('take-card', card.id);
+        console.log(card.id)
       }
     }
   };
@@ -51,6 +57,7 @@
   }
   
   .river-card {
+    position: relative;
     margin: 5px;
     width: 200px;
     height: 280px;
@@ -63,27 +70,29 @@
   }
   
   .river-card img {
-    width:140%;
+    width: 140%;
     height: auto;
     display: block;
   }
-
-.card {
-    width: 400px;
-    height: 560px;
-    border: 1px solid #333;
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  
+  .take-card-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
   }
   
-  .card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .river-card:hover .take-card-button {
+    opacity: 1;
   }
-
   </style>
   

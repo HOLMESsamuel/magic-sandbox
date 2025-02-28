@@ -92,6 +92,7 @@
     <card-modal
       :modalImageSrc="modalImageSrc"
       :modalFlipImageSrc="modalFlipImageSrc"
+      :modalImageName="modalImageName"
       :isCardModalVisible="isCardModalVisible"
       :isMoveToDeckModalVisible="isMoveToDeckModalVisible"
       @close-card-modal="closeCardModal"
@@ -158,6 +159,7 @@
           offsetY: 0,
           modalImageSrc: '',
           modalFlipImageSrc: '',
+          modalImageName: '',
           isCardModalVisible: false,
           isDeckModalVisible: false,
           isMoveToDeckModalVisible: false,
@@ -512,6 +514,7 @@
         showCard(event) {
           this.modalImageSrc = event.image;
           this.modalFlipImageSrc = event.flipImage;
+          this.modalImageName = event.name;
           this.isCardModalVisible = true;
         },
         showDeck() {

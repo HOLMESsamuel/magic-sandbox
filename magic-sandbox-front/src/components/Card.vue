@@ -358,7 +358,7 @@
         return !this.inHand;
       },
       showCardDetail() {
-        this.$emit('show-card', {image: this.imageSrc, flipImage: this.flipImage});
+        this.$emit('show-card', {name: this.name, image: this.imageSrc, flipImage: this.flipImage});
       },
       openMoveToDeckModal() {
         this.$emit('open-move-to-deck-modal', this.id);

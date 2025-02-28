@@ -1,7 +1,7 @@
 <template>
     <div v-if="isCardModalVisible && !isMoveToDeckModalVisible" class="cardModal" @click="closeModal">
       <div class="card-modal-content">
-        <img :src="modalImageSrc" alt="Enlarged Card" />
+        <img :src="getCardImageSource()" alt="Enlarged Card" />
         <img v-if="modalFlipImageSrc && modalFlipImageSrc !== DEFAULT_CARD_BACK_URL" :src="modalFlipImageSrc" alt="Enlarged Card flipped" />
         <button class="close-button" @click.stop="closeModal"></button>
       </div>
@@ -10,6 +10,7 @@
   
   <script>
   import { DEFAULT_CARD_BACK_URL } from '../../constants';
+  import { getLocalCardImageUrl } from '../../utils/utils';
 
   export default {
     emits: ["close-card-modal"],
@@ -21,13 +22,21 @@
     props: {
       modalImageSrc: String,
       modalFlipImageSrc: String,
+      modalImageName: String,
       isCardModalVisible: Boolean,
       isMoveToDeckModalVisible: Boolean
     },
     methods: {
       closeModal() {
         this.$emit('close-card-modal');
-      }
+      },
+      getCardImageSource() {
+        if (this.modalImageSrc === "local") {
+          return getLocalCardImageUrl('../assets/sr/cards/', this.modalImageName, 'webp')
+        } else {
+          return this.modalImageSrc
+        }
+      },
     }
   };
   </script>

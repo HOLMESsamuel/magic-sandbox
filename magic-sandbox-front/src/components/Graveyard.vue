@@ -4,7 +4,7 @@
             <button @click="openGraveyardModal" class="button-center">👁️</button>
         </div>
         <div class="graveyard-image-container">
-            <img v-if="cards && cards.length >0" :src="cards[cards.length-1].image" draggable="false" class="last-graveyard-card">
+            <img v-if="cards && cards.length >0" :src="getCardImageSource(cards[cards.length-1])" draggable="false" class="last-graveyard-card">
             <img src="../assets/graveyard.png" draggable="false" class="graveyard-image">
         </div>
     </div>
@@ -12,6 +12,7 @@
   
   <script>
     import axios from 'axios';
+    import { getLocalCardImageUrl } from '../utils/utils';
   
     export default {
       props: {
@@ -58,7 +59,14 @@
       methods: {
         openGraveyardModal() {
             this.$emit('open-graveyard-modal', this.pIndex);
+        },
+        getCardImageSource(card) {
+        if (card.image === "local") {
+          return getLocalCardImageUrl('../assets/sr/cards/', card.name, 'webp')
+        } else {
+          return card.image
         }
+      },
       },
     };
   </script>

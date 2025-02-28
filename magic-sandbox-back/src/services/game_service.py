@@ -269,7 +269,7 @@ class GameService:
             if card.id == cardId:
                 new_card = game_state.river_cards.pop(index)
                 player.graveyard.cards.append(new_card)
-                game_state.river_cards.append(game_state.pool.pop(0))
+                game_state.river_cards.insert(index, game_state.pool.pop(0))
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " took " + cardId + " from river"}
     

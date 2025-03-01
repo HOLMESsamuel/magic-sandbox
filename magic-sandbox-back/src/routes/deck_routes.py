@@ -31,6 +31,11 @@ async def shuffle_deck(playerId: str, roomId: str):
     response = await game_service.shuffle_deck(playerId, roomId)
     return response
 
+@router.put("/room/{roomId}/player/{playerId}/deck/graveyard")
+async def mix_graveyard_to_deck(playerId: str, roomId: str):
+    response = await game_service.mix_graveyard_to_deck(playerId, roomId)
+    return response
+
 @router.put("/room/{roomId}/player/{playerId}/deck/reveal")
 async def reveal_deck_first_card(playerId: str, roomId: str):
     response = await game_service.reveal_deck_first_card(roomId, playerId)

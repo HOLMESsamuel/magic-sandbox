@@ -276,3 +276,34 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " took " + cardId + " from river"}
     
+    async def mix_graveyard_to_deck(self, playerId, roomId):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.deck.cards.extend(player.graveyard.cards)
+        player.deck.shuffle()
+        player.graveyard.cards.clear()
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " mixed his graveyard to deck"}
+    
+    async def discard_board(self, playerId, roomId):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        player.graveyard.cards.extend(player.board.cards)
+        player.board.cards.clear()
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " discarded his cards"}
+    
+    async def draw_5(self, playerId, roomId):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        for i in range(5):
+            if len(player.deck.cards) > 0:
+                player.draw_card()
+            else:
+                player.deck.cards.extend(player.graveyard.cards)
+                player.deck.shuffle()
+                player.graveyard.cards.clear()
+                player.draw_card()
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " draw 5 cards"}
+    

@@ -19,3 +19,8 @@ async def update_score(playerId: str, roomId: str, score: int):
 async def detap_all(playerId: str, roomId: str):
     response = await game_service.detap_all(playerId, roomId)
     return response
+
+@router.put("/room/{roomId}/player/{playerId}/board/discard")
+async def discard_board(playerId: str, roomId: str):
+    response = await game_service.discard_board(playerId, roomId)
+    return response

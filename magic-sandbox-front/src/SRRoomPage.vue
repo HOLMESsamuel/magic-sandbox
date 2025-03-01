@@ -116,14 +116,14 @@
       @close-graveyard-modal="closeGraveyardModal()"
       @add-card-to-hand="moveFromGraveyardToHand($event)"
     ></graveyard-modal>
-    <control-panel
+    <SRControlPanel
       :roomId="roomId"
       :userIndex="userIndex"
       :playerName=this.userName
       @show-deck="showDeck($event)"
       @open-token-modal="openTokenModal($event)"
       @open-dice-modal="openDiceModal">
-    </control-panel>
+    </SRControlPanel>
   </template>
     
     <script>
@@ -134,7 +134,7 @@
     import Hand from './components/Hand.vue'
     import Graveyard from './components/Graveyard.vue';
     import Background from './components/Background.vue';
-    import ControlPanel from './components/ControlPanel.vue';
+    import SRControlPanel from './components/sr/SRControlPanel.vue';
     import CardModal from './components/modals/CardModal.vue';
     import GraveyardModal from './components/modals/GraveyardModal.vue';
     import SettingsModal from './components/modals/SettingsModal.vue';
@@ -271,7 +271,7 @@
         this.connectWebSocket();
       },
       components: {
-        Deck, Card, CardModal, Counter, Hand, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, ControlPanel, River
+        Deck, Card, CardModal, Counter, Hand, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, SRControlPanel, River
       },
       methods: {
         handleKeyPress(event) {

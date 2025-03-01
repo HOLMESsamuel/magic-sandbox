@@ -39,3 +39,8 @@ async def move_card_from_exile_to_hand(playerId: str, roomId: str, cardId: str, 
 async def mulligan(playerId: str, roomId: str):
     response = await game_service.mulligan(playerId, roomId)
     return response
+
+@router.put("/room/{roomId}/player/{playerId}/hand/draw5")
+async def draw_5(playerId: str, roomId: str):
+    response = await game_service.draw_5(playerId, roomId)
+    return response

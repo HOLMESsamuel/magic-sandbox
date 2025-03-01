@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+  assetsInclude: ['**/*.webp', '**/*.png', '**/*.jpg'],
   plugins: [
     vue(),
     VitePWA({

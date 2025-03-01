@@ -93,7 +93,7 @@
       },
       getCardImageSource() {
         if (this.imageSrc === "local") {
-          return getLocalCardImageUrl('../assets/sr/cards/', this.name, 'webp')
+          return getLocalCardImageUrl('/sr/cards/', this.name, 'webp')
         } else {
           if(this.flipped){
             return this.flipImage

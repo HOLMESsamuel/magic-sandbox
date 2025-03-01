@@ -62,7 +62,7 @@
         },
         getCardImageSource(card) {
         if (card.image === "local") {
-          return getLocalCardImageUrl('../assets/sr/cards/', card.name, 'webp')
+          return getLocalCardImageUrl('/sr/cards/', card.name, 'webp')
         } else {
           return card.image
         }

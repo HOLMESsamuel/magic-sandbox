@@ -23,7 +23,7 @@
     emits: ['take-card'],
     methods: {
       getCardImage(cardName) {
-        return getLocalCardImageUrl('../assets/sr/cards/', cardName, 'webp');
+        return getLocalCardImageUrl('/sr/cards/', cardName, 'webp');
       },
       takeCard(card) {
         this.$emit('take-card', card.id);

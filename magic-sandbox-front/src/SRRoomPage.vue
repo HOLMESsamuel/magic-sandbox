@@ -83,7 +83,7 @@
               :offsetX="offsetX"
               :offsetY="offsetY"
               :reverseMovement="isReverseMovement"
-              :backgroundImage="'../assets/sr/cardback.png'"
+              :backgroundImage="'/sr/cardback.png'"
             ></deck>
             </div>
           </div>

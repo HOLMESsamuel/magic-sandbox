@@ -32,7 +32,7 @@
       },
       getCardImageSource() {
         if (this.modalImageSrc === "local") {
-          return getLocalCardImageUrl('../assets/sr/cards/', this.modalImageName, 'webp')
+          return getLocalCardImageUrl('/sr/cards/', this.modalImageName, 'webp')
         } else {
           return this.modalImageSrc
         }

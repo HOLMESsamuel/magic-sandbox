@@ -1,6 +1,6 @@
 <template>
     <div class="river-container">
-      <div class="river">
+      <div class="river" :style="rotation">
         <div v-for="(card, index) in cards" :key="index" class="river-card">
           <img :src="getCardImage(card.name)" :alt="card.name" />
           <button class="take-card-button" @click="takeCard(card)">Take</button>
@@ -17,7 +17,8 @@
       cards: {
         type: Array,
         required: true
-      }
+      },
+      userIndex: Number
     },
     emits: ['take-card'],
     methods: {
@@ -28,6 +29,24 @@
         this.$emit('take-card', card.id);
         console.log(card.id)
       }
+    },
+    computed: {
+        rotation() {
+            let transformStyle = {};
+            if(this.userIndex === 1 || this.userIndex ===2) {
+            transformStyle.transform = 'rotate(180deg)';
+            }
+
+            if(this.$store.state.rotate === true) {
+            if(transformStyle.transform) {
+                transformStyle.transform = '';
+            } else {
+                transformStyle.transform = "rotate(180deg)";
+            }
+            }
+
+            return transformStyle;
+        }
     }
   };
   </script>

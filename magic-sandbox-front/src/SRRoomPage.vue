@@ -21,6 +21,7 @@
             :scale="scale"
             :offsetX="offsetX"
             :offsetY="offsetY"
+            :userIndex="userIndex"
             :maxZIndex="state.max_z_index"
             :cards="state.river_cards"
             @take-card="takeCardFromRiver($event)"

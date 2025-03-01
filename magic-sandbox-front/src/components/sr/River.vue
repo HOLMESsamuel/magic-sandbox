@@ -89,7 +89,7 @@
   }
   
   .river-card img {
-    width: 140%;
+    width: 100%;
     height: auto;
     display: block;
   }

@@ -27,7 +27,7 @@
         ></Card>
       </div>
       <div v-if="pIndex != userIndex" v-for="(card, index) in cards" :key="index" class="hand-card">
-        <img src="../assets/magic/card_back.webp" :style="hiddenCardStyle" class="Card Image">
+        <img src="/magic/card_back.webp" :style="hiddenCardStyle" class="Card Image">
       </div>
     </div>
   </template>

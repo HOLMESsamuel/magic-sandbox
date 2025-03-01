@@ -53,7 +53,7 @@
               :offsetX="offsetX"
               :offsetY="offsetY"
               :reverseMovement="isReverseMovement"
-              :backgroundImage="'../assets/magic/card_back.webp'">
+              :backgroundImage="'/magic/card_back.webp'">
             </deck>
             <counter
               :key="`${player.name}-${player.score}`"

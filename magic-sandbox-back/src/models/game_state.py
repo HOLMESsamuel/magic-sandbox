@@ -84,5 +84,6 @@ class GameState(BaseModel):
             random.shuffle(self.pool)
             for i in range(5):
                 self.river_cards.append(self.pool.pop(0))
+            self.river_cards.append(Card(id=str(uuid.uuid4()), image="local", name="Explorer"))
 
 

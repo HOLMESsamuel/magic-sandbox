@@ -847,6 +847,70 @@
         {
             "name": "Predator",
             "type": "ship"
+        },
+        {
+            "name": "Screecher",
+            "type": "hero"
+        },
+        {
+            "name": "Chancellor Hartman",
+            "type": "hero"
+        },
+        {
+            "name": "Confessor Morris",
+            "type": "hero"
+        },
+        {
+            "name": "CEO Shaner",
+            "type": "hero"
+        },
+        {
+            "name": "Blob Overlord",
+            "type": "hero"
+        },
+        {
+            "name": "Commander Klik",
+            "type": "hero"
+        },
+        {
+            "name": "Hive Lord",
+            "type": "hero"
+        },
+        {
+            "name": "War Elder",
+            "type": "hero"
+        },
+        {
+            "name": "Ram Pilot",
+            "type": "hero"
+        },
+        {
+            "name": "Cunning Captain",
+            "type": "hero"
+        },
+        {
+            "name": "CEO Torres",
+            "type": "hero"
+        },
+        {
+            "name": "Special Ops Director",
+            "type": "hero"
+        },
+        {
+            "name": "High Priest Lyle",
+            "type": "hero"
+        },
+        {
+            "name": "Commodore Zhang",
+            "type": "hero"
+        },
+        {
+            "name": "Chairman Haygan",
+            "type": "hero"
+        },
+        {
+            "name": "Admiral Rasmussen",
+            "type": "hero"
         }
     ]
 }

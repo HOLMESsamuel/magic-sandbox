@@ -129,11 +129,7 @@ async def websocket_endpoint(websocket: WebSocket, group_id: str, name: str, typ
         else:
             game_state = GameState()
 
-    game_state.add_player_if_not_exist(name)
-
-    if type == "sr":
-        player : Player = game_state.get_player(name)
-        player.deck.initialize_sr_deck()
+    game_state.add_player_if_not_exist(name, type)
 
     state_manager.update_group_state(group_id, game_state)
 

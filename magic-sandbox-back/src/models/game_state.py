@@ -20,12 +20,15 @@ class GameState(BaseModel):
                 self.players.remove(player)
                 break
 
-    def add_player_if_not_exist(self, player_name):
+    def add_player_if_not_exist(self, player_name, type):
         for player in self.players:
             if player.name == player_name:
                 return
         player_index = len(self.players)
-        self.players.append(Player(name=player_name, index=player_index))
+        player = Player(name=player_name, index=player_index)
+        if type == "sr":
+            player.deck.initialize_sr_deck()
+        self.players.append(player)
 
     def get_player(self, player_name):
         for player in self.players:

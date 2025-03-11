@@ -13,6 +13,7 @@ class GameState(BaseModel):
     river_cards : list[Card] = []
     pool : list[Card] = []
     type : str = "magic"
+    scraped_card : list[Card] = []
 
     def remove_player(self, player_id):
         for player in self.players:

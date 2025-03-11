@@ -25,6 +25,7 @@
             :maxZIndex="state.max_z_index"
             :cards="state.river_cards"
             @take-card="takeCardFromRiver($event)"
+            @scrap-card="scrapCard($event)"
           ></river>
           <div>
             <div v-for="(player, pIndex) in state.players">
@@ -623,6 +624,15 @@
             const backendUrl = import.meta.env.VITE_BACKEND_URL;
             try{
                 const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/river/card/'+  cardId + '/player/' + this.userName, {});
+                console.log(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async scrapCard(cardId) {
+            const backendUrl = import.meta.env.VITE_BACKEND_URL;
+            try{
+                const response = await axios.delete(`${backendUrl}` + 'room/' + this.roomId +'/river/card/'+  cardId, {});
                 console.log(response.data);
             } catch (error) {
                 console.log(error);

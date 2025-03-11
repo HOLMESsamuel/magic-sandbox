@@ -3,7 +3,10 @@
       <div class="river" :style="rotation">
         <div v-for="(card, index) in cards" :key="index" class="river-card" :style="getCardStyle(card)">
           <img :src="getCardImage(card.name)" :alt="card.name" draggable="false">
-          <button class="take-card-button" @click="takeCard(card)">Take</button>
+          <div class="button-container">
+            <button class="take-card-button" @click="takeCard(card)">Take</button>
+            <button class="scrap-card-button" @click="scrapCard(card)">Scrap</button>
+          </div>
         </div>
       </div>
     </div>
@@ -20,14 +23,16 @@
       },
       userIndex: Number
     },
-    emits: ['take-card'],
+    emits: ['take-card', 'scrap-card'],
     methods: {
       getCardImage(cardName) {
         return getLocalCardImageUrl('/sr/cards/', cardName, 'webp');
       },
       takeCard(card) {
         this.$emit('take-card', card.id);
-        console.log(card.id)
+      },
+      scrapCard(card) {
+        this.$emit('scrap-card', card.id);
       },
       getCardStyle(card) {
         const isHorizontal = card.horizontal || false;
@@ -101,24 +106,49 @@
     display: block;
   }
   
-  .take-card-button {
+  /* Button container that keeps the buttons centered */
+  .button-container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  /* Take button - Green */
+  .take-card-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    font-size: 30px;
+    padding: 10px 18px;
     border: none;
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
   }
   
-  .river-card:hover .take-card-button {
+  /* Scrap button - Red */
+  .scrap-card-button {
+    background-color: #F44336; /* Red */
+    color: white;
+    font-size: 20px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  /* Show buttons on hover */
+  .river-card:hover .take-card-button,
+  .river-card:hover .scrap-card-button {
     opacity: 1;
   }
   </style>
+  
   

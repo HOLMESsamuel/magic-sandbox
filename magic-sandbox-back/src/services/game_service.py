@@ -276,6 +276,19 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " took " + cardId + " from river"}
     
+    async def scrap_card(self, roomId: str, cardId: str):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        for index, card in enumerate(game_state.river_cards):
+            if card.id == cardId:
+                new_card = game_state.river_cards.pop(index)
+                game_state.scraped_card.append(new_card)
+                if card.name == "Explorer":
+                    game_state.river_cards.insert(index, Card(id=str(uuid.uuid4()), image="local", name="Explorer"))
+                else:
+                    game_state.river_cards.insert(index, game_state.pool.pop(0))
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": " room " + roomId + " scraping " + cardId + " from river"}
+    
     async def mix_graveyard_to_deck(self, playerId, roomId):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)

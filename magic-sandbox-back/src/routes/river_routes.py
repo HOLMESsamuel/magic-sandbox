@@ -15,3 +15,8 @@ async def move_card_from_river_to_graveyard(roomId: str, playerId: str, cardId: 
     response = await game_service.move_card_from_river_to_graveyard(roomId, playerId, cardId)
     return response
 
+@router.delete("/room/{roomId}/river/card/{cardId}")
+async def scrap_card(roomId: str, cardId: str):
+    response = await game_service.scrap_card(roomId, cardId)
+    return response
+

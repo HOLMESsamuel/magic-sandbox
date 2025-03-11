@@ -1,7 +1,7 @@
 <template>
     <div class="hand-container" :style="handStyle">
       <div v-if="pIndex == userIndex" v-for="(card, index) in cards" :key="index" class="hand-card" @mouseover="hoverCard(index)"
-      @mouseleave="unhoverCard(index)" @click.stop="showCard(card.image)" :style="conditionalCardStyle(index, card.id)">
+      @mouseleave="unhoverCard(index)" @click.stop="showCard(card.image)" :style="conditionalCardStyle(index, card)">
         <Card :key="index"
           :imageSrc="card.image"
           :name="card.name"
@@ -120,21 +120,27 @@
           this.hoveredCardIndex = null;
         }
       },
-      getCardStyle(index) {
+      getCardStyle(index, card) {
         let expandOrigin = this.reverseMovement ? "top" : "bottom";
+        const isHorizontal = card.horizontal || false;
         if (this.hoveredCardIndex === index) {
           return {
+            width: isHorizontal ? '280px' : '200px',
+            height: isHorizontal ? '200px' : '280px',
             transform: 'scale(2.5)',
             'z-index': 100,
             transition: 'transform 0.2s ease-in-out',
             'transform-origin': expandOrigin + ' center'
           };
         }
-        return;
+        return {
+            width: isHorizontal ? '280px' : '200px',
+            height: isHorizontal ? '200px' : '280px', 
+          };
       },
-      conditionalCardStyle(index, cardId) {
-        if (this.$store.state.currentlyDraggingId !== cardId) {
-          return this.getCardStyle(index);
+      conditionalCardStyle(index, card) {
+        if (this.$store.state.currentlyDraggingId !== card.id) {
+          return this.getCardStyle(index, card);
         }
         return;
       },
@@ -184,8 +190,6 @@
   
   .hand-card {
     margin: 5px;
-    width: 200px;
-    height: 280px;
     cursor: pointer;
   }
 

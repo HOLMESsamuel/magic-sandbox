@@ -2,915 +2,1143 @@
     "cards": [
         {
             "name": "Missile Mech",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Recycle Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Orbital Shuttle",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Integration Port",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Flagship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Orbital Platform",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Imperial Flagship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "The Hive",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Plague Pod",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Obliterator",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Ravager",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Cargo Pod",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Jamming Terminal",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Frontier Station",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Freighter",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Destroyer Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Trade Raft",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Stealth Tower",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Gunship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Battle Screecher",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Patrol Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Swarming Point",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Bioformer",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Breeding Site",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Knightstar",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Parasite",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Battle Blob",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Federation Battleship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Unity Fighter",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Trade Star",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Central Station",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Union Stronghold",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Needle Lancer",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Storage Silo",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Patrol Boat",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Alignment Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Demolisher",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Brain World",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Leviathan",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Assur 4",
-            "type": "base"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Trade Envoy",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Summit Site",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Solar Skiff",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Laser Drone",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Battle Barge",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Mobile Market",
-            "type": "base"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Stealth Needle",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Transit Nexus",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Mining Mech",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "War World",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Pulverizer",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Battle Pod",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Imperial Trader",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Patrol Mech",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Capitol World",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Lancer",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Construction Hauler",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Stellar Reef",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Trading Post",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Union Cluster",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Emperor_s Dreadnaught",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Alliance Frigate",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Crusher",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Federation Shuttle",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Assault Pod",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Space Station",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Long Hauler",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Plasma Vent",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Barter World",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Battlecruiser",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Blockade Runner",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Defense System",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Frontier Ferry",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Royal Redoubt",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Trade Pod",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Federation Cruiser",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Trade Hive",
-            "type": "base"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Enforcer Mech",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Missile Silo",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "The Oracle",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Cutter",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Trade Wheel",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Imperial Frigate",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Federation Shipyard",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Alliance Landing",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Captured Outpost",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Warpgate Cruiser",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Plasma Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Cargo Craft",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Fortress Oblivion",
-            "type": "base"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Builder Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Defense Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Heavy Cruiser",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Missile Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Siege Fortress",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Merc Battlecruiser",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Spawning Wurm",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Coalition Freighter",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Moonwurm Hatchling",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Orbital Gun Platform",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Peacekeeper",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Convoy Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Stinger",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Mega Mech",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Assimilator",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Command Ship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Fighter Base",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Patrol Cutter",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Nanobot Swarm",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Moonwurm",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Embassy Base",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Blob Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Embassy Yacht",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Trade Escort",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Alliance Transport",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Conversion Yard",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Recycling Station",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Mercenary Garrison",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Frontier Hawk",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Customs Frigate",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Freight Raft",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Spike Cluster",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Imperial Palace",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Converter",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Imperial Smuggler",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Neural Nexus",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Blob Fighter",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Corvette",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Mech World",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Star Fortress",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Blob Wheel",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Pact Pod",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Supply Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Pact Warship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Swarmer",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Ram",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Command Center",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Cargo Launch",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Frontier Runner",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Reclamation Station",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Blob Alpha",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Border Fort",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "War Kite",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "The Colossus",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Loyal Colony",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Outland Station",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Nesting Ground",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Fleet HQ",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Mech Cruiser",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Megahauler",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Death World",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Ion Station",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Hive Queen",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Defense Center",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Central Office",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Swarm Cluster",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Light Cruiser",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Battle Station",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Colony Seed Ship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Midgate Station",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Merc Cruiser",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Junkyard",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Federal Transport",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Aging Battleship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Exchange Point",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Sentinel",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Bounty Hunter",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Security Craft",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Cargo Rocket",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Starbase Omega",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Blob Miner",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Hammerhead",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Mothership",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Starmarket",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "The Citadel",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Repair Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Imperial Fighter",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Unity Station",
-            "type": "base"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Coalition Fortress",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Burrower",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Battle Mech",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Trade Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Temple Guardian",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Supply Depot",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Repair Mech",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Blob World",
-            "type": "base"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Machine Base",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Stellar Ray",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Lookout Post",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Warning Beacon",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Blob Destroyer",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Trade Hauler",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Probe Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Survey Ship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Star Barge",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Port of Call",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Spike Pod",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Infested Moon",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Factory World",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Falcon",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Farm Ship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Dreadnaught",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "The Ark",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Coalition Messenger",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Gateship",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Battle Bot",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Cargo Mech",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Blob Carrier",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "The Incinerator",
-            "type": "ship"
+            "type": "base",
+            "horizontal": true
         },
         {
             "name": "Imperial Defender",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "The Wrecker",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Predator",
-            "type": "ship"
+            "type": "ship",
+            "horizontal": false
         },
         {
             "name": "Screecher",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Chancellor Hartman",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Confessor Morris",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "CEO Shaner",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Blob Overlord",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Commander Klik",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Hive Lord",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "War Elder",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Ram Pilot",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Cunning Captain",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "CEO Torres",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Special Ops Director",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "High Priest Lyle",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Commodore Zhang",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Chairman Haygan",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         },
         {
             "name": "Admiral Rasmussen",
-            "type": "hero"
+            "type": "hero",
+            "horizontal": true
         }
     ]
 }

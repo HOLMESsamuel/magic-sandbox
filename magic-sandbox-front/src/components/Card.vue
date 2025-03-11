@@ -6,8 +6,8 @@
       <!-- Hover Buttons -->
       <div v-if="!inHand && hover" class="hover-buttons">
         <button @click.native.stop="showCardDetail" class="button-center">👁️</button>
-        <button @click.native.stop="updateCounter(1)" class="button-right-top">+</button>
-        <button @click.native.stop="updateCounter(-1)" class="button-right-bottom">-</button>
+        <button v-if="game ==='magic'" @click.native.stop="updateCounter(1)" class="button-right-top">+</button>
+        <button v-if="game ==='magic'" @click.native.stop="updateCounter(-1)" class="button-right-bottom">-</button>
       </div>
       <div v-if="!inHand && counter != 0" class="counter-container">
         <CardCounter :count="counter" />
@@ -66,7 +66,8 @@
       maxZIndex: Number,
       flipped: Boolean,
       flipImage: String,
-      copy: Boolean
+      copy: Boolean,
+      game: String
 
     },
     data() {

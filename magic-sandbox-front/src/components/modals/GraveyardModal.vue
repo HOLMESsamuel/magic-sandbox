@@ -3,7 +3,7 @@
       <div class="modal-content" @click.stop>
         <h2 v-if="sortedCards">{{sortedCards.length}} card<span v-if="sortedCards.length > 1">s</span></h2>
         <div class="card-grid">
-          <div v-for="(card, index) in sortedCards" :key="index" class="graveyard-view-card" @mouseover="hover = true" @mouseleave="hover = false">
+          <div v-for="(card, index) in sortedCards" :key="index" class="graveyard-view-card" :class="card.horizontal === true ? 'graveyard-view-horizontal-card' : 'graveyard-view-vertical-card'" @mouseover="hover = true" @mouseleave="hover = false">
             <img :src="getCardImageSource(card)" :alt="card.name" draggable="false">
             <button v-if="hover" class="add-to-hand-button" @click.stop="addToHand(card.id)">Add to Hand</button>
           </div>
@@ -47,7 +47,7 @@
       },
       getCardImageSource(card) {
         if (card.image === "local") {
-          return getLocalCardImageUrl('../assets/sr/cards/', card.name, 'webp')
+          return getLocalCardImageUrl('/sr/cards/', card.name, 'webp')
         } else {
           return card.image
         }
@@ -85,9 +85,16 @@
   gap: 10px; /* Spacing between cards */
   }
   
-  .graveyard-view-card{
+  .graveyard-view-vertical-card{
   width: 200px;
   height: 280px;
+  position: relative;
+  }
+
+  .graveyard-view-horizontal-card{
+  width: 280px;
+  height: 200px;
+  margin-right: 80px;
   position: relative;
   }
   

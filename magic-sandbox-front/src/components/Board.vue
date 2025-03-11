@@ -13,6 +13,7 @@
         :initialPosition="card.position"
         :player="player.name"
         :userIndex="userIndex"
+        :game="game"
         :pIndex="pIndex"
         :scale="scale"
         :offsetX="offsetX"
@@ -79,7 +80,8 @@
         default: false
       },
       player: Object,
-      maxZIndex: Number
+      maxZIndex: Number,
+      game: String
     },
     data() {
       return {

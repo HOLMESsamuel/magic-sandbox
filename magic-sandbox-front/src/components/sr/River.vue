@@ -1,8 +1,8 @@
 <template>
     <div class="river-container">
       <div class="river" :style="rotation">
-        <div v-for="(card, index) in cards" :key="index" class="river-card">
-          <img :src="getCardImage(card.name)" :alt="card.name" />
+        <div v-for="(card, index) in cards" :key="index" class="river-card" :style="getCardStyle(card)">
+          <img :src="getCardImage(card.name)" :alt="card.name" draggable="false">
           <button class="take-card-button" @click="takeCard(card)">Take</button>
         </div>
       </div>
@@ -28,7 +28,14 @@
       takeCard(card) {
         this.$emit('take-card', card.id);
         console.log(card.id)
-      }
+      },
+      getCardStyle(card) {
+        const isHorizontal = card.horizontal || false;
+        return {
+            width: isHorizontal ? '280px' : '200px',
+            height: isHorizontal ? '200px' : '280px',
+        };
+    }
     },
     computed: {
         rotation() {
@@ -46,7 +53,7 @@
             }
 
             return transformStyle;
-        }
+        },
     }
   };
   </script>

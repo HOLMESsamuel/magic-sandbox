@@ -36,6 +36,7 @@
               :roomId="roomId"
               :player="player"
               :userIndex="userIndex"
+              :game="state.type"
               :pIndex="pIndex"
               :scale="scale"
               :offsetX="offsetX"
@@ -669,8 +670,6 @@
     
   <style>
   .card {
-    width: 200px;
-    height: 280px; 
     position: fixed;
     cursor: pointer;
   }

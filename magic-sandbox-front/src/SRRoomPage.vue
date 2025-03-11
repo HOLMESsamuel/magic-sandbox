@@ -126,6 +126,10 @@
       @open-token-modal="openTokenModal($event)"
       @open-dice-modal="openDiceModal">
     </SRControlPanel>
+    <CounterPanel
+      :players="state.players"
+      :roomId="roomId"
+    ></CounterPanel>
   </template>
     
     <script>
@@ -141,7 +145,8 @@
     import GraveyardModal from './components/modals/GraveyardModal.vue';
     import SettingsModal from './components/modals/SettingsModal.vue';
     import DiceModal from './components/modals/DiceModal.vue';
-    import River from './components/sr/River.vue'
+    import River from './components/sr/River.vue';
+    import CounterPanel from "./components/CounterPanel.vue"
     import axios from 'axios';
   
     export default {
@@ -273,7 +278,7 @@
         this.connectWebSocket();
       },
       components: {
-        Deck, Card, CardModal, Counter, Hand, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, SRControlPanel, River
+        Deck, Card, CardModal, Counter, Hand, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, SRControlPanel, River, CounterPanel
       },
       methods: {
         handleKeyPress(event) {

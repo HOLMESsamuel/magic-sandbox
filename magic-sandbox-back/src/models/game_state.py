@@ -29,6 +29,7 @@ class GameState(BaseModel):
         player = Player(name=player_name, index=player_index)
         if type == "sr":
             player.deck.initialize_sr_deck()
+            player.score = 50
         self.players.append(player)
 
     def get_player(self, player_name):

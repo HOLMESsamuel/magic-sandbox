@@ -3,7 +3,7 @@
       <div class="river" :style="rotation">
         <div v-for="(card, index) in cards" :key="index" class="river-card" :style="getCardStyle(card)">
           <img :src="getCardImage(card.name)" :alt="card.name" draggable="false">
-          <div class="button-container">
+          <div class="card-button-container">
             <button class="take-card-button" @click="takeCard(card)">Take</button>
             <button class="scrap-card-button" @click="scrapCard(card)">Scrap</button>
           </div>
@@ -107,7 +107,7 @@
   }
   
   /* Button container that keeps the buttons centered */
-  .button-container {
+  .card-button-container {
     position: absolute;
     top: 50%;
     left: 50%;

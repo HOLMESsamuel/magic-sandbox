@@ -84,7 +84,8 @@ class GameState(BaseModel):
             data = json.load(f)
 
             for card in data.get("cards", []):
-                self.pool.append(Card(id=str(uuid.uuid4()), image="local", name=card['name'], horizontal=card['horizontal']))
+                for i in range(card['number']):
+                    self.pool.append(Card(id=str(uuid.uuid4()), image="local", name=card['name'], horizontal=card['horizontal']))
             
             random.shuffle(self.pool)
             for i in range(5):

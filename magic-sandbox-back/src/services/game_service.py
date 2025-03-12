@@ -304,8 +304,10 @@ class GameService:
     async def discard_board(self, playerId, roomId):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
-        player.graveyard.cards.extend(player.board.cards)
-        player.board.cards.clear()
+        cards_to_remove = [card for card in player.board.cards if 'ship' in card.types]
+        cards_to_keep = [card for card in player.board.cards if 'ship' not in card.types]
+        player.graveyard.cards.extend(cards_to_remove)
+        player.board.cards = cards_to_keep
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " discarded his cards"}
     

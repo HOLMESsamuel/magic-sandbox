@@ -21,11 +21,11 @@ class Deck(BaseModel, CardContainerAbstract):
     def initialize_sr_deck(self):
         for i in range(8):
             id = str(uuid.uuid4())
-            card : Card = Card(name="Scout", id=id, image="local")
+            card : Card = Card(name="Scout", id=id, image="local", types=['ship'])
             self.cards.append(card)
         for i in range(2):
             id = str(uuid.uuid4())
-            card : Card = Card(name="Viper", id=id, image="local")
+            card : Card = Card(name="Viper", id=id, image="local", types=['ship'])
             self.cards.append(card)
         self.shuffle()
 

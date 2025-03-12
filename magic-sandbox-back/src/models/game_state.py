@@ -85,11 +85,11 @@ class GameState(BaseModel):
 
             for card in data.get("cards", []):
                 for i in range(card['number']):
-                    self.pool.append(Card(id=str(uuid.uuid4()), image="local", name=card['name'], horizontal=card['horizontal']))
+                    self.pool.append(Card(id=str(uuid.uuid4()), image="local", name=card['name'], horizontal=card['horizontal'], types=[card["type"]]))
             
             random.shuffle(self.pool)
             for i in range(5):
                 self.river_cards.append(self.pool.pop(0))
-            self.river_cards.append(Card(id=str(uuid.uuid4()), image="local", name="Explorer"))
+            self.river_cards.append(Card(id=str(uuid.uuid4()), image="local", name="Explorer", types=["ship"]))
 
 

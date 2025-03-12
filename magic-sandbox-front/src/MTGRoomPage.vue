@@ -93,6 +93,7 @@
               :offsetX="offsetX"
               :offsetY="offsetY"
               :maxZIndex="state.max_z_index"
+              :backgroundImage="'/magic/card_back.webp'"
               :reverseMovement="userIndex === 1 || userIndex === 2"
               @open-move-to-deck-modal="openMoveToDeckModal($event)"
               @move-from-hand-to-hand="moveFromHandToHand($event)"

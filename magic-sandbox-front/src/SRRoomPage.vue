@@ -65,6 +65,7 @@
               @move-from-hand-to-hand="moveFromHandToHand($event)"
               @show-card="showCard($event)"
               @move-to-graveyard="moveToGraveyard($event)"
+              :backgroundImage="'/sr/cardback.png'"
             ></hand>
             <graveyard
               :playerName="player.name" 

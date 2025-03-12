@@ -27,7 +27,7 @@
         ></Card>
       </div>
       <div v-if="pIndex != userIndex" v-for="(card, index) in cards" :key="index" class="hand-card">
-        <img src="/magic/card_back.webp" :style="hiddenCardStyle" class="Card Image">
+        <div :style="hiddenCardStyle" class="hidden-card"></div>
       </div>
     </div>
   </template>
@@ -35,6 +35,7 @@
   <script>
   import Card from './Card.vue'
   import axios from 'axios';
+  import { getLocalCardImageUrlCompletePath } from '../utils/utils';
 
   export default {
     emits: ['open-move-to-deck-modal', 'show-card', 'move-from-hand-to-hand', 'move-to-graveyard'],
@@ -59,7 +60,8 @@
         type: Boolean,
         default: false
       }, 
-      maxZIndex: Number
+      maxZIndex: Number,
+      backgroundImage: String
     },
     computed: {
       isCardFromHandMoving() {
@@ -78,6 +80,13 @@
             transformStyle.transform = "rotate(180deg)";
           }
         }
+
+        
+        let url = getLocalCardImageUrlCompletePath(this.backgroundImage);
+        
+        transformStyle.backgroundImage= `url(${url})`;
+        transformStyle.backgroundSize= 'contain';
+      
 
         return transformStyle;
       },
@@ -197,6 +206,11 @@
   width: 100%;
   height: auto;
   display: block;
+}
+
+.hidden-card{
+  height: 280px;
+  width: 200px;
 }
   </style>
   

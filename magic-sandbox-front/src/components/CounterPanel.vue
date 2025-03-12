@@ -1,6 +1,6 @@
 <template>
     <div class="counter-panel">
-        <div v-for="(player, index) in players" :key="index" class="counter-wrapper">
+        <div v-for="player in players" :key="player.score" class="counter-wrapper">
             <SRCounter 
                 :playerName="player.name"
                 :roomId="roomId"

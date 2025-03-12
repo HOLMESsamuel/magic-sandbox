@@ -41,6 +41,9 @@ class GameService:
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)
         player.reset()
+        if game_state.type == "sr":
+            player.deck.initialize_sr_deck()
+            player.score = 50
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": "Deck and board reset for " + playerId + " room " + roomId}
     

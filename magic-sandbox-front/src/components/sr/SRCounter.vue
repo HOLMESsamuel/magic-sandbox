@@ -1,10 +1,10 @@
 <template>
-    <div :style="counterStyle" class="counter">
-      <div class="player-name">{{ playerName }}</div>
-      <div class="score">{{ score }}</div>
-      <div class="button-group">
-        <button @click="decrementScore" class="minus-button">-</button>
-        <button @click="incrementScore" class="plus-button">+</button>
+    <div :style="counterStyle" class="sr-counter">
+      <div class="sr-player-name">{{ playerName }}</div>
+      <div class="sr-score">{{ score }}</div>
+      <div class="sr-button-group">
+        <button @click="decrementScore" class="sr-minus-button">-</button>
+        <button @click="incrementScore" class="sr-plus-button">+</button>
       </div>
     </div>
 </template>
@@ -52,7 +52,7 @@
   </script>
   
   <style>
-.counter {
+.sr-counter {
   position: fixed;
   padding: 0;
   margin: 0;
@@ -66,23 +66,23 @@
   border: solid black 1px;
 }
 
-.player-name {
+.sr-player-name {
   font-weight: bold;
   font-size: 1em;
   margin-bottom: 10px;
 }
 
-.score {
+.sr-score {
   font-size: 2em;
   margin-bottom: 5px;
 }
 
-.button-group {
+.sr-button-group {
   display: flex;
   justify-content: space-between;
 }
 
-.minus-button, .plus-button {
+.sr-minus-button, .sr-plus-button {
   border-radius: 50%;
   margin: 5px;
   width: 30px;
@@ -96,7 +96,7 @@
   cursor: pointer;
 }
 
-.minus-button:hover, .plus-button:hover {
+.sr-minus-button:hover, .sr-plus-button:hover {
   background-color: #e0e0e0;
 }
   </style>

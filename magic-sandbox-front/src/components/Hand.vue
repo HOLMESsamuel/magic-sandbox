@@ -56,6 +56,7 @@
       scale: Number,
       offsetX: Number,
       offsetY: Number,
+      game: String,
       reverseMovement: {
         type: Boolean,
         default: false

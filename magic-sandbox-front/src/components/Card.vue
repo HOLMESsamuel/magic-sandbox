@@ -21,6 +21,7 @@
           <li v-if="!this.inHand && this.tapped === false" @click.stop="tap">Tap</li>
           <li v-if="!this.inHand && this.tapped === true" @click.stop="untap">Untap</li>
           <li v-if="!this.inHand" @click.stop="moveToHand(this.userIndex)">Move to hand</li>
+          <li v-if="!this.inHand && game ==='sr'" @click.stop="scrap">Scrap</li>
         </ul>
     </div>
   </div>
@@ -469,6 +470,16 @@
         let cardIds = this.getSelectedCardIds();
         try{
           const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/untap', { cardIds: cardIds });
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async scrap() {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        let cardIds = this.getSelectedCardIds();
+        try{
+          const response = await axios.patch(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.player + '/card/scrap', { cardIds: cardIds });
           console.log(response.data);
         } catch (error) {
           console.log(error);

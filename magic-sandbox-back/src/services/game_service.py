@@ -107,6 +107,14 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " untap cards"}
     
+    async def scrap_cards(self, playerId: str, roomId: str, cardIds: List[str]):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        for cardId in cardIds:
+            game_state.scraped_cards.append(player.board.pop_card(cardId))
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " scraped cards"}
+    
     async def flip_cards(self, playerId: str, roomId: str, cardIds: List[str]):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)

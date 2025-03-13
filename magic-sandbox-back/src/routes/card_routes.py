@@ -23,6 +23,11 @@ async def untap_cards(playerId: str, roomId: str, body: CardIds = Body(...)):
     response = await game_service.untap_cards(playerId, roomId, body.cardIds)
     return response
 
+@router.patch("/room/{roomId}/player/{playerId}/card/scrap")
+async def scrap_cards(playerId: str, roomId: str, body: CardIds = Body(...)):
+    response = await game_service.scrap_cards(playerId, roomId, body.cardIds)
+    return response
+
 @router.patch("/room/{roomId}/player/{playerId}/card/flip")
 async def flip_cards(playerId: str, roomId: str, body: CardIds = Body(...)):
     response = await game_service.flip_cards(playerId, roomId, body.cardIds)

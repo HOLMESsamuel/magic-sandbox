@@ -284,7 +284,7 @@ class GameService:
         for index, card in enumerate(game_state.river_cards):
             if card.id == cardId:
                 new_card = game_state.river_cards.pop(index)
-                game_state.scraped_card.append(new_card)
+                game_state.scraped_cards.append(new_card)
                 if card.name == "Explorer":
                     game_state.river_cards.insert(index, Card(id=str(uuid.uuid4()), image="local", name="Explorer"))
                 else:
@@ -324,4 +324,14 @@ class GameService:
                 player.draw_card()
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " draw 5 cards"}
+    
+    async def move_card_from_scrap_to_hand(self, roomId, playerId, cardId):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        for index, card in enumerate(game_state.scraped_cards):
+            if card.id == cardId:
+                new_card = game_state.scraped_cards.pop(index)
+                player.hand.cards.append(new_card)
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " took card from scrap"}
     

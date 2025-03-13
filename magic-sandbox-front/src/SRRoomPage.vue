@@ -18,15 +18,16 @@
           <div class="axis-horizontal"></div>
           <div class="axis-vertical"></div>
           <river
-            :scale="scale"
-            :offsetX="offsetX"
-            :offsetY="offsetY"
             :userIndex="userIndex"
-            :maxZIndex="state.max_z_index"
             :cards="state.river_cards"
             @take-card="takeCardFromRiver($event)"
             @scrap-card="scrapCard($event)"
           ></river>
+          <ScrapZone
+            :userIndex="userIndex"
+            :cards="state.scraped_cards"
+            @open-scrap-modal="openScrapModal()"
+          ></ScrapZone>
           <div>
             <div v-for="(player, pIndex) in state.players">
               <background
@@ -119,6 +120,12 @@
       @close-graveyard-modal="closeGraveyardModal()"
       @add-card-to-hand="moveFromGraveyardToHand($event)"
     ></graveyard-modal>
+    <ScrapModal
+      :isScrapModalVisible="isScrapModalVisible"
+      :cards="state.scraped_cards"
+      @close-scrap-modal="closeScrapModal()"
+      @add-card-to-hand="moveFromScrapToHand($event)"
+    ></ScrapModal>
     <SRControlPanel
       :roomId="roomId"
       :userIndex="userIndex"
@@ -149,6 +156,8 @@
     import River from './components/sr/River.vue';
     import CounterPanel from "./components/CounterPanel.vue"
     import axios from 'axios';
+    import ScrapZone from './components/ScrapZone.vue';
+    import ScrapModal from './components/modals/ScrapModal.vue';
   
     export default {
       props: {
@@ -172,6 +181,7 @@
           isCardModalVisible: false,
           isDeckModalVisible: false,
           isMoveToDeckModalVisible: false,
+          isScrapModalVisible: false,
           isSettingsModalVisible: false,
           cardIdMovingToDeck: "",
           isDiceModalVisible: false,
@@ -279,7 +289,7 @@
         this.connectWebSocket();
       },
       components: {
-        Deck, Card, CardModal, Counter, Hand, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, SRControlPanel, River, CounterPanel
+        Deck, Card, CardModal, Counter, Hand, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, SRControlPanel, River, CounterPanel, ScrapZone, ScrapModal
       },
       methods: {
         handleKeyPress(event) {
@@ -539,6 +549,9 @@
           this.cardIdMovingToDeck = cardId;
           this.isMoveToDeckModalVisible = true;
         },
+        openScrapModal() {
+          this.isScrapModalVisible = true;
+        },
         openGraveyardModal(pIndex) {
           this.isGraveyardModalVisible= true;
           this.graveyardModalPlayerIndex = pIndex;
@@ -546,6 +559,9 @@
         closeGraveyardModal() {
           this.isGraveyardModalVisible = false;
           this.graveyardModalPlayerIndex = null;
+        },
+        closeScrapModal() {
+          this.isScrapModalVisible = false;
         },
         closeCardModal() {
           this.isCardModalVisible = false;
@@ -606,6 +622,15 @@
           const targetPlayerName = this.state.players[this.graveyardModalPlayerIndex].name;
           try{
             const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ targetPlayerName + '/graveyard/card/' + cardId + '/hand/' + this.userName, {});
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        async moveFromScrapToHand(cardId) {
+          const backendUrl = import.meta.env.VITE_BACKEND_URL;
+          try{
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.userName + '/scrap/card/' + cardId + '/hand', {});
             console.log(response.data);
           } catch (error) {
             console.log(error);

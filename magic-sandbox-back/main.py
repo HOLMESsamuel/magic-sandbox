@@ -19,6 +19,7 @@ from src.routes.graveyard_routes import router as graveyard_router
 from src.routes.exile_routes import router as exile_router
 from src.routes.player_routes import router as player_router
 from src.routes.river_routes import router as river_router
+from src.routes.scrap_routes import router as scrap_router
 
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -75,6 +76,7 @@ app.include_router(graveyard_router)
 app.include_router(player_router)
 app.include_router(exile_router)
 app.include_router(river_router)
+app.include_router(scrap_router)
 
 def mount_empty_uploads_folder(upload_folder_name: str):
     if os.path.exists(upload_folder_name):

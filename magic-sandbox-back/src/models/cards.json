@@ -10,19 +10,19 @@
             "name": "Recycle Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Orbital Shuttle",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Integration Port",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Flagship",
@@ -34,7 +34,7 @@
             "name": "Orbital Platform",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Imperial Flagship",
@@ -52,7 +52,7 @@
             "name": "Plague Pod",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Obliterator",
@@ -64,13 +64,13 @@
             "name": "Ravager",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Cargo Pod",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Jamming Terminal",
@@ -88,13 +88,13 @@
             "name": "Freighter",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Destroyer Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Trade Raft",
@@ -112,7 +112,7 @@
             "name": "Gunship",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Battle Screecher",
@@ -136,7 +136,7 @@
             "name": "Bioformer",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Breeding Site",
@@ -184,7 +184,7 @@
             "name": "Central Station",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Union Stronghold",
@@ -196,19 +196,19 @@
             "name": "Needle Lancer",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Storage Silo",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Patrol Boat",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Alignment Bot",
@@ -256,7 +256,7 @@
             "name": "Solar Skiff",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Laser Drone",
@@ -274,7 +274,7 @@
             "name": "Mobile Market",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Stealth Needle",
@@ -292,7 +292,7 @@
             "name": "Mining Mech",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "War World",
@@ -310,7 +310,7 @@
             "name": "Battle Pod",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Imperial Trader",
@@ -322,7 +322,7 @@
             "name": "Patrol Mech",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Capitol World",
@@ -334,7 +334,7 @@
             "name": "Lancer",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Construction Hauler",
@@ -346,13 +346,13 @@
             "name": "Stellar Reef",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Trading Post",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Union Cluster",
@@ -370,37 +370,37 @@
             "name": "Alliance Frigate",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Crusher",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Federation Shuttle",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Assault Pod",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Space Station",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Long Hauler",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Plasma Vent",
@@ -412,7 +412,7 @@
             "name": "Barter World",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Battlecruiser",
@@ -424,19 +424,19 @@
             "name": "Blockade Runner",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Defense System",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Frontier Ferry",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Royal Redoubt",
@@ -448,7 +448,7 @@
             "name": "Trade Pod",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Federation Cruiser",
@@ -484,7 +484,7 @@
             "name": "Cutter",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Trade Wheel",
@@ -496,7 +496,7 @@
             "name": "Imperial Frigate",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Federation Shipyard",
@@ -514,7 +514,7 @@
             "name": "Captured Outpost",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Warpgate Cruiser",
@@ -526,13 +526,13 @@
             "name": "Plasma Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Cargo Craft",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Fortress Oblivion",
@@ -544,7 +544,7 @@
             "name": "Builder Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Defense Bot",
@@ -562,7 +562,7 @@
             "name": "Missile Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Siege Fortress",
@@ -592,13 +592,13 @@
             "name": "Moonwurm Hatchling",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Orbital Gun Platform",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Peacekeeper",
@@ -610,13 +610,13 @@
             "name": "Convoy Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Stinger",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Mega Mech",
@@ -646,7 +646,7 @@
             "name": "Patrol Cutter",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Nanobot Swarm",
@@ -676,7 +676,7 @@
             "name": "Embassy Yacht",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Trade Escort",
@@ -700,7 +700,7 @@
             "name": "Recycling Station",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Mercenary Garrison",
@@ -712,7 +712,7 @@
             "name": "Frontier Hawk",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Customs Frigate",
@@ -724,13 +724,13 @@
             "name": "Freight Raft",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Spike Cluster",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Imperial Palace",
@@ -748,7 +748,7 @@
             "name": "Imperial Smuggler",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Neural Nexus",
@@ -760,13 +760,13 @@
             "name": "Blob Fighter",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Corvette",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Mech World",
@@ -784,7 +784,7 @@
             "name": "Blob Wheel",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Pact Pod",
@@ -796,7 +796,7 @@
             "name": "Supply Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Pact Warship",
@@ -808,19 +808,19 @@
             "name": "Swarmer",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Ram",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Command Center",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Cargo Launch",
@@ -832,7 +832,7 @@
             "name": "Frontier Runner",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Reclamation Station",
@@ -856,7 +856,7 @@
             "name": "War Kite",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "The Colossus",
@@ -874,7 +874,7 @@
             "name": "Outland Station",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Nesting Ground",
@@ -940,13 +940,13 @@
             "name": "Light Cruiser",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Battle Station",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Colony Seed Ship",
@@ -976,7 +976,7 @@
             "name": "Federal Transport",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Aging Battleship",
@@ -994,7 +994,7 @@
             "name": "Sentinel",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Bounty Hunter",
@@ -1012,7 +1012,7 @@
             "name": "Cargo Rocket",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Starbase Omega",
@@ -1024,7 +1024,7 @@
             "name": "Blob Miner",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Hammerhead",
@@ -1054,13 +1054,13 @@
             "name": "Repair Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Imperial Fighter",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Unity Station",
@@ -1078,7 +1078,7 @@
             "name": "Burrower",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Battle Mech",
@@ -1090,13 +1090,13 @@
             "name": "Trade Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Temple Guardian",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Supply Depot",
@@ -1108,7 +1108,7 @@
             "name": "Repair Mech",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Blob World",
@@ -1138,37 +1138,37 @@
             "name": "Warning Beacon",
             "type": "base",
             "horizontal": true,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Blob Destroyer",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Trade Hauler",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Probe Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Survey Ship",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Star Barge",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Port of Call",
@@ -1198,13 +1198,13 @@
             "name": "Falcon",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Farm Ship",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "Dreadnaught",
@@ -1234,7 +1234,7 @@
             "name": "Battle Bot",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Cargo Mech",
@@ -1258,7 +1258,7 @@
             "name": "Imperial Defender",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 2
         },
         {
             "name": "The Wrecker",
@@ -1270,7 +1270,7 @@
             "name": "Predator",
             "type": "ship",
             "horizontal": false,
-            "number": 1
+            "number": 3
         },
         {
             "name": "Screecher",

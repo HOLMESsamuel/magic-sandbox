@@ -34,6 +34,11 @@
                 :player="player"
                 :pIndex="pIndex"
               ></background>
+              <name
+                :playerName="player.name"
+                :pIndex="pIndex"
+                :userIndex="userIndex"
+              ></name>
               <Board
               :roomId="roomId"
               :player="player"
@@ -158,6 +163,7 @@
     import axios from 'axios';
     import ScrapZone from './components/ScrapZone.vue';
     import ScrapModal from './components/modals/ScrapModal.vue';
+    import Name from './components/sr/Name.vue';
   
     export default {
       props: {
@@ -289,7 +295,7 @@
         this.connectWebSocket();
       },
       components: {
-        Deck, Card, CardModal, Counter, Hand, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, SRControlPanel, River, CounterPanel, ScrapZone, ScrapModal
+        Deck, Card, CardModal, Counter, Hand, DiceModal, Board, SettingsModal, Graveyard, GraveyardModal, Background, SRControlPanel, River, CounterPanel, ScrapZone, ScrapModal, Name
       },
       methods: {
         handleKeyPress(event) {

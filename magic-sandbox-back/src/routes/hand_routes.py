@@ -44,3 +44,8 @@ async def mulligan(playerId: str, roomId: str):
 async def draw_5(playerId: str, roomId: str):
     response = await game_service.draw_5(playerId, roomId)
     return response
+
+@router.put("/room/{roomId}/player/{playerId}/hand/playall")
+async def play_all_cards(playerId: str, roomId: str):
+    response = await game_service.play_all_cards(playerId, roomId)
+    return response

@@ -333,6 +333,28 @@ class GameService:
         await websocket_manager.broadcast(roomId, game_state)
         return {"message": playerId + " room " + roomId + " draw 5 cards"}
     
+    async def play_all_cards(self, playerId, roomId):
+        game_state : GameState = state_manager.get_group_state(roomId)
+        player : Player = game_state.get_player(playerId)
+        # Calculate position in front of hand based on player index
+        base_x = 800 if player.index == 0 else 350 if player.index == 1 else -2100 if player.index == 2 else -1850
+        base_y = 900 if player.index == 0 else -1180 if player.index == 1 else -1180 if player.index == 2 else 900
+        
+        # Create a copy of the hand cards to avoid modification during iteration
+        hand_cards = player.hand.cards.copy()
+        
+        # Play all cards from the copied list
+        for i, card in enumerate(hand_cards):
+            position = {
+                "x": base_x + (i * 250), 
+                "y": base_y
+            }
+            player.play_card(card.id, position, game_state.max_z_index)
+            game_state.max_z_index += 1
+        
+        await websocket_manager.broadcast(roomId, game_state)
+        return {"message": playerId + " room " + roomId + " played all cards from hand"}
+    
     async def move_card_from_scrap_to_hand(self, roomId, playerId, cardId):
         game_state : GameState = state_manager.get_group_state(roomId)
         player : Player = game_state.get_player(playerId)

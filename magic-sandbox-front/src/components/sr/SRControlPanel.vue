@@ -7,6 +7,7 @@
         <button @click="discardAll" class="deck-button">Discard all</button>
         <button @click="mix" class="deck-button">Mix discard pile to deck</button>
         <button @click="draw5" class="deck-button">Draw 5</button>
+        <button @click="playAllCards" class="deck-button">Play All</button>
     </div>
 </template>
   
@@ -84,6 +85,15 @@
           const backendUrl = import.meta.env.VITE_BACKEND_URL;
           try{
             const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/hand/draw5', {});
+            console.log(response.data);
+          } catch (error) {
+            console.log(error);
+          }
+        },
+        async playAllCards() {
+          const backendUrl = import.meta.env.VITE_BACKEND_URL;
+          try{
+            const response = await axios.put(`${backendUrl}` + 'room/' + this.roomId +'/player/'+ this.playerName + '/hand/playall', {});
             console.log(response.data);
           } catch (error) {
             console.log(error);
